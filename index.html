@@ -63,7 +63,7 @@ html, body {
   -webkit-backdrop-filter: blur(25px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 25px 60px rgba(0, 0, 0, 0.6);
-  overflow: hidden; /* Crucial for minimizing */
+  overflow: hidden;
   transition: width 0.3s, height 0.3s;
 }
 
@@ -114,7 +114,6 @@ html, body {
   border-left: 1px solid #7a1604;
 }
 
-/* Icons */
 .minimize::after { content: ""; position: absolute; width: 8px; height: 2px; background: #333; bottom: 7px; left: 13px; }
 .maximize::after { content: ""; position: absolute; width: 10px; height: 8px; border: 1.5px solid #333; top: 6px; left: 11px; }
 .close::before, .close::after { content: ""; position: absolute; width: 15px; height: 2px; background: white; top: 10px; left: 17px; }
@@ -124,7 +123,7 @@ html, body {
 /* Content Area */
 .content-wrapper {
   transition: max-height 0.3s ease-out;
-  max-height: 1000px; /* Big enough for any content */
+  max-height: 1000px;
 }
 
 .content {
@@ -137,7 +136,25 @@ html, body {
   min-height: 200px;
 }
 
-/* Minimized State Utility Class */
+/* Download Button Style */
+.dl-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background: linear-gradient(to bottom, #f9f9f9, #e1e1e1);
+  border: 1px solid #999;
+  border-radius: 3px;
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0,0,0,0.1);
+  transition: 0.2s;
+}
+
+.dl-button:hover {
+  background: linear-gradient(to bottom, #fff, #ececec);
+  border-color: #666;
+}
+
 .is-minimized .content-wrapper {
   max-height: 0;
 }
@@ -171,9 +188,28 @@ html, body {
 
 <script>
 const pages = {
-  home: { title: "Windows Vista Aero Site", body: "<h2 style='margin-top: 0;'>Welcome</h2><p>Home content loaded.</p>" },
-  about: { title: "About Me", body: "<h2 style='margin-top: 0;'>About Me</h2><p>Legacy UI developer.</p>" },
-  downloads: { title: "Downloads Explorer", body: "<h2 style='margin-top: 0;'>Downloads</h2><p>Files list is ready.</p>" }
+  home: { 
+    title: "Windows Vista Aero Site", 
+    body: "<h2 style='margin-top: 0;'>Welcome</h2><p>Home content loaded.</p>" 
+  },
+  about: { 
+    title: "About Me", 
+    body: "<h2 style='margin-top: 0;'>About Me</h2><p>Legacy UI developer.</p>" 
+  },
+  downloads: { 
+    title: "Downloads Explorer", 
+    body: `
+      <h2 style='margin-top: 0;'>Downloads</h2>
+      <p>Click the button below to view the shared file:</p>
+      <div style="margin-top: 20px;">
+        <a href="https://drive.google.com/file/d/1TZeW-wMhtms_T-WDnx891Ftco-1ZcoPV/view?usp=drive_link" 
+           target="_blank" 
+           class="dl-button">
+           View on Google Drive
+        </a>
+      </div>
+    ` 
+  }
 };
 
 const win = document.getElementById("window");
@@ -223,7 +259,6 @@ function maximizeWindow() {
   }
 }
 
-// Drag Logic
 let drag = false;
 let offsetX, offsetY;
 
@@ -243,10 +278,4 @@ document.onmousemove = (e) => {
 
 document.onmouseup = () => drag = false;
 
-// Set initial position
-win.style.top = "150px";
-win.style.left = "150px";
-</script>
-
-</body>
-</html>
+win.style.top = "
