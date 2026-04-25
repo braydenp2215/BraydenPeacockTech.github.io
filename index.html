@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <title>BraydenPeacockTech</title>
 <style>
+  /* RESET & BACKGROUND */
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body { 
     width: 100vw; height: 100vh; overflow: hidden;
     background: #004a99 url("https://cdn.wallpaperhub.app/cloudcache/3/b/9/8/8/5/3b9885c93e8b83598ccccf9857e014c5de9f5c6f.jpg") no-repeat center center fixed;
@@ -13,13 +13,12 @@
     display: flex; align-items: center; justify-content: center;
   }
 
-  /* SIDE TABS */
+  /* NAVIGATION TABS */
   .screen-nav {
     position: fixed; right: 40px; top: 50%;
     transform: translateY(-50%);
     display: flex; flex-direction: column; gap: 15px; z-index: 1000;
   }
-
   .nav-item {
     background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
     padding: 15px 25px; border-radius: 5px; color: white;
@@ -29,19 +28,20 @@
   }
   .nav-item:hover { background: rgba(255, 255, 255, 0.3); transform: translateX(-5px); }
 
-  /* WINDOW */
+  /* WINDOW FRAME */
   .window { 
-    width: 95%; max-width: 1100px; 
+    width: 90%; max-width: 1000px; 
     background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(25px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 8px; 
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    display: flex; flex-direction: column;
-    position: absolute;
+    display: flex; flex-direction: column; position: absolute;
   }
 
+  /* TITLEBAR */
   .titlebar { height: 40px; display: flex; justify-content: space-between; align-items: center; padding: 0 10px 0 15px; cursor: move; }
   .title-text { color: white; font-size: 13px; text-shadow: 0 1px 2px black; font-weight: 500; }
 
+  /* WINDOW CONTROLS */
   .controls { display: flex; border: 1px solid #111; border-top: none; border-radius: 0 0 4px 4px; overflow: hidden; }
   .winbtn { width: 34px; height: 22px; position: relative; border-left: 1px solid rgba(0,0,0,0.2); cursor: pointer; }
   .blue { background: linear-gradient(to bottom, #f2f4f7, #aeb9c8 50%, #7d8a9e 51%, #ced6e0); }
@@ -49,16 +49,16 @@
   .winbtn::after { color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 11px; pointer-events: none; }
   .close::after { content: "✕"; }
 
-  .content { margin: 0 8px 8px 8px; padding: 25px; background: #ffffff; border-radius: 4px; border: 1px solid #999; color: #111; min-height: 200px; }
+  /* CONTENT AREA */
+  .content { margin: 0 8px 8px 8px; padding: 25px; background: #ffffff; border-radius: 4px; border: 1px solid #999; color: #111; min-height: 180px; }
 
-  /* TEXT STYLING */
-  .thanks-line { display: block; font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #d14126; }
-  .bio-line { display: block; white-space: nowrap; font-size: 1.1em; }
-  .downloads-header { font-size: 1.5em; font-weight: bold; margin-bottom: 5px; display: block; }
-  .latest-text { font-size: 1.1em; margin-bottom: 15px; display: block; color: #444; }
-
+  /* TEXT FORMATTING */
+  .thanks-msg { display: block; font-weight: bold; font-size: 1.2em; margin-bottom: 8px; color: #d14126; }
+  .bio-text { display: block; white-space: nowrap; font-size: 1.1em; }
+  .dl-header { font-size: 1.5em; font-weight: bold; margin-bottom: 5px; display: block; }
   .drive-btn {
-    display: inline-block; padding: 10px 25px; background: linear-gradient(to bottom, #f9f9f9, #dcdcdc);
+    display: inline-block; padding: 10px 25px; margin-top: 10px;
+    background: linear-gradient(to bottom, #f9f9f9, #dcdcdc);
     border: 1px solid #888; border-radius: 3px; color: #000; text-decoration: none; font-weight: bold;
     box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0,0,0,0.1);
   }
@@ -67,47 +67,48 @@
 <body>
 
 <nav class="screen-nav">
-  <div class="nav-item" onclick="showPage('home')">Home</div>
-  <div class="nav-item" onclick="showPage('about')">About Me</div>
-  <div class="nav-item" onclick="showPage('downloads')">Downloads</div>
+  <div class="nav-item" onclick="changeTab('home')">Home</div>
+  <div class="nav-item" onclick="changeTab('about')">About Me</div>
+  <div class="nav-item" onclick="changeTab('downloads')">Downloads</div>
 </nav>
 
-<div class="window" id="mainWin">
-  <div class="titlebar" id="dragbar">
-    <div class="title-text" id="winTitle">BraydenPeacockTech - Hub</div>
+<div class="window" id="appWindow">
+  <div class="titlebar" id="handle">
+    <div class="title-text" id="winHeader">BraydenPeacockTech - Home</div>
     <div class="controls">
       <div class="winbtn blue"></div>
       <div class="winbtn blue"></div>
-      <div class="winbtn red close" onclick="document.getElementById('mainWin').style.display='none'"></div>
+      <div class="winbtn red close" onclick="document.getElementById('appWindow').style.display='none'"></div>
     </div>
   </div>
   
-  <div class="content" id="mainContent">
+  <div class="content" id="displayBox">
     <h2 style="margin-top: 0;">Welcome</h2>
     <p>Welcome to my new site!</p>
   </div>
 </div>
 
 <script>
-  const pages = {
+  // Data for each tab
+  const siteData = {
     home: {
       title: "Home",
-      html: `<h2 style="margin-top: 0;">Welcome</h2><p>Welcome to my new site!</p>`
+      body: `<h2 style="margin-top: 0;">Welcome</h2><p>Welcome to my new site!</p>`
     },
     about: {
       title: "About Me",
-      html: `
-        <span class="thanks-line">Thanks for stopping by and supporting the channel!</span>
-        <span class="bio-line">
+      body: `
+        <span class="thanks-msg">Thanks for stopping by and supporting the channel!</span>
+        <span class="bio-text">
           <b>About Me:</b> Hi, I'm <b>Brayden Peacock</b>. I'm known as <b>Brayden Peacock & Tech</b> on YouTube, I'm a hardware enthusiast who loves messing with software, and welcome to my new site!
         </span>
       `
     },
     downloads: {
       title: "Downloads",
-      html: `
-        <span class="downloads-header">Downloads</span>
-        <span class="latest-text">Latest Release:</span>
+      body: `
+        <span class="dl-header">Downloads</span>
+        <p>Latest Release:</p>
         <a href="https://drive.google.com/file/d/1TZeW-wMhtms_T-WDnx891Ftco-1ZcoPV/view?usp=drive_link" target="_blank" class="drive-btn">
           Download Super11
         </a>
@@ -115,27 +116,31 @@
     }
   };
 
-  function showPage(pageKey) {
-    const win = document.getElementById('mainWin');
-    win.style.display = 'flex';
-    document.getElementById('winTitle').innerText = "BraydenPeacockTech - " + pages[pageKey].title;
-    document.getElementById('mainContent').innerHTML = pages[pageKey].html;
+  // Function to swap content
+  function changeTab(key) {
+    const win = document.getElementById('appWindow');
+    win.style.display = 'flex'; // Ensure window is visible
+    document.getElementById('winHeader').innerText = "BraydenPeacockTech - " + siteData[key].title;
+    document.getElementById('displayBox').innerHTML = siteData[key].body;
   }
 
-  // Drag logic
-  let win = document.getElementById('mainWin');
-  let drag = document.getElementById('dragbar');
-  let isDown = false, offset = [0,0];
-  drag.onmousedown = (e) => {
+  // Dragging logic
+  let el = document.getElementById('appWindow');
+  let bar = document.getElementById('handle');
+  let active = false, startX, startY;
+
+  bar.onmousedown = (e) => {
     if(e.target.classList.contains('winbtn')) return;
-    isDown = true;
-    offset = [win.offsetLeft - e.clientX, win.offsetTop - e.clientY];
+    active = true;
+    startX = e.clientX - el.offsetLeft;
+    startY = e.clientY - el.offsetTop;
   };
-  document.onmouseup = () => { isDown = false; };
+  document.onmouseup = () => active = false;
   document.onmousemove = (e) => {
-    if (isDown) {
-      win.style.left = (e.clientX + offset[0]) + 'px';
-      win.style.top  = (e.clientY + offset[1]) + 'px';
+    if (active) {
+      el.style.left = (e.clientX - startX) + 'px';
+      el.style.top  = (e.clientY - startY) + 'px';
+      el.style.margin = "0";
     }
   };
 </script>
