@@ -25,7 +25,7 @@
   .title-text { color: white; font-size: 13px; text-shadow: 0 1px 2px black; font-weight: 500; }
 
   .controls { display: flex; border: 1px solid #111; border-top: none; border-radius: 0 0 4px 4px; overflow: hidden; }
-  .winbtn { width: 34px; height: 22px; position: relative; border-left: 1px solid rgba(0,0,0,0.2); }
+  .winbtn { width: 34px; height: 22px; position: relative; border-left: 1px solid rgba(0,0,0,0.2); cursor: pointer; }
   .blue { background: linear-gradient(to bottom, #f2f4f7, #aeb9c8 50%, #7d8a9e 51%, #ced6e0); }
   .red { width: 50px; background: linear-gradient(to bottom, #d86a6a, #b82a11 50%, #6a0505 51%, #b82a11); }
   .winbtn::after { color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 11px; }
@@ -38,7 +38,6 @@
   .thanks-line { display: block; font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #d14126; }
   .bio-line { display: block; white-space: nowrap; font-size: 1.1em; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
   
-  /* DOWNLOADS SECTION STYLING */
   .downloads-header { font-size: 1.5em; font-weight: bold; margin-bottom: 5px; display: block; }
   .latest-text { font-size: 1.1em; margin-bottom: 15px; display: block; color: #444; }
 
@@ -54,17 +53,32 @@
 </head>
 <body>
 
-<div class="window">
+<div class="window" id="mainWin">
   <div class="titlebar">
     <div class="title-text">BraydenPeacockTech - Hub</div>
     <div class="controls">
       <div class="winbtn blue"></div>
       <div class="winbtn blue"></div>
-      <div class="winbtn red close"></div>
+      <div class="winbtn red close" onclick="document.getElementById('mainWin').style.display='none'"></div>
     </div>
   </div>
   
   <div class="content">
     <span class="thanks-line">Thanks for stopping by and supporting the channel!</span>
     
-    <span class="bio-line
+    <span class="bio-line">
+      <b>About Me:</b> Hi, I'm <b>Brayden Peacock</b>. I'm known as <b>Brayden Peacock & Tech</b> on YouTube, I'm a hardware enthusiast who loves messing with software, and welcome to my new site!
+    </span>
+
+    <div class="downloads">
+      <span class="downloads-header">Downloads</span>
+      <span class="latest-text">Latest Release:</span>
+      <a href="https://drive.google.com/file/d/1TZeW-wMhtms_T-WDnx891Ftco-1ZcoPV/view?usp=drive_link" target="_blank" class="drive-btn">
+        Download Super11
+      </a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
