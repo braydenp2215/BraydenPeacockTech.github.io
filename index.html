@@ -2,292 +2,125 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BraydenPeacockTech</title>
+<title>BraydenPeacockTech - Home</title>
 
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
+/* CORE RESET */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body, html {
+  width: 100vw; height: 100vh;
   font-family: "Segoe UI", Tahoma, sans-serif;
-  background: url("https://cdn.wallpaperhub.app/cloudcache/3/b/9/8/8/5/3b9885c93e8b83598ccccf9857e014c5de9f5c6f.jpg") no-repeat center center fixed;
+  background: #004a99 url("https://cdn.wallpaperhub.app/cloudcache/3/b/9/8/8/5/3b9885c93e8b83598ccccf9857e014c5de9f5c6f.jpg") no-repeat center center fixed;
   background-size: cover;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
 }
 
-/* ===== EXTERNAL NAVIGATION ===== */
+/* SIDE NAVIGATION */
 .screen-nav {
-  position: fixed;
-  right: 40px;
-  top: 50%;
+  position: fixed; right: 40px; top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  z-index: 10000;
+  display: flex; flex-direction: column; gap: 15px; z-index: 10000;
 }
 
 .nav-item {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  padding: 15px 25px;
-  border-radius: 5px;
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-  transition: all 0.2s;
-  cursor: pointer;
-  text-align: center;
-  min-width: 120px;
+  background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
+  padding: 15px 25px; border-radius: 5px; color: white;
+  text-decoration: none; font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.3);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5); cursor: pointer; text-align: center;
+  min-width: 140px; transition: 0.2s;
 }
 
-.nav-item:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateX(-5px);
-}
+.nav-item:hover { background: rgba(255, 255, 255, 0.3); transform: translateX(-5px); }
 
-/* ===== THE WINDOW ===== */
+/* THE AERO WINDOW */
 .window {
-  width: 600px;
-  position: absolute;
-  z-index: 999;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(25px) saturate(160%);
-  -webkit-backdrop-filter: blur(25px) saturate(160%);
+  width: 650px; position: absolute; z-index: 999;
+  border-radius: 8px; background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(30px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 25px 60px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 25px 60px rgba(0,0,0,0.6);
   overflow: hidden;
-  transition: width 0.3s, height 0.3s;
 }
 
 .titlebar {
-  height: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-left: 15px;
-  cursor: move;
-  user-select: none;
+  height: 40px; display: flex; justify-content: space-between;
+  align-items: flex-start; padding-left: 15px; cursor: move;
 }
 
-.title-text {
-  line-height: 40px;
-  font-size: 13px;
-  color: white;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
-}
+.title-text { line-height: 40px; font-size: 13px; color: white; text-shadow: 0 1px 3px black; }
 
-/* ===== METALLIC BUTTONS ===== */
-.controls {
-  display: flex;
-  margin-top: 1px;
-  margin-right: 5px;
-  border: 1px solid #111;
-  border-top: none;
-  border-radius: 0 0 4px 4px;
-  overflow: hidden;
-}
+/* 3D GEL BUTTONS */
+.controls { display: flex; margin-right: 5px; border: 1px solid #111; border-top: none; border-radius: 0 0 4px 4px; overflow: hidden; }
 
-.winbtn {
-  width: 34px;
-  height: 23px;
-  position: relative;
-  cursor: pointer;
-  border-left: 1px solid rgba(0,0,0,0.3);
-  background-image: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 48%, rgba(255,255,255,0) 52%, rgba(255,255,255,0.1) 100%);
-}
+.winbtn { width: 34px; height: 22px; position: relative; cursor: pointer; border-left: 1px solid rgba(0,0,0,0.3); }
 
-.minimize, .maximize {
-  background: linear-gradient(to bottom, #f2f4f7 0%, #cbd3de 48%, #aeb9c8 52%, #ced6e0 100%);
-}
+.minimize, .maximize { background: linear-gradient(to bottom, #f2f4f7, #aeb9c8 50%, #7d8a9e 51%, #ced6e0); }
 
 .close {
   width: 50px;
-  background: linear-gradient(to bottom, #ef9f8d 0%, #e27c67 48%, #d14d31 52%, #aa1f05 100%);
-  border-left: 1px solid #7a1604;
+  background: linear-gradient(to bottom, #d86a6a, #b82a11 50%, #6a0505 51%, #b82a11);
 }
 
-.minimize::after { content: ""; position: absolute; width: 8px; height: 2px; background: #333; bottom: 7px; left: 13px; }
-.maximize::after { content: ""; position: absolute; width: 10px; height: 8px; border: 1.5px solid #333; top: 6px; left: 11px; }
-.close::before, .close::after { content: ""; position: absolute; width: 15px; height: 2px; background: white; top: 10px; left: 17px; }
-.close::before { transform: rotate(45deg); }
-.close::after { transform: rotate(-45deg); }
-
-/* Content Area */
-.content-wrapper {
-  transition: max-height 0.3s ease-out;
-  max-height: 1000px;
+.winbtn::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
 }
 
-.content {
-  margin: 0 7px 7px 7px;
-  padding: 30px;
-  background: #ffffff;
-  border-radius: 4px;
-  border: 1px solid rgba(0,0,0,0.2);
-  color: #222;
-  min-height: 250px;
-}
+.close::after { content: "✕"; color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 11px; }
+.minimize::after { content: "—"; color: #333; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; }
+.maximize::after { content: "▢"; color: #333; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; }
 
-/* Download Button Style */
+/* CONTENT AREA */
+.content-area { margin: 0 7px 7px 7px; padding: 30px; background: #fff; border-radius: 4px; border: 1px solid #777; color: #111; min-height: 250px; }
+
 .drive-btn {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 10px 25px;
+  display: inline-block; margin-top: 15px; padding: 10px 25px;
   background: linear-gradient(to bottom, #f9f9f9, #dcdcdc);
-  border: 1px solid #888;
-  border-radius: 3px;
-  color: #000;
-  text-decoration: none;
-  font-weight: bold;
-  box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0,0,0,0.2);
-}
-
-.drive-btn:hover {
-  background: linear-gradient(to bottom, #fff, #e5e5e5);
-  border-color: #555;
-}
-
-.is-minimized .content-wrapper {
-  max-height: 0;
+  border: 1px solid #888; border-radius: 3px; color: #000;
+  text-decoration: none; font-weight: bold;
 }
 </style>
 </head>
 <body>
 
 <nav class="screen-nav">
-  <div class="nav-item" onclick="changeContent('home')">Home</div>
-  <div class="nav-item" onclick="changeContent('about')">About Me</div>
-  <div class="nav-item" onclick="changeContent('downloads')">Downloads</div>
+  <div class="nav-item" onclick="show('home')">Home</div>
+  <div class="nav-item" onclick="show('about')">About Me</div>
+  <div class="nav-item" onclick="show('downloads')">Downloads</div>
 </nav>
 
-<div class="window" id="window">
+<div class="window" id="win">
   <div class="titlebar" id="dragbar">
-    <div class="title-text" id="window-title">BraydenPeacockTech - Home</div>
+    <div class="title-text" id="win-title">BraydenPeacockTech - Home</div>
     <div class="controls">
-      <div class="winbtn minimize" onclick="toggleMinimize()"></div>
-      <div class="winbtn maximize" onclick="maximizeWindow()"></div>
-      <div class="winbtn close" onclick="closeWindow()"></div>
+      <div class="winbtn minimize" onclick="alert('Minimize Clicked')"></div>
+      <div class="winbtn maximize"></div>
+      <div class="winbtn close" onclick="document.getElementById('win').style.display='none'"></div>
     </div>
   </div>
   
-  <div class="content-wrapper" id="content-wrapper">
-    <div class="content" id="main-content">
-      <h2 style="margin-top: 0;">Welcome</h2>
-      <p>The window is online. Navigate using the buttons on the right.</p>
-    </div>
+  <div class="content-area" id="main-view">
+    <h2 style="margin-top: 0;">Welcome</h2>
+    <p>Everything is loaded. Use the buttons on the right to navigate.</p>
   </div>
 </div>
 
 <script>
 const pages = {
-  home: { 
-    title: "Home", 
-    body: "<h2 style='margin-top: 0;'>Welcome</h2><p>V2 Site Update: Content logic fixed.</p>" 
- about: { 
-    title: "About Me", 
-    body: `
-      <h2 style="margin-top: 0;">About Me</h2>
-      <p>Hi, I'm <b>Brayden Peacock</b>. You probably know me from <b>YouTube</b> as <b>Brayden Peacock & Tech</b>!</p>
-      <p>I'm a hardware enthusiast who loves messing with software and pushing systems to do things they weren't originally meant to do. Whether it's refurbishing legacy laptops or finding new ways to tweak Windows, I'm all about the hands-on tech experience.</p>
-      <p>This site is a place for me to share my findings, downloads like Super11, and hardware projects with the community. Thanks for being part of the channel!</p>
-    ` 
+  home: {
+    title: "Home",
+    html: "<h2 style='margin-top: 0;'>Welcome</h2><p>V2 Site Update: Everything is working. Check the hardware projects and YouTube content updates.</p>"
   },
-  downloads: { 
-    title: "Downloads", 
-    body: `
-      <h2 style="margin-top: 0;">Downloads</h2>
-      <p>Latest Release:</p>
-      <a href="https://drive.google.com/file/d/1TZeW-wMhtms_T-WDnx891Ftco-1ZcoPV/view?usp=drive_link" 
-         target="_blank" 
-         class="drive-btn">
-         Download Super11
-      </a>
-    ` 
-  }
-};
-
-const win = document.getElementById("window");
-const titleElement = document.getElementById('window-title');
-let isMaximized = false;
-let isMinimized = false;
-let lastPos = { top: '150px', left: '150px', width: '600px' };
-
-function changeContent(pageKey) {
-  win.style.display = 'block';
-  if(isMinimized) toggleMinimize(); 
-  
-  const fullTitle = "BraydenPeacockTech - " + pages[pageKey].title;
-  
-  // 1. Update the title inside the window
-  titleElement.innerText = fullTitle;
-  
-  // 2. Update the browser tab title
-  document.title = fullTitle;
-  
-  // Update Content
-  document.getElementById('main-content').innerHTML = pages[pageKey].body;
-}
-
-function closeWindow() { win.style.display = 'none'; }
-
-function toggleMinimize() {
-  if (!isMinimized) {
-    win.classList.add('is-minimized');
-    isMinimized = true;
-  } else {
-    win.classList.remove('is-minimized');
-    isMinimized = false;
-  }
-}
-
-function maximizeWindow() {
-  if (!isMaximized) {
-    lastPos.top = win.style.top;
-    lastPos.left = win.style.left;
-    lastPos.width = win.style.width;
-    win.style.top = "0";
-    win.style.left = "0";
-    win.style.width = "100vw";
-    win.style.height = "100vh";
-    win.style.borderRadius = "0";
-    isMaximized = true;
-  } else {
-    win.style.top = lastPos.top;
-    win.style.left = lastPos.left;
-    win.style.width = lastPos.width;
-    win.style.height = "auto";
-    win.style.borderRadius = "8px";
-    isMaximized = false;
-  }
-}
-
-let drag = false;
-let offsetX, offsetY;
-document.getElementById("dragbar").onmousedown = (e) => {
-  if (isMaximized) return;
-  drag = true;
-  offsetX = e.clientX - win.offsetLeft;
-  offsetY = e.clientY - win.offsetTop;
-};
-document.onmousemove = (e) => {
-  if (drag) {
-    win.style.left = (e.clientX - offsetX) + "px";
-    win.style.top = (e.clientY - offsetY) + "px";
-  }
-};
-document.onmouseup = () => drag = false;
-
-win.style.top = "150px";
-win.style.left = "150px";
-</script>
-
-</body>
-</html>
+  about: {
+    title: "About Me",
+    html: `<h2 style="margin-top: 0;">About Me</h2>
+           <p>Hi, I'm <b>Brayden Peacock</b>. You probably know me from <b>YouTube</b> as <b>Brayden Peacock & Tech</b>!</p>
+           <p>I'm a hardware enthusiast who loves messing with software and pushing systems to their limits. Whether it's refurbishing laptops or tweaking Windows, I love hands-on tech work.</p>`
+  },
+  downloads: {
+    title: "Downloads",
+    html: `<h2 style="margin-top: 0;">Downloads</h2>
+           <p>Latest Release:</p>
+           <a href="
