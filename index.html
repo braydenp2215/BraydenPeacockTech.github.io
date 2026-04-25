@@ -13,6 +13,23 @@
     display: flex; align-items: center; justify-content: center;
   }
 
+  /* SIDE TABS */
+  .screen-nav {
+    position: fixed; right: 40px; top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 15px; z-index: 1000;
+  }
+
+  .nav-item {
+    background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
+    padding: 15px 25px; border-radius: 5px; color: white;
+    text-decoration: none; font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.3);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5); cursor: pointer; text-align: center;
+    min-width: 140px; transition: 0.2s;
+  }
+  .nav-item:hover { background: rgba(255, 255, 255, 0.3); transform: translateX(-5px); }
+
+  /* WINDOW */
   .window { 
     width: 95%; max-width: 1100px; 
     background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(25px) saturate(150%);
@@ -21,41 +38,42 @@
     display: flex; flex-direction: column;
   }
 
-  .titlebar { height: 40px; display: flex; justify-content: space-between; align-items: center; padding: 0 10px 0 15px; }
+  .titlebar { height: 40px; display: flex; justify-content: space-between; align-items: center; padding: 0 10px 0 15px; cursor: move; }
   .title-text { color: white; font-size: 13px; text-shadow: 0 1px 2px black; font-weight: 500; }
 
   .controls { display: flex; border: 1px solid #111; border-top: none; border-radius: 0 0 4px 4px; overflow: hidden; }
   .winbtn { width: 34px; height: 22px; position: relative; border-left: 1px solid rgba(0,0,0,0.2); cursor: pointer; }
   .blue { background: linear-gradient(to bottom, #f2f4f7, #aeb9c8 50%, #7d8a9e 51%, #ced6e0); }
   .red { width: 50px; background: linear-gradient(to bottom, #d86a6a, #b82a11 50%, #6a0505 51%, #b82a11); }
-  .winbtn::after { color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 11px; }
+  .winbtn::after { color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 11px; pointer-events: none; }
   .close::after { content: "✕"; }
 
-  .content { 
-    margin: 0 8px 8px 8px; padding: 25px; background: #ffffff; border-radius: 4px; border: 1px solid #999; color: #111; 
-  }
+  .content { margin: 0 8px 8px 8px; padding: 25px; background: #ffffff; border-radius: 4px; border: 1px solid #999; color: #111; min-height: 250px; }
 
-  .thanks-line { display: block; font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #d14126; }
-  .bio-line { display: block; white-space: nowrap; font-size: 1.1em; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-  
+  /* CONTENT STYLING */
+  .thanks-line { display: block; font-weight: bold; font-size: 1.2em; margin-top: 15px; color: #d14126; }
+  .bio-line { display: block; white-space: nowrap; font-size: 1.1em; }
   .downloads-header { font-size: 1.5em; font-weight: bold; margin-bottom: 5px; display: block; }
   .latest-text { font-size: 1.1em; margin-bottom: 15px; display: block; color: #444; }
 
   .drive-btn {
-    display: inline-block; padding: 10px 25px;
-    background: linear-gradient(to bottom, #f9f9f9, #dcdcdc);
-    border: 1px solid #888; border-radius: 3px; color: #000;
-    text-decoration: none; font-weight: bold;
+    display: inline-block; padding: 10px 25px; background: linear-gradient(to bottom, #f9f9f9, #dcdcdc);
+    border: 1px solid #888; border-radius: 3px; color: #000; text-decoration: none; font-weight: bold;
     box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0,0,0,0.1);
   }
-  .drive-btn:hover { background: linear-gradient(to bottom, #fff, #e5e5e5); border-color: #555; }
 </style>
 </head>
 <body>
 
+<nav class="screen-nav">
+  <div class="nav-item" onclick="showPage('home')">Home</div>
+  <div class="nav-item" onclick="showPage('about')">About Me</div>
+  <div class="nav-item" onclick="showPage('downloads')">Downloads</div>
+</nav>
+
 <div class="window" id="mainWin">
-  <div class="titlebar">
-    <div class="title-text">BraydenPeacockTech - Hub</div>
+  <div class="titlebar" id="dragbar">
+    <div class="title-text" id="winTitle">BraydenPeacockTech - Home</div>
     <div class="controls">
       <div class="winbtn blue"></div>
       <div class="winbtn blue"></div>
@@ -63,22 +81,64 @@
     </div>
   </div>
   
-  <div class="content">
-    <span class="thanks-line">Thanks for stopping by and supporting the channel!</span>
-    
-    <span class="bio-line">
-      <b>About Me:</b> Hi, I'm <b>Brayden Peacock</b>. I'm known as <b>Brayden Peacock & Tech</b> on YouTube, I'm a hardware enthusiast who loves messing with software, and welcome to my new site!
-    </span>
-
-    <div class="downloads">
-      <span class="downloads-header">Downloads</span>
-      <span class="latest-text">Latest Release:</span>
-      <a href="https://drive.google.com/file/d/1TZeW-wMhtms_T-WDnx891Ftco-1ZcoPV/view?usp=drive_link" target="_blank" class="drive-btn">
-        Download Super11
-      </a>
-    </div>
+  <div class="content" id="mainContent">
+    <h2 style="margin-top: 0;">Welcome</h2>
+    <p>The window is online. Navigate using the tabs on the right.</p>
   </div>
 </div>
+
+<script>
+  const pages = {
+    home: {
+      title: "Home",
+      html: `<h2 style="margin-top: 0;">Welcome</h2><p>Welcome to the hub for hardware projects, software messing, and YouTube updates.</p>`
+    },
+    about: {
+      title: "About Me",
+      html: `
+        <span class="bio-line">
+          <b>About Me:</b> Hi, I'm <b>Brayden Peacock</b>. I'm known as <b>Brayden Peacock & Tech</b> on YouTube, I'm a hardware enthusiast who loves messing with software, and welcome to my new site!
+        </span>
+        <span class="thanks-line">Thanks for stopping by and supporting the channel!</span>
+      `
+    },
+    downloads: {
+      title: "Downloads",
+      html: `
+        <span class="downloads-header">Downloads</span>
+        <span class="latest-text">Latest Release:</span>
+        <a href="https://drive.google.com/file/d/1TZeW-wMhtms_T-WDnx891Ftco-1ZcoPV/view?usp=drive_link" target="_blank" class="drive-btn">
+          Download Super11
+        </a>
+      `
+    }
+  };
+
+  function showPage(pageKey) {
+    const win = document.getElementById('mainWin');
+    win.style.display = 'flex';
+    document.getElementById('winTitle').innerText = "BraydenPeacockTech - " + pages[pageKey].title;
+    document.getElementById('mainContent').innerHTML = pages[pageKey].html;
+  }
+
+  // Simple Drag logic
+  let win = document.getElementById('mainWin');
+  let drag = document.getElementById('dragbar');
+  let isDown = false, offset = [0,0];
+  drag.onmousedown = (e) => {
+    if(e.target.classList.contains('winbtn')) return;
+    isDown = true;
+    offset = [win.offsetLeft - e.clientX, win.offsetTop - e.clientY];
+  };
+  document.onmouseup = () => { isDown = false; };
+  document.onmousemove = (e) => {
+    if (isDown) {
+      win.style.left = (e.clientX + offset[0]) + 'px';
+      win.style.top  = (e.clientY + offset[1]) + 'px';
+      win.style.margin = "0"; // Prevents centering conflict while dragging
+    }
+  };
+</script>
 
 </body>
 </html>
