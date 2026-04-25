@@ -9,7 +9,12 @@ body {
   margin: 0;
   height: 100vh;
   font-family: "Segoe UI", Tahoma, sans-serif;
-  background: linear-gradient(135deg, #2b5876, #4e4376);
+
+  /* 🌄 Vista-style background */
+  background: url("https://upload.wikimedia.org/wikipedia/en/7/76/Windows_Vista_wallpaper.jpg");
+  background-size: cover;
+  background-position: center;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,59 +23,62 @@ body {
 /* ===== WINDOW ===== */
 .window {
   width: 420px;
-  border-radius: 14px;
+  border-radius: 12px;
   overflow: hidden;
 
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255,255,255,0.18);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   color: white;
 }
 
-/* ===== TITLE BAR ===== */
+/* ===== TITLE BAR (VISTA STYLE) ===== */
 .titlebar {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 8px 10px 8px 15px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 8px 10px 8px 14px;
 
   background: linear-gradient(
     to bottom,
-    rgba(255,255,255,0.35),
-    rgba(255,255,255,0.10)
+    rgba(120,180,255,0.9),
+    rgba(30,90,180,0.9)
   );
 
-  border-bottom: 1px solid rgba(255,255,255,0.25);
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+
+  font-size: 14px;
+  font-weight: 600;
   text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
 
-/* ===== WINDOW BUTTONS ===== */
-.buttons {
+/* ===== WINDOWS BUTTONS ===== */
+.controls {
   display: flex;
   gap: 6px;
 }
 
-.btn-circle {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+.win-btn {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  font-size: 12px;
+  color: white;
+  user-select: none;
 }
 
-.close { background: #ff5f57; }
-.min { background: #ffbd2e; }
-.max { background: #28c840; }
-
-/* hover effect */
-.btn-circle:hover {
-  filter: brightness(1.2);
+.win-btn:hover {
+  background: rgba(255,255,255,0.4);
 }
 
 /* ===== CONTENT ===== */
@@ -100,15 +108,15 @@ p {
 
 <body>
 
-<div class="window">
+<div class="window" id="window">
 
   <div class="titlebar">
     <div>Welcome to my website</div>
 
-    <div class="buttons">
-      <div class="btn-circle min"></div>
-      <div class="btn-circle max"></div>
-      <div class="btn-circle close"></div>
+    <div class="controls">
+      <div class="win-btn" onclick="minimize()">_</div>
+      <div class="win-btn" onclick="maximize()">□</div>
+      <div class="win-btn" onclick="closeWindow()">X</div>
     </div>
   </div>
 
@@ -119,6 +127,26 @@ p {
   </div>
 
 </div>
+
+<script>
+function minimize() {
+  document.querySelector(".content").style.display = "none";
+}
+
+function maximize() {
+  const w = document.getElementById("window");
+  if (w.style.width === "100%") {
+    w.style.width = "420px";
+  } else {
+    w.style.width = "100%";
+    w.style.height = "100vh";
+  }
+}
+
+function closeWindow() {
+  document.getElementById("window").style.display = "none";
+}
+</script>
 
 </body>
 </html>
