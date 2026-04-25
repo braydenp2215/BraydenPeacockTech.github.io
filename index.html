@@ -5,215 +5,247 @@
 <title>BraydenPeacockTech</title>
 
 <style>
-body {
+html, body {
   margin: 0;
   padding: 0;
-  height: 100vh;
   width: 100vw;
+  height: 100vh;
   font-family: "Segoe UI", Tahoma, sans-serif;
-  
-  /* Background via direct URL */
   background: url("https://cdn.wallpaperhub.app/cloudcache/3/b/9/8/8/5/3b9885c93e8b83598ccccf9857e014c5de9f5c6f.jpg") no-repeat center center fixed;
   background-size: cover;
-  
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ===== WINDOW CONTAINER ===== */
-.window {
-  width: 450px;
-  min-height: 200px;
-  border-radius: 8px;
-  overflow: hidden;
-  
-  /* Fixed starting position */
-  position: absolute;
-  top: 100px;
-  left: 100px;
-  z-index: 999;
-  
-  /* Aero Glass Effect */
+/* ===== EXTERNAL NAVIGATION (RIGHT SIDE) ===== */
+.screen-nav {
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 10000;
+}
+
+.nav-item {
   background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 15px 25px;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  transition: all 0.2s;
+  cursor: pointer;
+  text-align: center;
+  min-width: 100px;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(-5px);
+}
+
+/* ===== THE WINDOW ===== */
+.window {
+  width: 600px;
+  position: absolute;
+  z-index: 999;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(25px) saturate(160%);
   -webkit-backdrop-filter: blur(25px) saturate(160%);
-  
-  /* Glass border and shadow */
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 
-    0 0 0 1px rgba(0, 0, 0, 0.2),
-    0 20px 50px rgba(0, 0, 0, 0.6);
-  
-  display: block !important;
-  opacity: 1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 25px 60px rgba(0, 0, 0, 0.6);
+  overflow: hidden; /* Crucial for minimizing */
+  transition: width 0.3s, height 0.3s;
 }
 
-/* ===== TITLE BAR ===== */
 .titlebar {
+  height: 40px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  height: 32px;
-  padding-left: 12px;
+  padding-left: 15px;
   cursor: move;
   user-select: none;
-  background: linear-gradient(to bottom, 
-    rgba(255,255,255,0.5) 0%, 
-    rgba(255,255,255,0.15) 50%, 
-    rgba(255,255,255,0) 100%);
 }
 
 .title-text {
-  line-height: 32px;
+  line-height: 40px;
   font-size: 13px;
   color: white;
-  font-weight: 500;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 1px 2px rgba(0,0,0,0.7);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
 }
 
-/* ===== BUTTON CONTROLS ===== */
+/* ===== METALLIC BUTTONS ===== */
 .controls {
   display: flex;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  margin-top: 1px;
+  margin-right: 5px;
+  border: 1px solid #111;
   border-top: none;
-  border-right: none;
-  border-bottom-left-radius: 5px;
+  border-radius: 0 0 4px 4px;
+  overflow: hidden;
 }
 
 .winbtn {
   width: 34px;
-  height: 20px;
+  height: 23px;
   position: relative;
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  background: linear-gradient(to bottom, 
-    rgba(255, 255, 255, 0.6) 0%, 
-    rgba(255, 255, 255, 0.2) 45%, 
-    rgba(0, 0, 0, 0.05) 50%, 
-    rgba(255, 255, 255, 0.2) 100%);
+  border-left: 1px solid rgba(0,0,0,0.3);
+  background-image: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 48%, rgba(255,255,255,0) 52%, rgba(255,255,255,0.1) 100%);
 }
 
-.winbtn:hover { filter: brightness(1.2); }
-
-/* Icons */
-.minimize::after {
-  content: "";
-  position: absolute;
-  width: 8px; height: 2px;
-  background: #111;
-  bottom: 6px; left: 13px;
+.minimize, .maximize {
+  background: linear-gradient(to bottom, #f2f4f7 0%, #cbd3de 48%, #aeb9c8 52%, #ced6e0 100%);
 }
 
-.maximize::after {
-  content: "";
-  position: absolute;
-  width: 9px; height: 7px;
-  border: 1.5px solid #111;
-  top: 5px; left: 11px;
-}
-
-/* Close Button (Vista Red Gloss) */
 .close {
   width: 50px;
-  background: linear-gradient(to bottom, 
-    #ef9f8d 0%, #e57761 45%, #d44a2d 50%, #9e1a05 100%);
+  background: linear-gradient(to bottom, #ef9f8d 0%, #e27c67 48%, #d14d31 52%, #aa1f05 100%);
+  border-left: 1px solid #7a1604;
 }
 
-.close::before, .close::after {
-  content: "";
-  position: absolute;
-  width: 14px; height: 2px;
-  background: white;
-  top: 9px; left: 18px;
-}
+/* Icons */
+.minimize::after { content: ""; position: absolute; width: 8px; height: 2px; background: #333; bottom: 7px; left: 13px; }
+.maximize::after { content: ""; position: absolute; width: 10px; height: 8px; border: 1.5px solid #333; top: 6px; left: 11px; }
+.close::before, .close::after { content: ""; position: absolute; width: 15px; height: 2px; background: white; top: 10px; left: 17px; }
 .close::before { transform: rotate(45deg); }
 .close::after { transform: rotate(-45deg); }
 
-.close:hover {
-  background: linear-gradient(to bottom, #f9bfb4 0%, #ee8d7a 45%, #e85233 50%, #c42609 100%);
-  box-shadow: 0 0 15px rgba(255, 50, 50, 0.6);
+/* Content Area */
+.content-wrapper {
+  transition: max-height 0.3s ease-out;
+  max-height: 1000px; /* Big enough for any content */
 }
 
-/* ===== MAIN CONTENT AREA ===== */
 .content {
-  padding: 40px 20px;
-  background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
-  margin: 0 5px 5px 5px;
-  border-radius: 0 0 4px 4px;
-  border: 1px solid rgba(0,0,0,0.1);
-  color: #333;
-  text-align: center;
+  margin: 0 7px 7px 7px;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.2);
+  color: #222;
+  min-height: 200px;
 }
 
-h1 { margin: 0; color: #1e3a8a; }
+/* Minimized State Utility Class */
+.is-minimized .content-wrapper {
+  max-height: 0;
+}
 </style>
 </head>
 <body>
 
+<nav class="screen-nav">
+  <div class="nav-item" onclick="changeContent('home')">Home</div>
+  <div class="nav-item" onclick="changeContent('about')">About Me</div>
+  <div class="nav-item" onclick="changeContent('downloads')">Downloads</div>
+</nav>
+
 <div class="window" id="window">
   <div class="titlebar" id="dragbar">
-    <div class="title-text">Welcome to my website</div>
+    <div class="title-text" id="window-title">Windows Vista Aero Site</div>
     <div class="controls">
-      <div class="winbtn minimize" onclick="minimize()"></div>
-      <div class="winbtn maximize" onclick="maximize()"></div>
-      <div class="winbtn close" onclick="closeWin()"></div>
+      <div class="winbtn minimize" onclick="toggleMinimize()"></div>
+      <div class="winbtn maximize" onclick="maximizeWindow()"></div>
+      <div class="winbtn close" onclick="closeWindow()"></div>
     </div>
   </div>
-
-  <div class="content" id="content">
-    <h1>BraydenPeacockTech</h1>
-    <p>Windows Vista Aero Site</p>
+  
+  <div class="content-wrapper" id="content-wrapper">
+    <div class="content" id="main-content">
+      <h2 style="margin-top: 0;">Welcome</h2>
+      <p>The window name remains visible even when minimized.</p>
+    </div>
   </div>
 </div>
 
 <script>
-let win = document.getElementById("window");
+const pages = {
+  home: { title: "Windows Vista Aero Site", body: "<h2 style='margin-top: 0;'>Welcome</h2><p>Home content loaded.</p>" },
+  about: { title: "About Me", body: "<h2 style='margin-top: 0;'>About Me</h2><p>Legacy UI developer.</p>" },
+  downloads: { title: "Downloads Explorer", body: "<h2 style='margin-top: 0;'>Downloads</h2><p>Files list is ready.</p>" }
+};
+
+const win = document.getElementById("window");
+const wrapper = document.getElementById("content-wrapper");
+let isMaximized = false;
+let isMinimized = false;
+let lastPos = { top: '150px', left: '150px', width: '600px' };
+
+function changeContent(pageKey) {
+  win.style.display = 'block';
+  if(isMinimized) toggleMinimize(); 
+  document.getElementById('main-content').innerHTML = pages[pageKey].body;
+  document.getElementById('window-title').innerText = pages[pageKey].title;
+}
+
+function closeWindow() { win.style.display = 'none'; }
+
+function toggleMinimize() {
+  if (!isMinimized) {
+    win.classList.add('is-minimized');
+    isMinimized = true;
+  } else {
+    win.classList.remove('is-minimized');
+    isMinimized = false;
+  }
+}
+
+function maximizeWindow() {
+  if (!isMaximized) {
+    lastPos.top = win.style.top;
+    lastPos.left = win.style.left;
+    lastPos.width = win.style.width;
+    
+    win.style.top = "0";
+    win.style.left = "0";
+    win.style.width = "100vw";
+    win.style.height = "100vh";
+    win.style.borderRadius = "0";
+    isMaximized = true;
+  } else {
+    win.style.top = lastPos.top;
+    win.style.left = lastPos.left;
+    win.style.width = lastPos.width;
+    win.style.height = "auto";
+    win.style.borderRadius = "8px";
+    isMaximized = false;
+  }
+}
+
+// Drag Logic
 let drag = false;
 let offsetX, offsetY;
 
-// Title Bar Drag Logic
-document.getElementById("dragbar").addEventListener("mousedown", (e) => {
+document.getElementById("dragbar").onmousedown = (e) => {
+  if (isMaximized) return;
   drag = true;
   offsetX = e.clientX - win.offsetLeft;
   offsetY = e.clientY - win.offsetTop;
-  win.style.zIndex = 1000;
-});
+};
 
-document.addEventListener("mousemove", (e) => {
+document.onmousemove = (e) => {
   if (drag) {
     win.style.left = (e.clientX - offsetX) + "px";
     win.style.top = (e.clientY - offsetY) + "px";
   }
-});
+};
 
-document.addEventListener("mouseup", () => drag = false);
+document.onmouseup = () => drag = false;
 
-function closeWin() {
-  win.style.opacity = "0";
-  setTimeout(() => win.style.display = "none", 300);
-}
-
-function minimize() {
-  let c = document.getElementById("content");
-  c.style.display = c.style.display === "none" ? "block" : "none";
-}
-
-let isMax = false;
-function maximize() {
-  if(!isMax) {
-    win.style.width = "100%";
-    win.style.height = "100%";
-    win.style.top = "0";
-    win.style.left = "0";
-    isMax = true;
-  } else {
-    win.style.width = "450px";
-    win.style.height = "auto";
-    win.style.top = "100px";
-    win.style.left = "100px";
-    isMax = false;
-  }
-}
+// Set initial position
+win.style.top = "150px";
+win.style.left = "150px";
 </script>
 
 </body>
