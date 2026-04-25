@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <title>BraydenPeacockTech</title>
 <style>
-  /* RESET & BACKGROUND */
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body { 
     width: 100vw; height: 100vh; overflow: hidden;
     background: #004a99 url("https://cdn.wallpaperhub.app/cloudcache/3/b/9/8/8/5/3b9885c93e8b83598ccccf9857e014c5de9f5c6f.jpg") no-repeat center center fixed;
@@ -13,7 +13,7 @@
     display: flex; align-items: center; justify-content: center;
   }
 
-  /* NAVIGATION TABS */
+  /* SIDE TABS */
   .screen-nav {
     position: fixed; right: 40px; top: 50%;
     transform: translateY(-50%);
@@ -22,128 +22,47 @@
   .nav-item {
     background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
     padding: 15px 25px; border-radius: 5px; color: white;
-    text-decoration: none; font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.3);
+    font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.3);
     text-shadow: 0 1px 3px rgba(0,0,0,0.5); cursor: pointer; text-align: center;
     min-width: 140px; transition: 0.2s;
   }
   .nav-item:hover { background: rgba(255, 255, 255, 0.3); transform: translateX(-5px); }
 
-  /* WINDOW FRAME */
+  /* WINDOW */
   .window { 
-    width: 90%; max-width: 1000px; 
-    background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(25px) saturate(150%);
-    border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 8px; 
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    width: 800px; /* Locked width to keep it readable */
+    background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 8px; 
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
     display: flex; flex-direction: column; position: absolute;
   }
 
-  /* TITLEBAR */
-  .titlebar { height: 40px; display: flex; justify-content: space-between; align-items: center; padding: 0 10px 0 15px; cursor: move; }
-  .title-text { color: white; font-size: 13px; text-shadow: 0 1px 2px black; font-weight: 500; }
+  /* AERO TITLEBAR */
+  .titlebar { height: 40px; display: flex; justify-content: space-between; align-items: flex-start; padding-left: 15px; cursor: move; }
+  .title-text { line-height: 40px; font-size: 13px; color: white; text-shadow: 0 1px 3px black; }
 
-  /* WINDOW CONTROLS */
-  .controls { display: flex; border: 1px solid #111; border-top: none; border-radius: 0 0 4px 4px; overflow: hidden; }
-  .winbtn { width: 34px; height: 22px; position: relative; border-left: 1px solid rgba(0,0,0,0.2); cursor: pointer; }
-  .blue { background: linear-gradient(to bottom, #f2f4f7, #aeb9c8 50%, #7d8a9e 51%, #ced6e0); }
-  .red { width: 50px; background: linear-gradient(to bottom, #d86a6a, #b82a11 50%, #6a0505 51%, #b82a11); }
-  .winbtn::after { color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 11px; pointer-events: none; }
-  .close::after { content: "✕"; }
+  /* 3D GEL BUTTONS (RESTORED) */
+  .controls { display: flex; margin-right: 5px; border: 1px solid #111; border-top: none; border-radius: 0 0 4px 4px; overflow: hidden; }
+  .winbtn { width: 34px; height: 22px; position: relative; cursor: pointer; border-left: 1px solid rgba(0,0,0,0.3); }
+  .winbtn::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+  }
+  .minmax { background: linear-gradient(to bottom, #f2f4f7, #aeb9c8 50%, #7d8a9e 51%, #ced6e0); }
+  .close-btn { width: 50px; background: linear-gradient(to bottom, #d86a6a, #b82a11 50%, #6a0505 51%, #b82a11); }
+  
+  .winbtn::after { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; }
+  .close-btn::after { content: "✕"; color: white; font-size: 11px; }
+  .min::after { content: "—"; color: #333; font-size: 10px; }
+  .max::after { content: "▢"; color: #333; font-size: 14px; }
 
-  /* CONTENT AREA */
-  .content { margin: 0 8px 8px 8px; padding: 25px; background: #ffffff; border-radius: 4px; border: 1px solid #999; color: #111; min-height: 180px; }
+  /* CONTENT BOX */
+  .content { 
+    margin: 0 7px 7px 7px; padding: 25px; background: #ffffff; border-radius: 4px; border: 1px solid #777; color: #111; 
+    min-height: 200px;
+    overflow-x: auto; /* THIS FIXES THE LONG LINE ISSUE */
+  }
 
   /* TEXT FORMATTING */
-  .thanks-msg { display: block; font-weight: bold; font-size: 1.2em; margin-bottom: 8px; color: #d14126; }
-  .bio-text { display: block; white-space: nowrap; font-size: 1.1em; }
-  .dl-header { font-size: 1.5em; font-weight: bold; margin-bottom: 5px; display: block; }
-  .drive-btn {
-    display: inline-block; padding: 10px 25px; margin-top: 10px;
-    background: linear-gradient(to bottom, #f9f9f9, #dcdcdc);
-    border: 1px solid #888; border-radius: 3px; color: #000; text-decoration: none; font-weight: bold;
-    box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0,0,0,0.1);
-  }
-</style>
-</head>
-<body>
-
-<nav class="screen-nav">
-  <div class="nav-item" onclick="changeTab('home')">Home</div>
-  <div class="nav-item" onclick="changeTab('about')">About Me</div>
-  <div class="nav-item" onclick="changeTab('downloads')">Downloads</div>
-</nav>
-
-<div class="window" id="appWindow">
-  <div class="titlebar" id="handle">
-    <div class="title-text" id="winHeader">BraydenPeacockTech - Home</div>
-    <div class="controls">
-      <div class="winbtn blue"></div>
-      <div class="winbtn blue"></div>
-      <div class="winbtn red close" onclick="document.getElementById('appWindow').style.display='none'"></div>
-    </div>
-  </div>
-  
-  <div class="content" id="displayBox">
-    <h2 style="margin-top: 0;">Welcome</h2>
-    <p>Welcome to my new site!</p>
-  </div>
-</div>
-
-<script>
-  // Data for each tab
-  const siteData = {
-    home: {
-      title: "Home",
-      body: `<h2 style="margin-top: 0;">Welcome</h2><p>Welcome to my new site!</p>`
-    },
-    about: {
-      title: "About Me",
-      body: `
-        <span class="thanks-msg">Thanks for stopping by and supporting the channel!</span>
-        <span class="bio-text">
-          <b>About Me:</b> Hi, I'm <b>Brayden Peacock</b>. I'm known as <b>Brayden Peacock & Tech</b> on YouTube, I'm a hardware enthusiast who loves messing with software, and welcome to my new site!
-        </span>
-      `
-    },
-    downloads: {
-      title: "Downloads",
-      body: `
-        <span class="dl-header">Downloads</span>
-        <p>Latest Release:</p>
-        <a href="https://drive.google.com/file/d/1TZeW-wMhtms_T-WDnx891Ftco-1ZcoPV/view?usp=drive_link" target="_blank" class="drive-btn">
-          Download Super11
-        </a>
-      `
-    }
-  };
-
-  // Function to swap content
-  function changeTab(key) {
-    const win = document.getElementById('appWindow');
-    win.style.display = 'flex'; // Ensure window is visible
-    document.getElementById('winHeader').innerText = "BraydenPeacockTech - " + siteData[key].title;
-    document.getElementById('displayBox').innerHTML = siteData[key].body;
-  }
-
-  // Dragging logic
-  let el = document.getElementById('appWindow');
-  let bar = document.getElementById('handle');
-  let active = false, startX, startY;
-
-  bar.onmousedown = (e) => {
-    if(e.target.classList.contains('winbtn')) return;
-    active = true;
-    startX = e.clientX - el.offsetLeft;
-    startY = e.clientY - el.offsetTop;
-  };
-  document.onmouseup = () => active = false;
-  document.onmousemove = (e) => {
-    if (active) {
-      el.style.left = (e.clientX - startX) + 'px';
-      el.style.top  = (e.clientY - startY) + 'px';
-      el.style.margin = "0";
-    }
-  };
-</script>
-
-</body>
-</html>
+  .thanks-txt { display: block; font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #c0392b; }
+  .bio-txt
