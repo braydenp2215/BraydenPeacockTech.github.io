@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BraydenPeacockTech - Super11</title>
+<title>BraydenPeacockTech</title>
 
 <style>
 html, body {
@@ -170,7 +170,7 @@ html, body {
 
 <div class="window" id="window">
   <div class="titlebar" id="dragbar">
-    <div class="title-text" id="window-title">Windows Vista Aero Site</div>
+    <div class="title-text" id="window-title">BraydenPeacockTech - Home</div>
     <div class="controls">
       <div class="winbtn minimize" onclick="toggleMinimize()"></div>
       <div class="winbtn maximize" onclick="maximizeWindow()"></div>
@@ -189,7 +189,7 @@ html, body {
 <script>
 const pages = {
   home: { 
-    title: "Windows Vista Aero Site", 
+    title: "Home", 
     body: "<h2 style='margin-top: 0;'>Welcome</h2><p>V2 Site Update: Content logic fixed.</p>" 
   },
   about: { 
@@ -197,7 +197,7 @@ const pages = {
     body: "<h2 style='margin-top: 0;'>About Me</h2><p>Self-taught developer and hardware enthusiast specializing in custom OS and legacy UI.</p>" 
   },
   downloads: { 
-    title: "Downloads Explorer", 
+    title: "Downloads", 
     body: `
       <h2 style="margin-top: 0;">Downloads</h2>
       <p>Latest Release:</p>
@@ -211,6 +211,7 @@ const pages = {
 };
 
 const win = document.getElementById("window");
+const titleElement = document.getElementById('window-title');
 let isMaximized = false;
 let isMinimized = false;
 let lastPos = { top: '150px', left: '150px', width: '600px' };
@@ -218,8 +219,17 @@ let lastPos = { top: '150px', left: '150px', width: '600px' };
 function changeContent(pageKey) {
   win.style.display = 'block';
   if(isMinimized) toggleMinimize(); 
+  
+  const fullTitle = "BraydenPeacockTech - " + pages[pageKey].title;
+  
+  // 1. Update the title inside the window
+  titleElement.innerText = fullTitle;
+  
+  // 2. Update the browser tab title
+  document.title = fullTitle;
+  
+  // Update Content
   document.getElementById('main-content').innerHTML = pages[pageKey].body;
-  document.getElementById('window-title').innerText = pages[pageKey].title;
 }
 
 function closeWindow() { win.style.display = 'none'; }
