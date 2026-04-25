@@ -10,7 +10,6 @@
     width: 100vw; height: 100vh; overflow: hidden;
     background: #004a99 url("https://cdn.wallpaperhub.app/cloudcache/3/b/9/8/8/5/3b9885c93e8b83598ccccf9857e014c5de9f5c6f.jpg") no-repeat center center fixed;
     background-size: cover; font-family: "Segoe UI", Tahoma, sans-serif;
-    display: flex; align-items: center; justify-content: center;
   }
 
   /* SIDE TABS */
@@ -28,41 +27,21 @@
   }
   .nav-item:hover { background: rgba(255, 255, 255, 0.3); transform: translateX(-5px); }
 
-  /* WINDOW */
+  /* WINDOW - Fixed positioning to ensure it's visible */
   .window { 
-    width: 800px; /* Locked width to keep it readable */
+    width: 800px; 
+    position: absolute;
+    top: 15%; left: 15%; /* Starting coordinates so it doesn't vanish */
     background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 8px; 
     box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-    display: flex; flex-direction: column; position: absolute;
+    display: flex; flex-direction: column; z-index: 999;
   }
 
   /* AERO TITLEBAR */
   .titlebar { height: 40px; display: flex; justify-content: space-between; align-items: flex-start; padding-left: 15px; cursor: move; }
   .title-text { line-height: 40px; font-size: 13px; color: white; text-shadow: 0 1px 3px black; }
 
-  /* 3D GEL BUTTONS (RESTORED) */
+  /* 3D GEL BUTTONS */
   .controls { display: flex; margin-right: 5px; border: 1px solid #111; border-top: none; border-radius: 0 0 4px 4px; overflow: hidden; }
-  .winbtn { width: 34px; height: 22px; position: relative; cursor: pointer; border-left: 1px solid rgba(0,0,0,0.3); }
-  .winbtn::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 50%;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
-  }
-  .minmax { background: linear-gradient(to bottom, #f2f4f7, #aeb9c8 50%, #7d8a9e 51%, #ced6e0); }
-  .close-btn { width: 50px; background: linear-gradient(to bottom, #d86a6a, #b82a11 50%, #6a0505 51%, #b82a11); }
-  
-  .winbtn::after { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; }
-  .close-btn::after { content: "✕"; color: white; font-size: 11px; }
-  .min::after { content: "—"; color: #333; font-size: 10px; }
-  .max::after { content: "▢"; color: #333; font-size: 14px; }
-
-  /* CONTENT BOX */
-  .content { 
-    margin: 0 7px 7px 7px; padding: 25px; background: #ffffff; border-radius: 4px; border: 1px solid #777; color: #111; 
-    min-height: 200px;
-    overflow-x: auto; /* THIS FIXES THE LONG LINE ISSUE */
-  }
-
-  /* TEXT FORMATTING */
-  .thanks-txt { display: block; font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #c0392b; }
-  .bio-txt
+  .winbtn { width: 34px; height: 22px; position: relative; cursor: pointer; border-left: 1px solid rgba(
