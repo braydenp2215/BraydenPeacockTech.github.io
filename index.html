@@ -10,98 +10,88 @@ body {
   height: 100vh;
   font-family: "Segoe UI", Tahoma, sans-serif;
 
-  /* 🌄 Vista-style background */
-  background: url("https://upload.wikimedia.org/wikipedia/en/7/76/Windows_Vista_wallpaper.jpg");
+  background: url("wallpaper.jpg");
   background-size: cover;
   background-position: center;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
 }
 
 /* ===== WINDOW ===== */
 .window {
   width: 420px;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
 
-  background: rgba(255,255,255,0.18);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  position: absolute;
+  top: 120px;
+  left: 120px;
 
-  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255,255,255,0.35);
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+
   color: white;
 }
 
-/* ===== TITLE BAR (VISTA STYLE) ===== */
+/* ===== TITLE BAR ===== */
 .titlebar {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 8px 10px 8px 14px;
+  padding: 6px 10px;
 
   background: linear-gradient(
     to bottom,
-    rgba(120,180,255,0.9),
-    rgba(30,90,180,0.9)
+    rgba(120,180,255,0.95),
+    rgba(40,90,180,0.95)
   );
 
-  border-bottom: 1px solid rgba(255,255,255,0.3);
+  cursor: move; /* important for drag */
 
-  font-size: 14px;
-  font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-}
-
-/* ===== WINDOWS BUTTONS ===== */
-.controls {
-  display: flex;
-  gap: 6px;
-}
-
-.win-btn {
-  width: 18px;
-  height: 18px;
-  border-radius: 3px;
-  background: rgba(255,255,255,0.25);
-  border: 1px solid rgba(255,255,255,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 12px;
-  color: white;
   user-select: none;
 }
 
-.win-btn:hover {
-  background: rgba(255,255,255,0.4);
+/* ===== BUTTONS ===== */
+.controls {
+  display: flex;
+  gap: 5px;
+}
+
+.btn {
+  width: 22px;
+  height: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 3px;
+
+  background: rgba(255,255,255,0.3);
+  border: 1px solid rgba(255,255,255,0.4);
+
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: rgba(255,255,255,0.6);
+}
+
+.close:hover {
+  background: #ff4d4d;
 }
 
 /* ===== CONTENT ===== */
 .content {
   padding: 25px;
   text-align: center;
-}
-
-h1 {
-  margin: 0;
-  font-size: 26px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.4);
-}
-
-p {
-  opacity: 0.9;
-  margin-top: 10px;
-}
-
-.small {
-  margin-top: 15px;
-  font-size: 12px;
-  opacity: 0.7;
+  color: white;
 }
 </style>
 </head>
@@ -110,41 +100,69 @@ p {
 
 <div class="window" id="window">
 
-  <div class="titlebar">
+  <div class="titlebar" id="dragbar">
     <div>Welcome to my website</div>
 
     <div class="controls">
-      <div class="win-btn" onclick="minimize()">_</div>
-      <div class="win-btn" onclick="maximize()">□</div>
-      <div class="win-btn" onclick="closeWindow()">X</div>
+      <div class="btn" onclick="minimize()">_</div>
+      <div class="btn" onclick="maximize()">□</div>
+      <div class="btn close" onclick="closeWin()">X</div>
     </div>
   </div>
 
-  <div class="content">
+  <div class="content" id="content">
     <h1>BraydenPeacockTech</h1>
-    <p>Vista-style tech site</p>
-    <div class="small">Built with GitHub Pages</div>
+    <p>Vista Aero Style Site</p>
   </div>
 
 </div>
 
 <script>
+let win = document.getElementById("window");
+let content = document.getElementById("content");
+
+/* ===== DRAGGING ===== */
+let drag = false;
+let offsetX, offsetY;
+
+document.getElementById("dragbar").addEventListener("mousedown", (e) => {
+  drag = true;
+  offsetX = e.clientX - win.offsetLeft;
+  offsetY = e.clientY - win.offsetTop;
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (drag) {
+    win.style.left = (e.clientX - offsetX) + "px";
+    win.style.top = (e.clientY - offsetY) + "px";
+  }
+});
+
+document.addEventListener("mouseup", () => {
+  drag = false;
+});
+
+/* ===== BUTTONS ===== */
 function minimize() {
-  document.querySelector(".content").style.display = "none";
+  content.style.display = content.style.display === "none" ? "block" : "none";
 }
 
 function maximize() {
-  const w = document.getElementById("window");
-  if (w.style.width === "100%") {
-    w.style.width = "420px";
+  if (win.dataset.max === "true") {
+    win.style.width = "420px";
+    win.style.height = "auto";
+    win.dataset.max = "false";
   } else {
-    w.style.width = "100%";
-    w.style.height = "100vh";
+    win.style.width = "100%";
+    win.style.height = "100vh";
+    win.style.top = "0";
+    win.style.left = "0";
+    win.dataset.max = "true";
   }
 }
 
-function closeWindow() {
-  document.getElementById("window").style.display = "none";
+function closeWin() {
+  win.style.display = "none";
 }
 </script>
 
