@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BraydenPeacockTech - Home</title>
+<title>BraydenPeacockTech</title>
 
 <style>
 /* CORE RESET */
@@ -56,71 +56,4 @@ body, html {
 
 .winbtn { width: 34px; height: 22px; position: relative; cursor: pointer; border-left: 1px solid rgba(0,0,0,0.3); }
 
-.minimize, .maximize { background: linear-gradient(to bottom, #f2f4f7, #aeb9c8 50%, #7d8a9e 51%, #ced6e0); }
-
-.close {
-  width: 50px;
-  background: linear-gradient(to bottom, #d86a6a, #b82a11 50%, #6a0505 51%, #b82a11);
-}
-
-.winbtn::before {
-  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 50%;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
-}
-
-.close::after { content: "✕"; color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 11px; }
-.minimize::after { content: "—"; color: #333; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; }
-.maximize::after { content: "▢"; color: #333; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; }
-
-/* CONTENT AREA */
-.content-area { margin: 0 7px 7px 7px; padding: 30px; background: #fff; border-radius: 4px; border: 1px solid #777; color: #111; min-height: 250px; }
-
-.drive-btn {
-  display: inline-block; margin-top: 15px; padding: 10px 25px;
-  background: linear-gradient(to bottom, #f9f9f9, #dcdcdc);
-  border: 1px solid #888; border-radius: 3px; color: #000;
-  text-decoration: none; font-weight: bold;
-}
-</style>
-</head>
-<body>
-
-<nav class="screen-nav">
-  <div class="nav-item" onclick="show('home')">Home</div>
-  <div class="nav-item" onclick="show('about')">About Me</div>
-  <div class="nav-item" onclick="show('downloads')">Downloads</div>
-</nav>
-
-<div class="window" id="win">
-  <div class="titlebar" id="dragbar">
-    <div class="title-text" id="win-title">BraydenPeacockTech - Home</div>
-    <div class="controls">
-      <div class="winbtn minimize" onclick="alert('Minimize Clicked')"></div>
-      <div class="winbtn maximize"></div>
-      <div class="winbtn close" onclick="document.getElementById('win').style.display='none'"></div>
-    </div>
-  </div>
-  
-  <div class="content-area" id="main-view">
-    <h2 style="margin-top: 0;">Welcome</h2>
-    <p>Everything is loaded. Use the buttons on the right to navigate.</p>
-  </div>
-</div>
-
-<script>
-const pages = {
-  home: {
-    title: "Home",
-    html: "<h2 style='margin-top: 0;'>Welcome</h2><p>V2 Site Update: Everything is working. Check the hardware projects and YouTube content updates.</p>"
-  },
-  about: {
-    title: "About Me",
-    html: `<h2 style="margin-top: 0;">About Me</h2>
-           <p>Hi, I'm <b>Brayden Peacock</b>. You probably know me from <b>YouTube</b> as <b>Brayden Peacock & Tech</b>!</p>
-           <p>I'm a hardware enthusiast who loves messing with software and pushing systems to their limits. Whether it's refurbishing laptops or tweaking Windows, I love hands-on tech work.</p>`
-  },
-  downloads: {
-    title: "Downloads",
-    html: `<h2 style="margin-top: 0;">Downloads</h2>
-           <p>Latest Release:</p>
-           <a href="
+.minimize, .maximize { background: linear-gradient(to bottom, #f2f4f7, #aeb9c8 50%, #7d8a9e 51%,
