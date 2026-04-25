@@ -7,128 +7,176 @@
 <style>
 body {
   margin: 0;
+  padding: 0;
   height: 100vh;
+  width: 100vw;
   font-family: "Segoe UI", Tahoma, sans-serif;
-
-  background: url("wallpaper.jpg");
+  
+  /* Background via direct URL */
+  background: url("https://cdn.wallpaperhub.app/cloudcache/3/b/9/8/8/5/3b9885c93e8b83598ccccf9857e014c5de9f5c6f.jpg") no-repeat center center fixed;
   background-size: cover;
-  background-position: center;
-
+  
   overflow: hidden;
 }
 
-/* ===== WINDOW ===== */
+/* ===== WINDOW CONTAINER ===== */
 .window {
-  width: 420px;
-  border-radius: 10px;
+  width: 450px;
+  min-height: 200px;
+  border-radius: 8px;
   overflow: hidden;
-
+  
+  /* Fixed starting position */
   position: absolute;
-  top: 120px;
-  left: 120px;
-
-  background: rgba(255,255,255,0.18);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  border: 1px solid rgba(255,255,255,0.35);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-
-  color: white;
+  top: 100px;
+  left: 100px;
+  z-index: 999;
+  
+  /* Aero Glass Effect */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(25px) saturate(160%);
+  -webkit-backdrop-filter: blur(25px) saturate(160%);
+  
+  /* Glass border and shadow */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 0 0 1px rgba(0, 0, 0, 0.2),
+    0 20px 50px rgba(0, 0, 0, 0.6);
+  
+  display: block !important;
+  opacity: 1 !important;
 }
 
 /* ===== TITLE BAR ===== */
 .titlebar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-
-  padding: 6px 10px;
-
-  background: linear-gradient(
-    to bottom,
-    rgba(120,180,255,0.95),
-    rgba(40,90,180,0.95)
-  );
-
-  cursor: move; /* important for drag */
-
+  align-items: flex-start;
+  height: 32px;
+  padding-left: 12px;
+  cursor: move;
   user-select: none;
+  background: linear-gradient(to bottom, 
+    rgba(255,255,255,0.5) 0%, 
+    rgba(255,255,255,0.15) 50%, 
+    rgba(255,255,255,0) 100%);
 }
 
-/* ===== BUTTONS ===== */
+.title-text {
+  line-height: 32px;
+  font-size: 13px;
+  color: white;
+  font-weight: 500;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 1px 2px rgba(0,0,0,0.7);
+}
+
+/* ===== BUTTON CONTROLS ===== */
 .controls {
   display: flex;
-  gap: 5px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-top: none;
+  border-right: none;
+  border-bottom-left-radius: 5px;
 }
 
-.btn {
-  width: 22px;
-  height: 18px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 3px;
-
-  background: rgba(255,255,255,0.3);
-  border: 1px solid rgba(255,255,255,0.4);
-
-  font-size: 12px;
+.winbtn {
+  width: 34px;
+  height: 20px;
+  position: relative;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
+  background: linear-gradient(to bottom, 
+    rgba(255, 255, 255, 0.6) 0%, 
+    rgba(255, 255, 255, 0.2) 45%, 
+    rgba(0, 0, 0, 0.05) 50%, 
+    rgba(255, 255, 255, 0.2) 100%);
 }
 
-.btn:hover {
-  background: rgba(255,255,255,0.6);
+.winbtn:hover { filter: brightness(1.2); }
+
+/* Icons */
+.minimize::after {
+  content: "";
+  position: absolute;
+  width: 8px; height: 2px;
+  background: #111;
+  bottom: 6px; left: 13px;
 }
+
+.maximize::after {
+  content: "";
+  position: absolute;
+  width: 9px; height: 7px;
+  border: 1.5px solid #111;
+  top: 5px; left: 11px;
+}
+
+/* Close Button (Vista Red Gloss) */
+.close {
+  width: 50px;
+  background: linear-gradient(to bottom, 
+    #ef9f8d 0%, #e57761 45%, #d44a2d 50%, #9e1a05 100%);
+}
+
+.close::before, .close::after {
+  content: "";
+  position: absolute;
+  width: 14px; height: 2px;
+  background: white;
+  top: 9px; left: 18px;
+}
+.close::before { transform: rotate(45deg); }
+.close::after { transform: rotate(-45deg); }
 
 .close:hover {
-  background: #ff4d4d;
+  background: linear-gradient(to bottom, #f9bfb4 0%, #ee8d7a 45%, #e85233 50%, #c42609 100%);
+  box-shadow: 0 0 15px rgba(255, 50, 50, 0.6);
 }
 
-/* ===== CONTENT ===== */
+/* ===== MAIN CONTENT AREA ===== */
 .content {
-  padding: 25px;
+  padding: 40px 20px;
+  background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
+  margin: 0 5px 5px 5px;
+  border-radius: 0 0 4px 4px;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: #333;
   text-align: center;
-  color: white;
 }
+
+h1 { margin: 0; color: #1e3a8a; }
 </style>
 </head>
-
 <body>
 
 <div class="window" id="window">
-
   <div class="titlebar" id="dragbar">
-    <div>Welcome to my website</div>
-
+    <div class="title-text">Welcome to my website</div>
     <div class="controls">
-      <div class="btn" onclick="minimize()">_</div>
-      <div class="btn" onclick="maximize()">□</div>
-      <div class="btn close" onclick="closeWin()">X</div>
+      <div class="winbtn minimize" onclick="minimize()"></div>
+      <div class="winbtn maximize" onclick="maximize()"></div>
+      <div class="winbtn close" onclick="closeWin()"></div>
     </div>
   </div>
 
   <div class="content" id="content">
     <h1>BraydenPeacockTech</h1>
-    <p>Vista Aero Style Site</p>
+    <p>Windows Vista Aero Site</p>
   </div>
-
 </div>
 
 <script>
 let win = document.getElementById("window");
-let content = document.getElementById("content");
-
-/* ===== DRAGGING ===== */
 let drag = false;
 let offsetX, offsetY;
 
+// Title Bar Drag Logic
 document.getElementById("dragbar").addEventListener("mousedown", (e) => {
   drag = true;
   offsetX = e.clientX - win.offsetLeft;
   offsetY = e.clientY - win.offsetTop;
+  win.style.zIndex = 1000;
 });
 
 document.addEventListener("mousemove", (e) => {
@@ -138,31 +186,33 @@ document.addEventListener("mousemove", (e) => {
   }
 });
 
-document.addEventListener("mouseup", () => {
-  drag = false;
-});
-
-/* ===== BUTTONS ===== */
-function minimize() {
-  content.style.display = content.style.display === "none" ? "block" : "none";
-}
-
-function maximize() {
-  if (win.dataset.max === "true") {
-    win.style.width = "420px";
-    win.style.height = "auto";
-    win.dataset.max = "false";
-  } else {
-    win.style.width = "100%";
-    win.style.height = "100vh";
-    win.style.top = "0";
-    win.style.left = "0";
-    win.dataset.max = "true";
-  }
-}
+document.addEventListener("mouseup", () => drag = false);
 
 function closeWin() {
-  win.style.display = "none";
+  win.style.opacity = "0";
+  setTimeout(() => win.style.display = "none", 300);
+}
+
+function minimize() {
+  let c = document.getElementById("content");
+  c.style.display = c.style.display === "none" ? "block" : "none";
+}
+
+let isMax = false;
+function maximize() {
+  if(!isMax) {
+    win.style.width = "100%";
+    win.style.height = "100%";
+    win.style.top = "0";
+    win.style.left = "0";
+    isMax = true;
+  } else {
+    win.style.width = "450px";
+    win.style.height = "auto";
+    win.style.top = "100px";
+    win.style.left = "100px";
+    isMax = false;
+  }
 }
 </script>
 
