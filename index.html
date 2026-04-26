@@ -15,10 +15,9 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 
 /* ROVER UI */
 #search-container { position: absolute; bottom: 60px; right: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 1000; }
-#rover-bubble { background: white; color: black; padding: 15px 20px; border-radius: 20px; border: 3px solid #78aaff; font-size: 14px; width: 280px; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 15px; font-weight: 500; min-height: 80px; }
+#rover-bubble { background: white; color: black; padding: 15px 20px; border-radius: 20px; border: 3px solid #78aaff; font-size: 14px; width: 300px; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 15px; font-weight: 500; min-height: 80px; }
 #rover-bubble::after { content: ''; position: absolute; bottom: -15px; right: 60px; border-width: 15px 15px 0; border-style: solid; border-color: white transparent; }
 
-/* YES/NO BUTTONS */
 #rover-choice-buttons { display: none; gap: 10px; margin-top: 10px; justify-content: center; }
 .choice-btn { padding: 5px 15px; border-radius: 5px; border: 1px solid #ccc; cursor: pointer; font-weight: bold; font-size: 12px; }
 .choice-btn.yes { background: #78aaff; color: white; border-color: #3a7bd5; }
@@ -47,7 +46,7 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 #blog-reader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.98); backdrop-filter: blur(25px); z-index: 10002; display: none; flex-direction: column; color: white; }
 .reader-header { padding: 15px 25px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
 .reader-body { flex: 1; padding: 60px 20%; overflow-y: auto; scroll-behavior: smooth; }
-.blog-date-white { font-size: 0.95em; color: white; font-weight: bold; display: block; margin-bottom: 8px; }
+.blog-date-white { font-size: 0.95em; color: white !important; font-weight: bold; display: block; margin-bottom: 8px; }
 </style>
 </head>
 
@@ -71,14 +70,14 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     </div>
     <div id="rover-dog"><img id="rover-img" src="./search.png" alt="Rover"></div>
     <div id="search-box">
-        <input type="text" id="site-search" placeholder="Search dates, names..." onkeydown="if(event.key==='Enter') executeSearch()">
+        <input type="text" id="site-search" placeholder="Search site..." onkeydown="if(event.key==='Enter') executeSearch()">
         <button class="search-btn" onclick="executeSearch()">Search</button>
     </div>
 </div>
 
 <div id="blog-reader">
     <div class="reader-header">
-        <span>BRAYDENPEACOCKTECH BLOG</span>
+        <span>BRAYDENPEACOCKTECH BLOG READER</span>
         <div class="winbtn close" onclick="closeReader()">✕ Close</div>
     </div>
     <div class="reader-body" id="readerBody">
@@ -102,7 +101,7 @@ const myBlogs = [{
     title: "Is Microsoft finally doing things right",
     author: "Brayden Peacock",
     date: "April, 26th 2026",
-    preview: "Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it...",
+    preview: "Microsoft has released Windows 11 build 26300.2289 on 4/26/26...",
     fullText: "Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.\n\n1st Change: Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.\n\n2nd Change: Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!\n\n3rd Change: Microsoft said they would let users skip Windows Update in OOBE.\n\n4th Change: Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.\n\n5th and Final: In Windows Update, Dev and Canary were merged into the Experimental Channel.\n\nThanks for reading this blog and have a great day."
 }];
 
@@ -115,54 +114,53 @@ function executeSearch() {
     const choiceDiv = document.getElementById('rover-choice-buttons');
     
     img.src = "./finding.gif";
-    bubbleText.innerText = "Sniff sniff... Rover is looking for '" + query + "'!";
+    bubbleText.innerText = "Sniff sniff... searching for '" + query + "'!";
     choiceDiv.style.display = "none";
 
     setTimeout(() => {
         img.src = "./search.png"; 
-        
-        let foundBlogIndex = -1;
         let foundPage = "";
+        let foundBlogIndex = -1;
+        let programName = "";
 
+        // 1. CHECK PAGES FIRST (Fixed Priority)
         const pages = ['home', 'about', 'downloads', 'videos', 'blog'];
         if (pages.includes(query)) {
             foundPage = query.charAt(0).toUpperCase() + query.slice(1);
+            programName = foundPage;
+        } 
+        // 2. CHECK BLOGS ONLY IF PAGE NOT FOUND
+        else {
+            foundBlogIndex = myBlogs.findIndex(b => 
+                b.title.toLowerCase().includes(query) || b.fullText.toLowerCase().includes(query) || 
+                b.author.toLowerCase().includes(query) || b.date.toLowerCase().includes(query)
+            );
+            if (foundBlogIndex !== -1) programName = "Blog Update";
         }
 
-        foundBlogIndex = myBlogs.findIndex(b => 
-            b.title.toLowerCase().includes(query) || 
-            b.fullText.toLowerCase().includes(query) || 
-            b.author.toLowerCase().includes(query) || 
-            b.date.toLowerCase().includes(query)
-        );
-
         if (foundPage || foundBlogIndex !== -1) {
-            bubbleText.innerText = "Rover wants to know: Is this the right program?";
+            bubbleText.innerText = "Rover wants to know: Is '" + programName + "' the right program?";
             choiceDiv.style.display = "flex";
 
-            const handleResult = () => {
+            const handleYes = () => {
                 clearTimeout(choiceTimeout);
                 choiceDiv.style.display = "none";
                 if (foundPage) launch(foundPage);
-                if (foundBlogIndex !== -1) {
-                    launch('Blog');
-                    openReader(foundBlogIndex);
-                }
-                bubbleText.innerText = "Woof! Found it.";
+                if (foundBlogIndex !== -1) launch('Blog');
+                bubbleText.innerText = "Woof! Opening it.";
+                setTimeout(() => { bubbleText.innerText = "Woof! I'm Rover. Type what you're looking for!"; }, 3000);
             };
 
-            document.getElementById('rover-yes').onclick = handleResult;
+            document.getElementById('rover-yes').onclick = handleYes;
             document.getElementById('rover-no').onclick = () => {
                 clearTimeout(choiceTimeout);
                 choiceDiv.style.display = "none";
-                bubbleText.innerText = "Okay, I'll stop searching!";
+                bubbleText.innerText = "Okay, I'll stand by!";
             };
 
-            // 7 SECOND AUTO-OPEN
-            choiceTimeout = setTimeout(handleResult, 7000);
-
+            choiceTimeout = setTimeout(handleYes, 7000);
         } else {
-            bubbleText.innerText = "Woof! Rover couldn't find any results for '" + query + "'.";
+            bubbleText.innerText = "Woof! Couldn't find '" + query + "'.";
         }
     }, 10000); 
 }
@@ -191,11 +189,13 @@ function getContent(app) {
     if (app === "Blog") {
         let listHtml = "<h1>Latest Posts</h1>";
         myBlogs.forEach((post, index) => {
-            listHtml += `<div class="blog-entry"><span class="blog-date-white">${post.date}</span><h2>${post.title}</h2><button class="winbtn" style="width:100px; margin-top:10px;" onclick="openReader(${index})">Read Full</button></div>`;
+            listHtml += `<div class="blog-entry" style="background:rgba(255,255,255,0.1); padding:15px; border-radius:8px; margin-top:10px;"><span style="color:white; font-weight:bold;">${post.date}</span><h2>${post.title}</h2><button class="winbtn" style="width:100px; margin-top:10px;" onclick="openReader(${index})">Read Full</button></div>`;
         });
         return listHtml;
     }
-    return app + " content for BraydenPeacockTech.";
+    if (app === "Home") return "Welcome to the official site!";
+    if (app === "About") return "Brayden Peacock: Tech Modder and YouTuber.";
+    return app + " content coming soon!";
 }
 
 function openReader(index) {
@@ -218,7 +218,6 @@ function maximizeWin(id) {
     }
 }
 
-/* DRAG LOGIC */
 let dragTarget = null, offsetX = 0, offsetY = 0;
 document.addEventListener("mousedown", (e) => {
     const bar = e.target.closest(".title-bar");
