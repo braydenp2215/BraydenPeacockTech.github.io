@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Vista Aero OS - Complete Rebuild</title>
+<title>Vista Aero OS - Taskbar Fixed</title>
 
 <style>
 * {
@@ -24,9 +24,7 @@ body {
     background-size: cover;
 }
 
-/* =========================
-   DESKTOP ICONS
-========================= */
+/* DESKTOP */
 .desktop {
     position: absolute;
     top: 20px;
@@ -54,9 +52,7 @@ body {
     margin: 0 auto 5px;
 }
 
-/* =========================
-   WINDOW SYSTEM
-========================= */
+/* WINDOW */
 .window {
     position: absolute;
 
@@ -78,9 +74,7 @@ body {
     overflow: hidden;
 }
 
-/* =========================
-   TITLE BAR (VISTA AERO)
-========================= */
+/* TITLE BAR */
 .title-bar {
     height: 38px;
 
@@ -93,11 +87,8 @@ body {
     background: linear-gradient(
         to bottom,
         rgba(255,255,255,0.75),
-        rgba(255,255,255,0.25),
-        rgba(160,190,255,0.12)
+        rgba(255,255,255,0.25)
     );
-
-    border-bottom: 1px solid rgba(255,255,255,0.25);
 
     cursor: grab;
     user-select: none;
@@ -107,12 +98,10 @@ body {
     color: white;
     font-size: 13px;
     font-weight: 600;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+    text-shadow: 0 2px 8px black;
 }
 
-/* =========================
-   VISTA BUTTONS (FIXED)
-========================= */
+/* BUTTONS */
 .controls {
     display: flex;
     gap: 3px;
@@ -133,56 +122,27 @@ body {
 
     border: 1px solid rgba(0,0,0,0.35);
 
-    background: linear-gradient(to bottom, #ffffff, #cfe0ff);
+    background: linear-gradient(to bottom, white, #cfe0ff);
 
     cursor: pointer;
-    user-select: none;
 }
 
-.winbtn:active {
-    transform: translateY(1px);
-}
-
-/* SHINY WIDE CLOSE BUTTON */
 .winbtn.close {
     width: 46px;
-
     color: white;
-
-    background: linear-gradient(
-        to bottom,
-        rgba(255,200,200,1),
-        rgba(220,60,60,0.95),
-        rgba(140,0,0,0.95)
-    );
-
-    border: 1px solid rgba(90,0,0,0.85);
-
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.6),
-        0 0 10px rgba(255,80,80,0.6);
+    background: linear-gradient(to bottom, #ffaaaa, #c40000);
 }
 
-.winbtn.close:hover {
-    box-shadow:
-        0 0 18px rgba(255,80,80,1),
-        inset 0 1px 0 rgba(255,255,255,0.8);
-}
-
-/* =========================
-   CONTENT
-========================= */
+/* CONTENT */
 .content {
     flex: 1;
     padding: 40px;
 
     color: white;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.95);
+    text-shadow: 0 2px 10px black;
 }
 
-/* =========================
-   TASKBAR
-========================= */
+/* TASKBAR */
 #taskbar {
     position: absolute;
     bottom: 0;
@@ -212,13 +172,17 @@ body {
     border: 1px solid rgba(255,255,255,0.25);
 
     cursor: pointer;
+    user-select: none;
+}
+
+.taskbtn.active {
+    background: rgba(120,170,255,0.45);
 }
 </style>
 </head>
 
 <body>
 
-<!-- DESKTOP -->
 <div class="desktop">
 
     <div class="icon" onclick="openApp('Home')">
@@ -248,20 +212,19 @@ body {
 <script>
 
 let z = 10;
-let dragTarget = null;
-let offsetX = 0;
-let offsetY = 0;
+let windows = {};
 
-/* =========================
-   OPEN WINDOW
-========================= */
+/* OPEN APP */
 function openApp(app) {
+
+    const id = "win_" + app + "_" + Date.now();
 
     const win = document.createElement("div");
     win.className = "window";
+    win.id = id;
 
-    win.style.top = (100 + Math.random()*40) + "px";
-    win.style.left = (100 + Math.random()*40) + "px";
+    win.style.top = "120px";
+    win.style.left = "120px";
     win.style.zIndex = z++;
 
     win.innerHTML = `
@@ -269,9 +232,9 @@ function openApp(app) {
             <span>${app} - Vista OS</span>
 
             <div class="controls">
-                <div class="winbtn" onclick="minimize(this)">—</div>
-                <div class="winbtn" onclick="maximize(this)">□</div>
-                <div class="winbtn close" onclick="closeWin(this)">✕</div>
+                <div class="winbtn" onclick="minimizeWindow('${id}')">—</div>
+                <div class="winbtn" onclick="maximizeWindow('${id}')">□</div>
+                <div class="winbtn close" onclick="closeWindow('${id}')">✕</div>
             </div>
         </div>
 
@@ -283,84 +246,96 @@ function openApp(app) {
 
     document.body.appendChild(win);
 
+    windows[id] = { app: app, state: "open" };
+
     enableDrag(win);
-    addTask(win, app);
+    createTaskbarButton(id, app);
 }
 
-/* =========================
-   AUTO START HOME
-========================= */
-document.addEventListener("DOMContentLoaded", () => {
-    openApp("Home");
-});
-
-/* =========================
-   DRAG SYSTEM
-========================= */
+/* DRAG */
 function enableDrag(win) {
     const bar = win.querySelector(".title-bar");
 
-    bar.addEventListener("mousedown", (e) => {
-        dragTarget = win;
+    let offsetX = 0;
+    let offsetY = 0;
+    let dragging = false;
 
+    bar.addEventListener("mousedown", (e) => {
+        dragging = true;
         offsetX = e.clientX - win.offsetLeft;
         offsetY = e.clientY - win.offsetTop;
 
         win.style.zIndex = z++;
     });
+
+    document.addEventListener("mousemove", (e) => {
+        if (dragging) {
+            win.style.left = (e.clientX - offsetX) + "px";
+            win.style.top = (e.clientY - offsetY) + "px";
+        }
+    });
+
+    document.addEventListener("mouseup", () => {
+        dragging = false;
+    });
 }
 
-document.addEventListener("mousemove", (e) => {
-    if (dragTarget) {
-        dragTarget.style.left = (e.clientX - offsetX) + "px";
-        dragTarget.style.top = (e.clientY - offsetY) + "px";
+/* MINIMIZE (keeps taskbar button) */
+function minimizeWindow(id) {
+    const win = document.getElementById(id);
+    win.style.display = "none";
+
+    if (windows[id]) {
+        windows[id].state = "minimized";
     }
-});
-
-document.addEventListener("mouseup", () => {
-    dragTarget = null;
-});
-
-/* =========================
-   WINDOW CONTROLS
-========================= */
-function minimize(btn) {
-    btn.closest(".window").style.display = "none";
 }
 
-function maximize(btn) {
-    const w = btn.closest(".window");
+/* MAXIMIZE */
+function maximizeWindow(id) {
+    const win = document.getElementById(id);
 
-    if (!w.dataset.max) {
-        w.dataset.max = "1";
-        w.style.top = "0";
-        w.style.left = "0";
-        w.style.width = "100vw";
-        w.style.height = "calc(100vh - 40px)";
+    if (!win.dataset.max) {
+        win.dataset.max = "1";
+        win.style.top = "0";
+        win.style.left = "0";
+        win.style.width = "100vw";
+        win.style.height = "calc(100vh - 40px)";
     } else {
-        w.dataset.max = "";
-        w.style.width = "760px";
-        w.style.height = "480px";
+        win.dataset.max = "";
+        win.style.width = "760px";
+        win.style.height = "480px";
     }
 }
 
-function closeWin(btn) {
-    btn.closest(".window").remove();
+/* CLOSE (removes taskbar properly) */
+function closeWindow(id) {
+    document.getElementById(id).remove();
+
+    const btn = document.getElementById("task_" + id);
+    if (btn) btn.remove();
+
+    delete windows[id];
 }
 
-/* =========================
-   TASKBAR
-========================= */
-function addTask(win, app) {
+/* TASKBAR SYSTEM (FIXED) */
+function createTaskbarButton(id, app) {
+
     const bar = document.getElementById("taskbar");
 
     const btn = document.createElement("div");
     btn.className = "taskbtn";
+    btn.id = "task_" + id;
     btn.innerText = app;
 
     btn.onclick = () => {
+        const win = document.getElementById(id);
+
+        if (!win) return;
+
         win.style.display = "flex";
         win.style.zIndex = z++;
+
+        windows[id].state = "open";
     };
 
     bar.appendChild(btn);
