@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Vista Aero OS - Fixed Build</title>
+<title>Super11 Vista Aero OS</title>
 
 <style>
 * {
@@ -15,9 +15,7 @@ body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-
     font-family: "Segoe UI", Tahoma, sans-serif;
-
     background: url("./wallpaper.jpg") no-repeat center center fixed;
     background-size: cover;
 }
@@ -27,10 +25,9 @@ body {
     position: absolute;
     top: 20px;
     left: 20px;
-
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 20px;
 }
 
 .icon {
@@ -40,7 +37,6 @@ body {
     font-size: 12px;
     text-shadow: 1px 1px 2px black;
     cursor: pointer;
-    user-select: none;
 }
 
 .icon img {
@@ -79,7 +75,7 @@ body {
     justify-content: space-between;
     align-items: center;
 
-    padding: 0 6px 0 10px;
+    padding: 0 8px;
 
     background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25));
 
@@ -94,14 +90,14 @@ body {
     text-shadow: 0 2px 8px black;
 }
 
-/* ================= CLOSE BUTTON ================= */
+/* ================= BUTTONS ================= */
 .controls {
     display: flex;
-    gap: 3px;
+    gap: 4px;
 }
 
-.winbtn.close {
-    width: 46px;
+.winbtn {
+    width: 34px;
     height: 22px;
 
     display: flex;
@@ -112,12 +108,27 @@ body {
     font-weight: bold;
 
     border-radius: 3px;
+    cursor: pointer;
 
+    border: 1px solid rgba(0,0,0,0.3);
+}
+
+/* minimize */
+.winbtn.min {
+    background: linear-gradient(to bottom, #fff, #cfd8ff);
+}
+
+/* maximize */
+.winbtn.max {
+    background: linear-gradient(to bottom, #fff, #d0ffd6);
+}
+
+/* close */
+.winbtn.close {
+    width: 46px;
     color: white;
     background: linear-gradient(to bottom, #ff6a6a, #b30000);
-
     box-shadow: 0 0 10px rgba(255,0,0,0.6);
-    cursor: pointer;
 }
 
 .winbtn.close:hover {
@@ -128,7 +139,6 @@ body {
 .content {
     flex: 1;
     padding: 40px;
-
     color: white;
     text-shadow: 0 2px 10px black;
 }
@@ -174,22 +184,22 @@ body {
 
 <div class="desktop">
 
-    <div class="icon" onclick="boot('Home')">
+    <div class="icon" onclick="launch('Home')">
         <img src="./home.png">
         Home
     </div>
 
-    <div class="icon" onclick="boot('About')">
+    <div class="icon" onclick="launch('About')">
         <img src="./aboutme.png">
         About
     </div>
 
-    <div class="icon" onclick="openApp('Downloads')">
+    <div class="icon" onclick="launch('Downloads')">
         <img src="./downloads.png">
         Downloads
     </div>
 
-    <div class="icon" onclick="openApp('Videos')">
+    <div class="icon" onclick="launch('Videos')">
         <img src="./videos.png">
         Videos
     </div>
@@ -203,6 +213,7 @@ body {
 let z = 10;
 let windows = {};
 let tasks = {};
+let booted = false;
 
 /* ================= CONTENT ================= */
 function getContent(app) {
@@ -210,7 +221,7 @@ function getContent(app) {
         case "Home":
             return "Hello and welcome to my site.";
         case "About":
-            return "Hi I'm Brayden Peacock. I'm a tech YouTuber and I love messing with software and Operating Systems when I have time. Thanks for supporting me.";
+            return "Hi I'm Brayden Peacock. I'm a tech YouTuber and I love messing with software.";
         case "Downloads":
             return "Downloads coming soon.";
         case "Videos":
@@ -220,29 +231,13 @@ function getContent(app) {
     }
 }
 
-/* ================= AUDIO (SAFE GITHUB + iOS + PC) ================= */
+/* ================= AUDIO ================= */
 const bootSound = new Audio("./Start.mp3");
-bootSound.preload = "auto";
 bootSound.volume = 0.5;
+bootSound.preload = "auto";
 
-let booted = false;
-
-/* ================= BOOT SYSTEM ================= */
-function boot(app) {
-    if (booted) return;
-    booted = true;
-
-    try {
-        bootSound.currentTime = 0;
-        const p = bootSound.play();
-        if (p) p.catch(()=>{});
-    } catch (e) {}
-
-    openApp(app);
-}
-
-/* ================= OPEN WINDOW ================= */
-function openApp(app) {
+/* ================= LAUNCH ================= */
+function launch(app) {
 
     const id = "win_" + app;
 
@@ -263,7 +258,11 @@ function openApp(app) {
         <div class="title-bar">
             <span>${app}</span>
             <div class="controls">
+
+                <div class="winbtn min" onclick="minimize('${id}')">—</div>
+                <div class="winbtn max" onclick="maximize('${id}')">□</div>
                 <div class="winbtn close" onclick="closeWin('${id}')">✕</div>
+
             </div>
         </div>
 
@@ -282,7 +281,6 @@ function openApp(app) {
 
 /* ================= TASKBAR ================= */
 function addTask(id, app) {
-
     const bar = document.getElementById("taskbar");
 
     const btn = document.createElement("div");
@@ -310,6 +308,73 @@ function closeWin(id) {
     delete windows[id];
     delete tasks[id];
 }
+
+/* ================= MINIMIZE ================= */
+function minimize(id) {
+    if (windows[id]) {
+        windows[id].style.display = "none";
+    }
+}
+
+/* ================= MAXIMIZE ================= */
+function maximize(id) {
+    const w = windows[id];
+    if (!w) return;
+
+    if (!w.dataset.max) {
+        w.dataset.max = "1";
+        w.style.top = "0";
+        w.style.left = "0";
+        w.style.width = "100vw";
+        w.style.height = "calc(100vh - 40px)";
+    } else {
+        w.dataset.max = "";
+        w.style.width = "760px";
+        w.style.height = "480px";
+        w.style.top = "120px";
+        w.style.left = "120px";
+    }
+}
+
+/* ================= DRAG ================= */
+let dragTarget = null;
+let offsetX = 0;
+let offsetY = 0;
+
+document.addEventListener("mousedown", (e) => {
+    const bar = e.target.closest(".title-bar");
+    if (!bar) return;
+
+    dragTarget = bar.parentElement;
+
+    offsetX = e.clientX - dragTarget.offsetLeft;
+    offsetY = e.clientY - dragTarget.offsetTop;
+
+    dragTarget.style.zIndex = ++z;
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (!dragTarget) return;
+
+    dragTarget.style.left = (e.clientX - offsetX) + "px";
+    dragTarget.style.top = (e.clientY - offsetY) + "px";
+});
+
+document.addEventListener("mouseup", () => {
+    dragTarget = null;
+});
+
+/* ================= BOOT ================= */
+document.addEventListener("pointerdown", () => {
+
+    if (booted) return;
+    booted = true;
+
+    bootSound.play().catch(() => {});
+
+    launch("Home");
+
+}, { once: true });
 
 </script>
 
