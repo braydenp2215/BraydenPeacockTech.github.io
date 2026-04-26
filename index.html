@@ -15,7 +15,7 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 
 /* MASSIVE ROVER & SEARCH */
 #search-container { position: absolute; bottom: 60px; right: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 1000; }
-#rover-bubble { background: white; color: black; padding: 15px 20px; border-radius: 20px; border: 3px solid #78aaff; font-size: 15px; width: 280px; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 15px; font-weight: 500; }
+#rover-bubble { background: white; color: black; padding: 15px 20px; border-radius: 20px; border: 3px solid #78aaff; font-size: 14px; width: 280px; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 15px; font-weight: 500; }
 #rover-bubble::after { content: ''; position: absolute; bottom: -15px; right: 60px; border-width: 15px 15px 0; border-style: solid; border-color: white transparent; }
 #rover-dog { width: 240px; cursor: pointer; }
 #rover-dog img { width: 100%; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
@@ -41,7 +41,7 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 .blog-date { font-size: 0.95em; color: white; font-weight: bold; display: block; margin-bottom: 8px; }
 .open-full-btn { background: #78aaff; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; }
 
-/* READER */
+/* FULL READER */
 #blog-reader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.98); backdrop-filter: blur(25px); z-index: 10002; display: none; flex-direction: column; color: white; }
 .reader-header { padding: 15px 25px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
 .reader-body { flex: 1; padding: 60px 20%; overflow-y: auto; scroll-behavior: smooth; }
@@ -64,7 +64,7 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     <div id="rover-bubble">Woof! I'm Rover. Type what you're looking for and I'll find it for you!</div>
     <div id="rover-dog"><img id="rover-img" src="./search.png" alt="Rover"></div>
     <div id="search-box">
-        <input type="text" id="site-search" placeholder="Ask Rover..." onkeydown="if(event.key==='Enter') executeSearch()">
+        <input type="text" id="site-search" placeholder="Search site, dates, or creator..." onkeydown="if(event.key==='Enter') executeSearch()">
         <button class="search-btn" onclick="executeSearch()">Search</button>
     </div>
 </div>
@@ -104,26 +104,36 @@ function executeSearch() {
     if (!query) return;
 
     const img = document.getElementById('rover-img');
+    const bubble = document.getElementById('rover-bubble');
+    
     img.src = "./finding.gif";
-    document.getElementById('rover-bubble').innerText = "Sniff sniff... give me 10 seconds to find '" + query + "'!";
+    bubble.innerText = "Sniff sniff... Rover is looking everywhere for '" + query + "'!";
 
     setTimeout(() => {
         img.src = "./search.png"; 
-        const pages = ['home', 'about', 'downloads', 'videos', 'blog'];
-        if (pages.includes(query)) {
-            launch(query.charAt(0).toUpperCase() + query.slice(1));
-            document.getElementById('rover-bubble').innerText = "Found it! Opening " + query + ".";
+        
+        // Advanced Search: Dates, Author, Title, and Content
+        const bIndex = myBlogs.findIndex(b => 
+            b.title.toLowerCase().includes(query) || 
+            b.fullText.toLowerCase().includes(query) || 
+            b.author.toLowerCase().includes(query) || 
+            b.date.toLowerCase().includes(query)
+        );
+
+        if (bIndex !== -1) {
+            launch('Blog');
+            openReader(bIndex);
+            bubble.innerText = "Rover wants to know: Is this the right program? Found it in the blog!";
         } else {
-            const bIndex = myBlogs.findIndex(b => b.title.toLowerCase().includes(query) || b.fullText.toLowerCase().includes(query));
-            if (bIndex !== -1) {
-                launch('Blog');
-                openReader(bIndex);
-                document.getElementById('rover-bubble').innerText = "Found it in the blog!";
+            const pages = ['home', 'about', 'downloads', 'videos', 'blog'];
+            if (pages.includes(query)) {
+                launch(query.charAt(0).toUpperCase() + query.slice(1));
+                bubble.innerText = "Rover wants to know: Is this the right program? Opening the page!";
             } else {
-                document.getElementById('rover-bubble').innerText = "Woof! Rover couldn't find that.";
+                bubble.innerText = "Woof! Rover couldn't find any dates, names, or creators matching '" + query + "'.";
             }
         }
-    }, 10000); // SET TO 10 SECONDS
+    }, 10000); 
 }
 
 function launch(app) {
@@ -132,16 +142,7 @@ function launch(app) {
     const win = document.createElement("div");
     win.className = "window";
     win.style.top = "100px"; win.style.left = "100px"; win.style.zIndex = ++z;
-    win.innerHTML = `
-        <div class="title-bar">
-            <span>${app} - BraydenPeacockTech</span>
-            <div class="controls">
-                <div class="winbtn" onclick="minimizeWin('${id}')">_</div>
-                <div class="winbtn" onclick="maximizeWin('${id}')">□</div>
-                <div class="winbtn close" onclick="closeWin('${id}')">✕</div>
-            </div>
-        </div>
-        <div class="content">${getContent(app)}</div>`;
+    win.innerHTML = `<div class="title-bar"><span>${app} - BraydenPeacockTech</span><div class="controls"><div class="winbtn" onclick="minimizeWin('${id}')">_</div><div class="winbtn" onclick="maximizeWin('${id}')">□</div><div class="winbtn close" onclick="closeWin('${id}')">✕</div></div></div><div class="content">${getContent(app)}</div>`;
     document.body.appendChild(win);
     windows[id] = win;
     addTask(id, app);
@@ -163,9 +164,7 @@ function getContent(app) {
         });
         return listHtml;
     }
-    if (app === "Home") return "Welcome to BraydenPeacockTech!";
-    if (app === "About") return "Hi, I'm Brayden Peacock, tech enthusiast and YouTuber.";
-    return app + " content coming soon!";
+    return app + " content for BraydenPeacockTech.";
 }
 
 function openReader(index) {
@@ -177,8 +176,8 @@ function openReader(index) {
 }
 
 function closeReader() { document.getElementById('blog-reader').style.display = 'none'; }
-function closeWin(id) { windows[id].remove(); tasks[id].remove(); delete windows[id]; delete tasks[id]; }
-function minimizeWin(id) { windows[id].style.display = "none"; }
+function closeWin(id) { if (windows[id]) windows[id].remove(); if (tasks[id]) tasks[id].remove(); delete windows[id]; delete tasks[id]; }
+function minimizeWin(id) { if (windows[id]) windows[id].style.display = "none"; }
 function maximizeWin(id) {
     const w = windows[id];
     if (w.style.width === "100vw") {
@@ -194,7 +193,6 @@ document.getElementById('readerBody').onscroll = function() {
     if (this.scrollTop > 300) btn.style.display = "block"; else btn.style.display = "none";
 };
 
-/* DRAG LOGIC */
 let dragTarget = null, offsetX = 0, offsetY = 0;
 document.addEventListener("mousedown", (e) => {
     const bar = e.target.closest(".title-bar");
