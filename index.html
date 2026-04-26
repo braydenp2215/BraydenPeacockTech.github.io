@@ -3,119 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BraydenPeacockTech - Hilly Lunchbox OS</title>
+    <title>Hilly Lunchbox OS - Build 4015</title>
     <style>
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
+            margin: 0; padding: 0; height: 100%;
             font-family: 'Segoe UI', Tahoma, sans-serif;
             background: url('wallpaper.jpg') no-repeat center center fixed;
             background-size: cover;
-            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
         }
 
-        /* The Main Vista Window */
         .vista-window {
-            width: 800px;
-            height: 500px;
-            margin: 50px auto;
+            width: 850px; height: 550px;
             background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px) saturate(150%);
-            -webkit-backdrop-filter: blur(15px) saturate(150%);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        /* Title Bar */
-        .title-bar {
-            padding: 10px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-
-        .title-text {
-            color: white;
-            font-size: 14px;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-            font-weight: bold;
-        }
-
-        /* Main Content Area */
-        .main-container {
-            display: flex;
-            flex: 1;
+            display: flex; flex-direction: column;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
             overflow: hidden;
         }
 
-        /* The Icon Sidebar (Software Repository) */
+        .title-bar {
+            height: 32px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 12px; border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .title-text { color: white; font-size: 13px; font-weight: bold; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+
+        .main-content { display: flex; flex: 1; }
+        
         .sidebar {
-            width: 100px;
-            background: rgba(0, 0, 0, 0.1);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
+            width: 80px; background: rgba(0,0,0,0.1);
+            border-right: 1px solid rgba(255,255,255,0.1);
+            display: flex; flex-direction: column; align-items: center; padding-top: 20px;
         }
 
-        .nav-icon {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 25px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        }
+        .nav-icon { width: 48px; height: 48px; margin-bottom: 20px; cursor: pointer; transition: 0.2s; }
+        .nav-icon:hover { transform: scale(1.15); filter: brightness(1.2); }
 
-        .nav-icon:hover {
-            transform: scale(1.2);
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
-        }
+        .content-area { flex: 1; padding: 40px; color: white; display: flex; flex-direction: column; }
 
-        /* Content Pane */
-        .content-pane {
-            flex: 1;
-            padding: 30px;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-            background: rgba(255, 255, 255, 0.05);
-        }
+        /* THE BUTTON ROW FIX */
+        .button-row { margin-top: auto; display: flex; gap: 15px; padding-bottom: 10px; }
 
-        /* The Fixed Glossy Buttons */
-        .button-row {
-            margin-top: 30px;
-        }
-
-        .vista-btn {
-            background: linear-gradient(to bottom, 
-                rgba(255,255,255,0.5) 0%, 
-                rgba(255,255,255,0.2) 50%, 
-                rgba(0,0,0,0.1) 51%, 
-                rgba(255,255,255,0.1) 100%);
+        /* Styled <a> tag to act as a bulletproof button */
+        .vista-btn-link {
+            display: inline-block;
+            text-decoration: none;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 50%, rgba(0,0,0,0.1) 51%, rgba(255,255,255,0.2) 100%);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 4px;
+            border-radius: 3px;
             color: white;
-            padding: 10px 25px;
+            padding: 8px 25px;
+            font-family: 'Segoe UI', sans-serif;
             font-size: 14px;
-            cursor: pointer;
-            margin-right: 10px;
+            font-weight: 500;
+            text-align: center;
             transition: 0.2s;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            cursor: pointer;
         }
 
-        .vista-btn:hover {
-            border-color: #00d2ff;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
-            background: linear-gradient(to bottom, rgba(0,210,255,0.4), rgba(0,210,255,0.2));
+        .vista-btn-link:hover {
+            background: linear-gradient(to bottom, #00d2ff, #0089d7);
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.8);
+            color: white;
         }
     </style>
 </head>
@@ -123,26 +80,25 @@
 
 <div class="vista-window">
     <div class="title-bar">
-        <span class="title-text">Hilly Lunchbox OS - Software Repository</span>
-        <div class="window-controls">
-            <img src="https://i.imgur.com/39N6FvG.png" style="height: 20px;"> </div>
+        <span class="title-text">Hilly Lunchbox OS - System Architect [Brayden]</span>
     </div>
 
-    <div class="main-container">
+    <div class="main-content">
         <div class="sidebar">
             <img src="home.png" class="nav-icon" title="Home">
-            <img src="aboutme.png" class="nav-icon" title="About Me">
+            <img src="aboutme.png" class="nav-icon" title="About">
             <img src="downloads.png" class="nav-icon" title="Downloads">
-            <img src="videos.png" class="nav-icon" title="Videos">
+            <img src="videos.png" class="nav-icon" title="Telemetry">
         </div>
 
-        <div class="content-pane">
-            <h1>Welcome to the Repository</h1>
-            <p>This is the official home for Hilly Lunchbox OS development, assets, and software modifications.</p>
+        <div class="content-area">
+            <h1 style="font-weight: 300; margin-bottom: 10px;">Hilly Lunchbox OS</h1>
+            <p><strong>System Status:</strong> Distribution Layer Active.</p>
+            <p>Welcome, Architect. All legacy DLL assets have been mapped for Build 4015.</p>
             
             <div class="button-row">
-                <button class="vista-btn">View GitHub</button>
-                <button class="vista-btn">Download Latest Build</button>
+                <a href="https://github.com/braydenp2215/braydenp2215.github.io" class="vista-btn-link" target="_blank">View Source</a>
+                <a href="https://www.youtube.com/@BraydenPeacock2215" class="vista-btn-link" target="_blank">Telemetry Archive</a>
             </div>
         </div>
     </div>
