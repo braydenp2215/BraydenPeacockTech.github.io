@@ -17,9 +17,9 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 #search-container { position: absolute; bottom: 60px; right: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 1000; }
 #rover-bubble { background: white; color: black; padding: 15px 20px; border-radius: 20px; border: 3px solid #78aaff; font-size: 15px; width: 280px; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 15px; font-weight: 500; }
 #rover-bubble::after { content: ''; position: absolute; bottom: -15px; right: 60px; border-width: 15px 15px 0; border-style: solid; border-color: white transparent; }
-#rover-dog { width: 240px; cursor: pointer; transition: transform 0.2s; }
+#rover-dog { width: 240px; cursor: pointer; }
 #rover-dog img { width: 100%; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
-#search-box { background: rgba(235, 240, 255, 0.3); backdrop-filter: blur(25px); padding: 12px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.5); display: flex; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+#search-box { background: rgba(235, 240, 255, 0.3); backdrop-filter: blur(25px); padding: 12px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.5); display: flex; gap: 8px; }
 #site-search { background: none; border: none; color: white; outline: none; padding: 5px; width: 200px; font-size: 16px; }
 .search-btn { background: #78aaff; border: none; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
 
@@ -28,22 +28,24 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 .taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; }
 
 /* WINDOWS */
-.window { position: absolute; width: 760px; height: 480px; display: flex; flex-direction: column; border-radius: 10px; background: rgba(235,240,255,0.18); border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(40px) saturate(200%); box-shadow: 0 60px 140px rgba(0,0,0,0.75); overflow: hidden; }
+.window { position: absolute; width: 760px; height: 480px; display: flex; flex-direction: column; border-radius: 10px; background: rgba(235,240,255,0.18); border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(40px) saturate(200%); box-shadow: 0 60px 140px rgba(0,0,0,0.75); overflow: hidden; transition: width 0.2s, height 0.2s, top 0.2s, left 0.2s; }
 .title-bar { height: 38px; display: flex; justify-content: space-between; align-items: center; padding: 0 8px; background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25)); cursor: grab; user-select: none; }
 .title-bar span { color: white; font-size: 13px; font-weight: 600; text-shadow: 0 2px 8px black; pointer-events: none; }
-.winbtn { width: 34px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.3); }
+.controls { display: flex; gap: 4px; }
+.winbtn { width: 34px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.3); color: black; background: linear-gradient(to bottom, #fff, #ddd); }
 .winbtn.close { width: 46px; color: white; background: linear-gradient(to bottom, #ff6a6a, #b30000); }
 .content { flex: 1; padding: 30px; color: white; text-shadow: 0 2px 10px black; overflow-y: auto; }
 
-/* BLOG STYLING */
+/* BLOG STYLING - UPDATED DATE COLOR */
 .blog-entry { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.2); }
-.blog-date { font-size: 0.8em; color: #aaa; display: block; margin-bottom: 5px; }
+.blog-date { font-size: 0.95em; color: white; font-weight: bold; display: block; margin-bottom: 8px; } /* WHITE AND BOLD */
 .open-full-btn { background: #78aaff; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; }
 
-/* READER */
+/* FULL READER */
 #blog-reader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.98); backdrop-filter: blur(25px); z-index: 10002; display: none; flex-direction: column; color: white; }
 .reader-header { padding: 15px 25px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
 .reader-body { flex: 1; padding: 60px 20%; overflow-y: auto; scroll-behavior: smooth; }
+.reader-author-info { color: white; font-weight: bold; font-style: italic; margin-bottom: 40px; display: block; font-size: 1.2em; } /* WHITE AND BOLD */
 #backToTop { position: fixed; bottom: 30px; right: 140px; background: rgba(120,170,255,0.6); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px 15px; border-radius: 5px; cursor: pointer; display: none; }
 </style>
 </head>
@@ -60,7 +62,7 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 
 <div id="search-container">
     <div id="rover-bubble">Woof! I'm Rover. Type what you're looking for and I'll find it for you!</div>
-    <div id="rover-dog"><img src="./search.png" alt="Rover"></div>
+    <div id="rover-dog"><img id="rover-img" src="./search.png" alt="Rover"></div>
     <div id="search-box">
         <input type="text" id="site-search" placeholder="Ask Rover..." onkeydown="if(event.key==='Enter') executeSearch()">
         <button class="search-btn" onclick="executeSearch()">Search</button>
@@ -73,8 +75,8 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
         <div class="winbtn close" onclick="closeReader()">✕ Close</div>
     </div>
     <div class="reader-body" id="readerBody">
-        <h1 id="reader-post-title" style="font-size: 3.5em; color: #78aaff;"></h1>
-        <span id="reader-post-author" style="font-style: italic; color: #888; margin-bottom: 30px; display: block; font-size: 1.2em;"></span>
+        <h1 id="reader-post-title" style="font-size: 3.5em; color: #78aaff; margin-bottom: 10px;"></h1>
+        <span id="reader-post-author" class="reader-author-info"></span>
         <div id="reader-post-content" style="font-size: 1.3em; line-height: 1.7; white-space: pre-wrap;"></div>
         <div id="backToTop" onclick="scrollToTop()">↑ Back to Top</div>
     </div>
@@ -99,21 +101,29 @@ const myBlogs = [{
 function executeSearch() {
     const query = document.getElementById('site-search').value.toLowerCase().trim();
     if (!query) return;
-    const pages = ['home', 'about', 'downloads', 'videos', 'blog'];
-    if (pages.includes(query)) {
-        launch(query.charAt(0).toUpperCase() + query.slice(1));
-        return;
-    }
-    const bIndex = myBlogs.findIndex(b => b.title.toLowerCase().includes(query) || b.fullText.toLowerCase().includes(query));
-    if (bIndex !== -1) {
-        launch('Blog');
-        setTimeout(() => openReader(bIndex), 200);
-    } else {
-        document.getElementById('rover-bubble').innerText = "Woof? I couldn't find '" + query + "'.";
-    }
-}
 
-const bootSound = new Audio("./Start.mp3");
+    const img = document.getElementById('rover-img');
+    img.src = "./finding.gif";
+    document.getElementById('rover-bubble').innerText = "Sniff sniff... give me 5 seconds to find '" + query + "'!";
+
+    setTimeout(() => {
+        img.src = "./search.png"; 
+        const pages = ['home', 'about', 'downloads', 'videos', 'blog'];
+        if (pages.includes(query)) {
+            launch(query.charAt(0).toUpperCase() + query.slice(1));
+            document.getElementById('rover-bubble').innerText = "Found it! Opening " + query + ".";
+        } else {
+            const bIndex = myBlogs.findIndex(b => b.title.toLowerCase().includes(query) || b.fullText.toLowerCase().includes(query));
+            if (bIndex !== -1) {
+                launch('Blog');
+                openReader(bIndex);
+                document.getElementById('rover-bubble').innerText = "Found a blog post!";
+            } else {
+                document.getElementById('rover-bubble').innerText = "Woof! I couldn't find that.";
+            }
+        }
+    }, 5000); // 5 seconds
+}
 
 function launch(app) {
     const id = "win_" + app;
@@ -121,7 +131,16 @@ function launch(app) {
     const win = document.createElement("div");
     win.className = "window";
     win.style.top = "100px"; win.style.left = "100px"; win.style.zIndex = ++z;
-    win.innerHTML = `<div class="title-bar"><span>${app} - BraydenPeacockTech</span><div class="controls"><div class="winbtn close" onclick="closeWin('${id}')">✕</div></div></div><div class="content">${getContent(app)}</div>`;
+    win.innerHTML = `
+        <div class="title-bar">
+            <span>${app} - BraydenPeacockTech</span>
+            <div class="controls">
+                <div class="winbtn" onclick="minimizeWin('${id}')">_</div>
+                <div class="winbtn" onclick="maximizeWin('${id}')">□</div>
+                <div class="winbtn close" onclick="closeWin('${id}')">✕</div>
+            </div>
+        </div>
+        <div class="content">${getContent(app)}</div>`;
     document.body.appendChild(win);
     windows[id] = win;
     addTask(id, app);
@@ -139,12 +158,7 @@ function getContent(app) {
     if (app === "Blog") {
         let listHtml = "<h1>Latest Posts</h1>";
         myBlogs.forEach((post, index) => {
-            listHtml += `<div class="blog-entry">
-                <span class="blog-date">${post.date}</span>
-                <h2>${post.title}</h2>
-                <p>${post.preview}</p>
-                <button class="open-full-btn" onclick="openReader(${index})">Open in Full</button>
-            </div>`;
+            listHtml += `<div class="blog-entry"><span class="blog-date">${post.date}</span><h2>${post.title}</h2><button class="open-full-btn" onclick="openReader(${index})">Open in Full</button></div>`;
         });
         return listHtml;
     }
@@ -160,7 +174,17 @@ function openReader(index) {
 }
 
 function closeReader() { document.getElementById('blog-reader').style.display = 'none'; }
-function closeWin(id) { if (windows[id]) windows[id].remove(); if (tasks[id]) tasks[id].remove(); delete windows[id]; delete tasks[id]; }
+function closeWin(id) { windows[id].remove(); tasks[id].remove(); delete windows[id]; delete tasks[id]; }
+function minimizeWin(id) { windows[id].style.display = "none"; }
+function maximizeWin(id) {
+    const w = windows[id];
+    if (w.style.width === "100vw") {
+        w.style.width = "760px"; w.style.height = "480px"; w.style.top = "100px"; w.style.left = "100px";
+    } else {
+        w.style.width = "100vw"; w.style.height = "calc(100vh - 40px)"; w.style.top = "0"; w.style.left = "0";
+    }
+}
+
 function scrollToTop() { document.getElementById('readerBody').scrollTo({ top: 0, behavior: 'smooth' }); }
 
 document.getElementById('readerBody').onscroll = function() {
@@ -176,6 +200,7 @@ document.addEventListener("mousedown", (e) => {
     const bar = e.target.closest(".title-bar");
     if (!bar) return;
     dragTarget = bar.parentElement;
+    if(dragTarget.style.width === "100vw") { dragTarget = null; return; }
     offsetX = e.clientX - dragTarget.offsetLeft;
     offsetY = e.clientY - dragTarget.offsetTop;
     dragTarget.style.zIndex = ++z;
@@ -190,7 +215,6 @@ document.addEventListener("mouseup", () => { dragTarget = null; });
 document.addEventListener("pointerdown", () => {
     if (booted) return;
     booted = true;
-    bootSound.play().catch(() => {});
     launch("Home"); 
 }, { once: true });
 </script>
