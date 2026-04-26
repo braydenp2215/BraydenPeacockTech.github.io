@@ -1,101 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title id="tab-title">BraydenPeacockTech - Home</title>
-    <style>
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            font-family: 'Segoe UI', sans-serif;
-            background: #003366 url('wallpaper.jpg') no-repeat center center fixed;
-            background-size: cover;
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
-        }
-        .vista-window {
-            width: 850px; height: 550px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 10px;
-            display: flex; flex-direction: column;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.5);
-        }
-        .title-bar {
-            height: 34px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
-            display: flex; align-items: center; padding: 0 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            color: white; font-size: 13px; font-weight: bold;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-        }
-        .main-content { display: flex; flex: 1; }
-        .sidebar {
-            width: 80px; background: rgba(0,0,0,0.1);
-            border-right: 1px solid rgba(255,255,255,0.1);
-            display: flex; flex-direction: column; align-items: center; padding-top: 20px;
-        }
-        .nav-icon { width: 48px; height: 48px; margin-bottom: 20px; cursor: pointer; transition: 0.2s; }
-        .nav-icon:hover { transform: scale(1.1); }
-        .content-area { flex: 1; padding: 40px; color: white; }
-        .section { display: none; }
-        .section.active { display: block; }
-        .vista-btn {
-            display: inline-block; padding: 10px 25px; color: white;
-            border: 1px solid white; text-decoration: none; border-radius: 4px;
-            background: rgba(255,255,255,0.1); transition: 0.2s;
-        }
-        .vista-btn:hover { background: #00d2ff; }
-    </style>
+<meta charset="UTF-8">
+<title>Vista Aero OS - Complete Rebuild</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+
+    font-family: "Segoe UI", Tahoma, sans-serif;
+
+    background: url("https://raw.githubusercontent.com/braydenp2215/BraydenPeacockTech.github.io/main/wallpaper.jpg")
+    no-repeat center center fixed;
+
+    background-size: cover;
+}
+
+/* =========================
+   DESKTOP ICONS
+========================= */
+.desktop {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.icon {
+    width: 80px;
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    text-shadow: 1px 1px 2px black;
+    cursor: pointer;
+    user-select: none;
+}
+
+.icon img {
+    width: 48px;
+    height: 48px;
+    display: block;
+    margin: 0 auto 5px;
+}
+
+/* =========================
+   WINDOW SYSTEM
+========================= */
+.window {
+    position: absolute;
+
+    width: 760px;
+    height: 480px;
+
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 10px;
+
+    background: rgba(235, 240, 255, 0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+
+    backdrop-filter: blur(38px) saturate(200%);
+    -webkit-backdrop-filter: blur(38px) saturate(200%);
+
+    box-shadow: 0 60px 140px rgba(0,0,0,0.75);
+    overflow: hidden;
+}
+
+/* =========================
+   TITLE BAR (VISTA AERO)
+========================= */
+.title-bar {
+    height: 38px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 6px 0 10px;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.75),
+        rgba(255,255,255,0.25),
+        rgba(160,190,255,0.12)
+    );
+
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+
+    cursor: grab;
+    user-select: none;
+}
+
+.title-bar span {
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+}
+
+/* =========================
+   VISTA BUTTONS (FIXED)
+========================= */
+.controls {
+    display: flex;
+    gap: 3px;
+}
+
+.winbtn {
+    width: 34px;
+    height: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    border-radius: 3px;
+
+    border: 1px solid rgba(0,0,0,0.35);
+
+    background: linear-gradient(to bottom, #ffffff, #cfe0ff);
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.winbtn:active {
+    transform: translateY(1px);
+}
+
+/* SHINY WIDE CLOSE BUTTON */
+.winbtn.close {
+    width: 46px;
+
+    color: white;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(255,200,200,1),
+        rgba(220,60,60,0.95),
+        rgba(140,0,0,0.95)
+    );
+
+    border: 1px solid rgba(90,0,0,0.85);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.6),
+        0 0 10px rgba(255,80,80,0.6);
+}
+
+.winbtn.close:hover {
+    box-shadow:
+        0 0 18px rgba(255,80,80,1),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+/* =========================
+   CONTENT
+========================= */
+.content {
+    flex: 1;
+    padding: 40px;
+
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.95);
+}
+
+/* =========================
+   TASKBAR
+========================= */
+#taskbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 5px;
+
+    background: rgba(0,0,0,0.6);
+}
+
+.taskbtn {
+    padding: 6px 12px;
+    margin-right: 6px;
+
+    color: white;
+    font-size: 13px;
+
+    border-radius: 3px;
+
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+
+    cursor: pointer;
+}
+</style>
 </head>
+
 <body>
 
-<div class="vista-window">
-    <div class="title-bar">
-        <span id="display-title">BraydenPeacockTech - Home</span>
+<!-- DESKTOP -->
+<div class="desktop">
+
+    <div class="icon" onclick="openApp('Home')">
+        <img src="https://raw.githubusercontent.com/braydenp2215/BraydenPeacockTech.github.io/main/home.png">
+        Home
     </div>
-    <div class="main-content">
-        <div class="sidebar">
-            <img src="home.png" class="nav-icon" onclick="nav('Home', 's-home')">
-            <img src="aboutme.png" class="nav-icon" onclick="nav('About', 's-about')">
-            <img src="downloads.png" class="nav-icon" onclick="nav('Downloads', 's-down')">
-            <img src="videos.png" class="nav-icon" onclick="nav('Telemetry', 's-vid')">
-        </div>
-        <div class="content-area">
-            <div id="s-home" class="section active">
-                <h1>BraydenPeacockTech</h1>
-                <p>Welcome to the central terminal.</p>
-                <a href="https://github.com/braydenp2215/braydenp2215.github.io" class="vista-btn" target="_blank">View Source</a>
-            </div>
-            <div id="s-about" class="section">
-                <h1>About</h1>
-                <p>System Architect and Hardware Enthusiast.</p>
-            </div>
-            <div id="s-down" class="section">
-                <h1>Downloads</h1>
-                <p>No active downloads in Build 4015.</p>
-            </div>
-            <div id="s-vid" class="section">
-                <h1>Telemetry</h1>
-                <p>Reviewing video archives.</p>
-                <br>
-                <a href="https://www.youtube.com/@BraydenPeacock2215" class="vista-btn" target="_blank">YouTube Archive</a>
-            </div>
-        </div>
+
+    <div class="icon" onclick="openApp('About')">
+        <img src="https://raw.githubusercontent.com/braydenp2215/BraydenPeacockTech.github.io/main/aboutme.png">
+        About
     </div>
+
+    <div class="icon" onclick="openApp('Downloads')">
+        <img src="https://raw.githubusercontent.com/braydenp2215/BraydenPeacockTech.github.io/main/downloads.png">
+        Downloads
+    </div>
+
+    <div class="icon" onclick="openApp('Videos')">
+        <img src="https://raw.githubusercontent.com/braydenp2215/BraydenPeacockTech.github.io/main/videos.png">
+        Videos
+    </div>
+
 </div>
 
+<div id="taskbar"></div>
+
 <script>
-    function nav(name, id) {
-        // Update browser tab and window title
-        document.title = "BraydenPeacockTech - " + name;
-        document.getElementById('display-title').innerText = "BraydenPeacockTech - " + name;
-        
-        // Switch sections
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+
+let z = 10;
+let dragTarget = null;
+let offsetX = 0;
+let offsetY = 0;
+
+/* =========================
+   OPEN WINDOW
+========================= */
+function openApp(app) {
+
+    const win = document.createElement("div");
+    win.className = "window";
+
+    win.style.top = (100 + Math.random()*40) + "px";
+    win.style.left = (100 + Math.random()*40) + "px";
+    win.style.zIndex = z++;
+
+    win.innerHTML = `
+        <div class="title-bar">
+            <span>${app} - Vista OS</span>
+
+            <div class="controls">
+                <div class="winbtn" onclick="minimize(this)">—</div>
+                <div class="winbtn" onclick="maximize(this)">□</div>
+                <div class="winbtn close" onclick="closeWin(this)">✕</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <h1>${app}</h1>
+            <p>${app} window active.</p>
+        </div>
+    `;
+
+    document.body.appendChild(win);
+
+    enableDrag(win);
+    addTask(win, app);
+}
+
+/* =========================
+   AUTO START HOME
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+    openApp("Home");
+});
+
+/* =========================
+   DRAG SYSTEM
+========================= */
+function enableDrag(win) {
+    const bar = win.querySelector(".title-bar");
+
+    bar.addEventListener("mousedown", (e) => {
+        dragTarget = win;
+
+        offsetX = e.clientX - win.offsetLeft;
+        offsetY = e.clientY - win.offsetTop;
+
+        win.style.zIndex = z++;
+    });
+}
+
+document.addEventListener("mousemove", (e) => {
+    if (dragTarget) {
+        dragTarget.style.left = (e.clientX - offsetX) + "px";
+        dragTarget.style.top = (e.clientY - offsetY) + "px";
     }
+});
+
+document.addEventListener("mouseup", () => {
+    dragTarget = null;
+});
+
+/* =========================
+   WINDOW CONTROLS
+========================= */
+function minimize(btn) {
+    btn.closest(".window").style.display = "none";
+}
+
+function maximize(btn) {
+    const w = btn.closest(".window");
+
+    if (!w.dataset.max) {
+        w.dataset.max = "1";
+        w.style.top = "0";
+        w.style.left = "0";
+        w.style.width = "100vw";
+        w.style.height = "calc(100vh - 40px)";
+    } else {
+        w.dataset.max = "";
+        w.style.width = "760px";
+        w.style.height = "480px";
+    }
+}
+
+function closeWin(btn) {
+    btn.closest(".window").remove();
+}
+
+/* =========================
+   TASKBAR
+========================= */
+function addTask(win, app) {
+    const bar = document.getElementById("taskbar");
+
+    const btn = document.createElement("div");
+    btn.className = "taskbtn";
+    btn.innerText = app;
+
+    btn.onclick = () => {
+        win.style.display = "flex";
+        win.style.zIndex = z++;
+    };
+
+    bar.appendChild(btn);
+}
+
 </script>
 
 </body>
