@@ -13,17 +13,52 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 .icon { width: 80px; text-align: center; color: white; font-size: 12px; text-shadow: 1px 1px 2px black; cursor: pointer; }
 .icon img { width: 48px; height: 48px; display: block; margin: 0 auto 5px; }
 
-/* Window UI */
-.window { position: absolute; width: 760px; height: 480px; display: flex; flex-direction: column; border-radius: 10px; background: rgba(235,240,255,0.18); border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); box-shadow: 0 60px 140px rgba(0,0,0,0.75); overflow: hidden; }
-.title-bar { height: 38px; display: flex; justify-content: space-between; align-items: center; padding: 0 8px; background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25)); cursor: grab; user-select: none; }
-.title-bar span { color: white; font-size: 13px; font-weight: 600; text-shadow: 0 2px 8px black; }
-.controls { display: flex; gap: 4px; }
-.winbtn { width: 34px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.3); }
-.winbtn.min { background: linear-gradient(to bottom, #fff, #cfd8ff); }
-.winbtn.max { background: linear-gradient(to bottom, #fff, #d0ffd6); }
-.winbtn.close { width: 46px; color: white; background: linear-gradient(to bottom, #ff6a6a, #b30000); }
+/* SEARCH UI WITH ROVER */
+#search-container {
+    position: absolute;
+    bottom: 60px;
+    right: 20px;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    z-index: 1000;
+}
+#rover-dog { width: 100px; cursor: pointer; transition: transform 0.2s; }
+#rover-dog:hover { transform: scale(1.1); }
+#rover-dog img { width: 100%; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); }
 
-.content { flex: 1; padding: 30px; color: white; text-shadow: 0 2px 10px black; overflow-y: auto; }
+#search-box {
+    background: rgba(235, 240, 255, 0.2);
+    backdrop-filter: blur(20px);
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    display: flex;
+    gap: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+#site-search {
+    background: none;
+    border: none;
+    color: white;
+    outline: none;
+    padding: 8px;
+    font-size: 14px;
+    width: 150px;
+    text-shadow: 0 1px 3px black;
+}
+#site-search::placeholder { color: rgba(255,255,255,0.7); }
+
+.search-btn {
+    background: linear-gradient(to bottom, #78aaff, #3a7bd5);
+    border: 1px solid rgba(0,0,0,0.3);
+    color: white;
+    padding: 6px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
 
 /* FULLSCREEN READER */
 #blog-reader {
@@ -38,35 +73,19 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     color: white;
 }
 .reader-header { padding: 15px 25px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.reader-body { 
-    flex: 1; 
-    padding: 60px 20%; 
-    overflow-y: auto; 
-    scroll-behavior: smooth;
-}
-#reader-post-content { 
-    font-size: 1.3em; 
-    line-height: 1.7; 
-    white-space: pre-wrap; /* Respects line breaks */
-}
+.reader-body { flex: 1; padding: 60px 20%; overflow-y: auto; scroll-behavior: smooth; }
 
-/* BACK TO TOP BUTTON */
-#backToTop {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: rgba(120,170,255,0.6);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: none;
-    font-size: 12px;
-}
-
+/* (WINDOW & TASKBAR STYLES SAME AS BEFORE) */
+.window { position: absolute; width: 760px; height: 480px; display: flex; flex-direction: column; border-radius: 10px; background: rgba(235,240,255,0.18); border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); box-shadow: 0 60px 140px rgba(0,0,0,0.75); overflow: hidden; }
+.title-bar { height: 38px; display: flex; justify-content: space-between; align-items: center; padding: 0 8px; background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25)); cursor: grab; user-select: none; }
+.title-bar span { color: white; font-size: 13px; font-weight: 600; text-shadow: 0 2px 8px black; }
+.controls { display: flex; gap: 4px; }
+.winbtn { width: 34px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.3); }
+.winbtn.close { width: 46px; color: white; background: linear-gradient(to bottom, #ff6a6a, #b30000); }
+.content { flex: 1; padding: 30px; color: white; text-shadow: 0 2px 10px black; overflow-y: auto; }
 #taskbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; display: flex; align-items: center; padding: 5px; background: rgba(0,0,0,0.65); z-index: 10000; }
 .taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; }
+#backToTop { position: fixed; bottom: 30px; right: 140px; background: rgba(120,170,255,0.6); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px 15px; border-radius: 5px; cursor: pointer; display: none; font-size: 12px; z-index: 10001; }
 </style>
 </head>
 
@@ -80,6 +99,17 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     <div class="icon" onclick="launch('Blog')"><img src="./pic.png">Blog</div>
 </div>
 
+<!-- ROVER SEARCH COMPANION -->
+<div id="search-container">
+    <div id="rover-dog" onclick="roverSpeak()">
+        <img src="./search.png" alt="Rover">
+    </div>
+    <div id="search-box">
+        <input type="text" id="site-search" placeholder="Ask Rover..." onkeydown="if(event.key==='Enter') executeSearch()">
+        <button class="search-btn" onclick="executeSearch()">Search</button>
+    </div>
+</div>
+
 <div id="blog-reader">
     <div class="reader-header">
         <span style="font-weight: bold; letter-spacing: 1px;">BRAYDENPEACOCKTECH BLOG</span>
@@ -88,7 +118,7 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     <div class="reader-body" id="readerBody">
         <h1 id="reader-post-title" style="font-size: 3.5em; margin-bottom: 10px; color: #78aaff;"></h1>
         <span id="reader-post-author" style="color: #888; font-style: italic; margin-bottom: 40px; display: block; font-size: 1.2em;"></span>
-        <div id="reader-post-content"></div>
+        <div id="reader-post-content" style="font-size: 1.3em; line-height: 1.7; white-space: pre-wrap;"></div>
         <div id="backToTop" onclick="scrollToTop()">↑ Back to Top</div>
     </div>
 </div>
@@ -101,35 +131,52 @@ let windows = {};
 let tasks = {};
 let booted = false;
 
-// UPDATED BLOG DATA WITH YOUR 5 CHANGES
 const myBlogs = [
     {
         title: "Is Microsoft finally doing things right",
         author: "Brayden Peacock",
+        date: "April, 26th 2026",
         preview: "Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it...",
         fullText: "Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.\n\n1st Change: Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.\n\n2nd Change: Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!\n\n3rd Change: Microsoft said they would let users skip Windows Update in OOBE.\n\n4th Change: Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.\n\n5th and Final: In Windows Update, Dev and Canary were merged into the Experimental Channel.\n\nThanks for reading this blog and have a great day."
     }
 ];
 
+// ROVER SEARCH LOGIC
+function executeSearch() {
+    const query = document.getElementById('site-search').value.toLowerCase();
+    if (!query) return;
+
+    // Search in blogs
+    const blogIndex = myBlogs.findIndex(b => b.title.toLowerCase().includes(query) || b.fullText.toLowerCase().includes(query));
+    
+    if (blogIndex !== -1) {
+        openReader(blogIndex);
+    } else if (query.includes("home") || query.includes("about") || query.includes("downloads") || query.includes("videos")) {
+        const target = query.charAt(0).toUpperCase() + query.slice(1);
+        launch(target);
+    } else {
+        alert("Rover says: 'Woof! I couldn't find any results for " + query + ". Try searching for things like 26H2 or Taskbar!'");
+    }
+}
+
+function roverSpeak() {
+    alert("Woof! I'm Rover. Type what you're looking for in the box and I'll find it for you!");
+}
+
 function openReader(index) {
     const post = myBlogs[index];
     document.getElementById('reader-post-title').innerText = post.title;
-    document.getElementById('reader-post-author').innerText = "By " + post.author;
+    document.getElementById('reader-post-author').innerText = "By " + post.author + " | " + post.date;
     document.getElementById('reader-post-content').innerText = post.fullText;
     document.getElementById('blog-reader').style.display = 'flex';
 }
 
 function closeReader() { document.getElementById('blog-reader').style.display = 'none'; }
+function scrollToTop() { document.getElementById('readerBody').scrollTo({ top: 0, behavior: 'smooth' }); }
 
-function scrollToTop() {
-    document.getElementById('readerBody').scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Show/Hide Back to Top button
 document.getElementById('readerBody').onscroll = function() {
     let btn = document.getElementById("backToTop");
-    if (this.scrollTop > 300) { btn.style.display = "block"; } 
-    else { btn.style.display = "none"; }
+    if (this.scrollTop > 300) { btn.style.display = "block"; } else { btn.style.display = "none"; }
 };
 
 function getContent(app) {
