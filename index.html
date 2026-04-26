@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title BraydenPeacockTech</title>
+    <title>BraydenPeacockTech - Home</title>
     <style>
         body, html {
             margin: 0; padding: 0; height: 100%;
@@ -11,98 +11,124 @@
             background: url('wallpaper.jpg') no-repeat center center fixed;
             background-size: cover;
             display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
         }
 
         .vista-window {
             width: 850px; height: 550px;
             background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex; flex-direction: column;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-            overflow: hidden;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.7);
         }
 
         .title-bar {
-            height: 32px;
+            height: 34px;
             background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 12px; border-bottom: 1px solid rgba(255,255,255,0.2);
+            display: flex; align-items: center;
+            padding: 0 15px; border-bottom: 1px solid rgba(255,255,255,0.2);
         }
 
-        .title-text { color: white; font-size: 13px; font-weight: bold; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+        /* This spans the dynamic part of the title */
+        #window-title { 
+            color: white; font-size: 13px; font-weight: bold; 
+            text-shadow: 0 1px 5px rgba(0,0,0,0.9);
+        }
 
-        .main-content { display: flex; flex: 1; }
+        .main-content { display: flex; flex: 1; overflow: hidden; }
         
         .sidebar {
-            width: 80px; background: rgba(0,0,0,0.1);
-            border-right: 1px solid rgba(255,255,255,0.1);
-            display: flex; flex-direction: column; align-items: center; padding-top: 20px;
+            width: 85px; background: rgba(0,0,0,0.15);
+            border-right: 1px solid rgba(255,255,255,0.15);
+            display: flex; flex-direction: column; align-items: center; padding-top: 25px;
         }
 
-        .nav-icon { width: 48px; height: 48px; margin-bottom: 20px; cursor: pointer; transition: 0.2s; }
+        .nav-icon { 
+            width: 52px; height: 52px; margin-bottom: 25px; 
+            cursor: pointer; transition: 0.3s; 
+        }
         .nav-icon:hover { transform: scale(1.15); filter: brightness(1.2); }
 
-        .content-area { flex: 1; padding: 40px; color: white; display: flex; flex-direction: column; }
+        .content-area { flex: 1; padding: 45px; color: white; display: flex; flex-direction: column; }
+        
+        /* Hides sections that aren't active */
+        .section { display: none; }
+        .section.active { display: flex; flex-direction: column; height: 100%; }
 
-        /* THE BUTTON ROW FIX */
-        .button-row { margin-top: auto; display: flex; gap: 15px; padding-bottom: 10px; }
+        .button-row { margin-top: auto; display: flex; gap: 15px; padding-bottom: 15px; }
 
-        /* Styled <a> tag to act as a bulletproof button */
         .vista-btn-link {
-            display: inline-block;
-            text-decoration: none;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 50%, rgba(0,0,0,0.1) 51%, rgba(255,255,255,0.2) 100%);
+            display: inline-block; text-decoration: none;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 3px;
-            color: white;
-            padding: 8px 25px;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            text-align: center;
-            transition: 0.2s;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-            cursor: pointer;
+            border-radius: 4px; color: white; padding: 10px 30px;
+            font-size: 14px; font-weight: 600; transition: 0.2s;
         }
-
-        .vista-btn-link:hover {
-            background: linear-gradient(to bottom, #00d2ff, #0089d7);
-            border-color: #fff;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.8);
-            color: white;
-        }
+        .vista-btn-link:hover { background: #00d2ff; box-shadow: 0 0 15px #00d2ff; }
     </style>
 </head>
 <body>
 
 <div class="vista-window">
     <div class="title-bar">
-        <span class="title-text">Hilly Lunchbox OS - System Architect [Brayden]</span>
+        <span id="window-title">BraydenPeacockTech - Home</span>
     </div>
 
     <div class="main-content">
         <div class="sidebar">
-            <img src="home.png" class="nav-icon" title="Home">
-            <img src="aboutme.png" class="nav-icon" title="About">
-            <img src="downloads.png" class="nav-icon" title="Downloads">
-            <img src="videos.png" class="nav-icon" title="Telemetry">
+            <img src="home.png" class="nav-icon" onclick="updateNav('Home', 'sec-home')">
+            <img src="aboutme.png" class="nav-icon" onclick="updateNav('About', 'sec-about')">
+            <img src="downloads.png" class="nav-icon" onclick="updateNav('Downloads', 'sec-downloads')">
+            <img src="videos.png" class="nav-icon" onclick="updateNav('Telemetry', 'sec-videos')">
         </div>
 
         <div class="content-area">
-            <h1 style="font-weight: 300; margin-bottom: 10px;">Hilly Lunchbox OS</h1>
-            <p><strong>System Status:</strong> Distribution Layer Active.</p>
-            <p>Welcome, Architect. All legacy DLL assets have been mapped for Build 4015.</p>
-            
-            <div class="button-row">
-                <a href="https://github.com/braydenp2215/braydenp2215.github.io" class="vista-btn-link" target="_blank">View Source</a>
-                <a href="https://www.youtube.com/@BraydenPeacock2215" class="vista-btn-link" target="_blank">Telemetry Archive</a>
+            <div id="sec-home" class="section active">
+                <h1 style="font-weight: 300; font-size: 3em; margin: 0;">BraydenPeacockTech</h1>
+                <p style="margin-top: 25px;">Welcome to the main terminal. All systems operational.</p>
+                <div class="button-row">
+                    <a href="https://github.com/braydenp2215/braydenp2215.github.io" class="vista-btn-link" target="_blank">View Source</a>
+                </div>
+            </div>
+
+            <div id="sec-about" class="section">
+                <h1>About Me</h1>
+                <p style="margin-top: 20px;">System Architect and hardware enthusiast specializing in custom OS environments.</p>
+            </div>
+
+            <div id="sec-downloads" class="section">
+                <h1>Downloads</h1>
+                <p style="margin-top: 20px;">System images and asset packages will appear here.</p>
+            </div>
+
+            <div id="sec-videos" class="section">
+                <h1>Telemetry</h1>
+                <p style="margin-top: 20px;">Reviewing recent build logs and video captures.</p>
+                <div class="button-row">
+                    <a href="https://www.youtube.com/@BraydenPeacock2215" class="vista-btn-link" target="_blank">YouTube Archive</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function updateNav(pageName, sectionId) {
+        // 1. Update the Window Title (The part in the Aero bar)
+        document.getElementById('window-title').innerText = "BraydenPeacockTech - " + pageName;
+        
+        // 2. Update the Browser Tab Title
+        document.title = "BraydenPeacockTech - " + pageName;
+
+        // 3. Switch the visible content
+        const sections = document.querySelectorAll('.section');
+        sections.forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+    }
+</script>
 
 </body>
 </html>
