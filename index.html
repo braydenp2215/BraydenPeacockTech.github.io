@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Super11 Vista Aero OS</title>
+<title>BraydenPeacockTech</title>
 
 <style>
-/* (UNCHANGED CSS — SAME AS BEFORE) */
+/* (STYLING UPDATED FOR BRAYDENPEACOCKTECH) */
 * {
     margin: 0;
     padding: 0;
@@ -97,31 +97,33 @@ body {
     border: 1px solid rgba(0,0,0,0.3);
 }
 
-.winbtn.min {
-    background: linear-gradient(to bottom, #fff, #cfd8ff);
-}
-
-.winbtn.max {
-    background: linear-gradient(to bottom, #fff, #d0ffd6);
-}
-
+.winbtn.min { background: linear-gradient(to bottom, #fff, #cfd8ff); }
+.winbtn.max { background: linear-gradient(to bottom, #fff, #d0ffd6); }
 .winbtn.close {
     width: 46px;
     color: white;
     background: linear-gradient(to bottom, #ff6a6a, #b30000);
-    box-shadow: 0 0 10px rgba(255,0,0,0.6);
-}
-
-.winbtn.close:hover {
-    box-shadow: 0 0 22px rgba(255,0,0,0.9);
 }
 
 .content {
     flex: 1;
-    padding: 40px;
+    padding: 30px;
     color: white;
     text-shadow: 0 2px 10px black;
+    overflow-y: auto;
 }
+
+/* Blog Styling */
+.blog-entry {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.blog-entry h2 { margin-bottom: 5px; font-size: 1.2em; }
+.blog-entry p { font-size: 0.95em; line-height: 1.4; opacity: 0.9; }
 
 #taskbar {
     position: absolute;
@@ -145,43 +147,22 @@ body {
     border-radius: 3px;
     cursor: pointer;
 }
-
-.taskbtn:hover {
-    background: rgba(120,170,255,0.4);
-}
 </style>
 </head>
 
 <body>
 
 <div class="desktop">
-
-    <div class="icon" onclick="launch('Home')">
-        <img src="./home.png">
-        Home
-    </div>
-
-    <div class="icon" onclick="launch('About')">
-        <img src="./aboutme.png">
-        About
-    </div>
-
-    <div class="icon" onclick="launch('Downloads')">
-        <img src="./downloads.png">
-        Downloads
-    </div>
-
-    <div class="icon" onclick="launch('Videos')">
-        <img src="./videos.png">
-        Videos
-    </div>
-
+    <div class="icon" onclick="launch('Home')"><img src="./home.png">Home</div>
+    <div class="icon" onclick="launch('About')"><img src="./aboutme.png">About</div>
+    <div class="icon" onclick="launch('Blog')"><img src="./blog.png">Blog</div>
+    <div class="icon" onclick="launch('Downloads')"><img src="./downloads.png">Downloads</div>
+    <div class="icon" onclick="launch('Videos')"><img src="./videos.png">Videos</div>
 </div>
 
 <div id="taskbar"></div>
 
 <script>
-
 let z = 10;
 let windows = {};
 let tasks = {};
@@ -190,17 +171,20 @@ let booted = false;
 function getContent(app) {
     switch(app) {
         case "Home":
-            return "Hello and welcome to my site.";
-
+            return "Welcome to the official BraydenPeacockTech site. Check the Blog for my latest experiments!";
         case "About":
-            return "Hi I'm Brayden Peacock. I'm a tech YouTuber and I love messing with software. And I like messing with Operating Systems when I feel like it. Thanks for supporting me and the channel";
-
+            return "Hi, I'm Brayden Peacock. I'm a tech YouTuber who loves custom OS projects and breaking software (for science!).";
+        case "Blog":
+            return `
+                <div class="blog-entry">
+                    <h2>First Post!</h2>
+                    <p>This is where I'll be posting updates on my 26H2 builds and Spectem OS progress. Stay tuned!</p>
+                </div>
+            `;
         case "Downloads":
-            return "Downloads coming soon.";
-
+            return "Downloads for my custom scripts and ISOs will appear here soon.";
         case "Videos":
-            return "Videos coming soon.";
-
+            return "Latest tech videos coming soon.";
         default:
             return "";
     }
@@ -208,12 +192,9 @@ function getContent(app) {
 
 const bootSound = new Audio("./Start.mp3");
 bootSound.volume = 0.5;
-bootSound.preload = "auto";
 
 function launch(app) {
-
     const id = "win_" + app;
-
     if (windows[id]) {
         windows[id].style.display = "flex";
         windows[id].style.zIndex = ++z;
@@ -222,42 +203,35 @@ function launch(app) {
 
     const win = document.createElement("div");
     win.className = "window";
-
-    win.style.top = "120px";
-    win.style.left = "120px";
+    win.style.top = "100px";
+    win.style.left = "100px";
     win.style.zIndex = ++z;
 
     win.innerHTML = `
         <div class="title-bar">
-            <span>${app}</span>
+            <span>${app} - BraydenPeacockTech</span>
             <div class="controls">
                 <div class="winbtn min" onclick="minimize('${id}')">—</div>
                 <div class="winbtn max" onclick="maximize('${id}')">□</div>
                 <div class="winbtn close" onclick="closeWin('${id}')">✕</div>
             </div>
         </div>
-
         <div class="content">
             <h1>${app}</h1>
-            <p>${getContent(app)}</p>
+            <div id="content_${app}">${getContent(app)}</div>
         </div>
     `;
 
     document.body.appendChild(win);
-
     windows[id] = win;
-
     addTask(id, app);
 }
 
 function addTask(id, app) {
-
     const bar = document.getElementById("taskbar");
-
     const btn = document.createElement("div");
     btn.className = "taskbtn";
     btn.innerText = app;
-
     btn.onclick = () => {
         const w = windows[id];
         if (w) {
@@ -265,70 +239,50 @@ function addTask(id, app) {
             w.style.zIndex = ++z;
         }
     };
-
     bar.appendChild(btn);
-
     tasks[id] = btn;
 }
 
 function closeWin(id) {
     if (windows[id]) windows[id].remove();
     if (tasks[id]) tasks[id].remove();
-
     delete windows[id];
     delete tasks[id];
 }
 
-function minimize(id) {
-    if (windows[id]) windows[id].style.display = "none";
-}
+function minimize(id) { if (windows[id]) windows[id].style.display = "none"; }
 
 function maximize(id) {
     const w = windows[id];
     if (!w) return;
-
     if (!w.dataset.max) {
         w.dataset.max = "1";
-        w.style.top = "0";
-        w.style.left = "0";
-        w.style.width = "100vw";
-        w.style.height = "calc(100vh - 40px)";
+        w.style.top = "0"; w.style.left = "0";
+        w.style.width = "100vw"; w.style.height = "calc(100vh - 40px)";
     } else {
         w.dataset.max = "";
-        w.style.width = "760px";
-        w.style.height = "480px";
-        w.style.top = "120px";
-        w.style.left = "120px";
+        w.style.width = "760px"; w.style.height = "480px";
+        w.style.top = "120px"; w.style.left = "120px";
     }
 }
 
-/* drag */
+/* Simple drag logic */
 let dragTarget = null;
-let offsetX = 0;
-let offsetY = 0;
-
+let offsetX = 0; let offsetY = 0;
 document.addEventListener("mousedown", (e) => {
     const bar = e.target.closest(".title-bar");
     if (!bar) return;
-
     dragTarget = bar.parentElement;
-
     offsetX = e.clientX - dragTarget.offsetLeft;
     offsetY = e.clientY - dragTarget.offsetTop;
-
     dragTarget.style.zIndex = ++z;
 });
-
 document.addEventListener("mousemove", (e) => {
     if (!dragTarget) return;
-
     dragTarget.style.left = (e.clientX - offsetX) + "px";
     dragTarget.style.top = (e.clientY - offsetY) + "px";
 });
-
-document.addEventListener("mouseup", () => {
-    dragTarget = null;
-});
+document.addEventListener("mouseup", () => { dragTarget = null; });
 
 document.addEventListener("pointerdown", () => {
     if (booted) return;
@@ -336,7 +290,6 @@ document.addEventListener("pointerdown", () => {
     bootSound.play().catch(() => {});
     launch("Home");
 }, { once: true });
-
 </script>
 
 </body>
