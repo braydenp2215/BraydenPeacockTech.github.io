@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Vista Aero OS - GitHub Build</title>
+<title>Vista Aero OS - Fixed Build</title>
 
 <style>
 * {
@@ -94,14 +94,14 @@ body {
     text-shadow: 0 2px 8px black;
 }
 
-/* ================= BUTTONS ================= */
+/* ================= CLOSE BUTTON ================= */
 .controls {
     display: flex;
     gap: 3px;
 }
 
-.winbtn {
-    width: 34px;
+.winbtn.close {
+    width: 46px;
     height: 22px;
 
     display: flex;
@@ -113,20 +113,11 @@ body {
 
     border-radius: 3px;
 
-    border: 1px solid rgba(0,0,0,0.35);
-
-    background: linear-gradient(to bottom, #fff, #cfe0ff);
-    cursor: pointer;
-}
-
-.winbtn.close {
-    width: 46px;
-
     color: white;
-
     background: linear-gradient(to bottom, #ff6a6a, #b30000);
 
     box-shadow: 0 0 10px rgba(255,0,0,0.6);
+    cursor: pointer;
 }
 
 .winbtn.close:hover {
@@ -212,65 +203,73 @@ body {
 let z = 10;
 let windows = {};
 let tasks = {};
-let dragTarget = null;
 
 /* ================= CONTENT ================= */
-const appContent = {
-    Home: "Hello and welcome to my site.",
-    About: "Hi I'm Brayden Peacock I'm a tech YouTuber and I love messing with software and Operating Systems when I have the time for it thanks for supporting me and the channel.",
-    Downloads: "Downloads coming soon.",
-    Videos: "Videos coming soon."
-};
+function getContent(app) {
+    switch(app) {
+        case "Home":
+            return "Hello and welcome to my site.";
+        case "About":
+            return "Hi I'm Brayden Peacock. I'm a tech YouTuber and I love messing with software and Operating Systems when I have time. Thanks for supporting me.";
+        case "Downloads":
+            return "Downloads coming soon.";
+        case "Videos":
+            return "Videos coming soon.";
+        default:
+            return "";
+    }
+}
 
-/* ================= AUDIO (GITHUB SAFE) ================= */
-const bootSound = new Audio("./Start.mp3"); // MUST match your repo exactly
-bootSound.volume = 0.5;
+/* ================= AUDIO (SAFE GITHUB + iOS + PC) ================= */
+const bootSound = new Audio("./Start.mp3");
 bootSound.preload = "auto";
+bootSound.volume = 0.5;
 
 let booted = false;
 
-/* ================= BOOT SYSTEM (iPhone + PC SAFE) ================= */
+/* ================= BOOT SYSTEM ================= */
 function boot(app) {
     if (booted) return;
     booted = true;
 
     try {
         bootSound.currentTime = 0;
-
-        const play = bootSound.play();
-        if (play !== undefined) {
-            play.catch(err => console.log("Audio blocked:", err));
-        }
+        const p = bootSound.play();
+        if (p) p.catch(()=>{});
     } catch (e) {}
 
     openApp(app);
 }
 
-/* ================= WINDOW SYSTEM ================= */
+/* ================= OPEN WINDOW ================= */
 function openApp(app) {
 
-    const id = "win_" + Date.now();
+    const id = "win_" + app;
+
+    if (windows[id]) {
+        windows[id].style.display = "flex";
+        windows[id].style.zIndex = ++z;
+        return;
+    }
 
     const win = document.createElement("div");
     win.className = "window";
 
     win.style.top = "120px";
     win.style.left = "120px";
-    win.style.zIndex = z++;
+    win.style.zIndex = ++z;
 
     win.innerHTML = `
         <div class="title-bar">
             <span>${app}</span>
             <div class="controls">
-                <div class="winbtn" onclick="minimize('${id}')">—</div>
-                <div class="winbtn" onclick="maximize('${id}')">□</div>
                 <div class="winbtn close" onclick="closeWin('${id}')">✕</div>
             </div>
         </div>
 
         <div class="content">
             <h1>${app}</h1>
-            <p>${appContent[app] || ""}</p>
+            <p>${getContent(app)}</p>
         </div>
     `;
 
@@ -278,28 +277,8 @@ function openApp(app) {
 
     windows[id] = win;
 
-    enableDrag(win);
     addTask(id, app);
 }
-
-/* ================= DRAG ================= */
-function enableDrag(win) {
-    const bar = win.querySelector(".title-bar");
-
-    bar.onmousedown = () => {
-        dragTarget = win;
-        win.style.zIndex = z++;
-    };
-}
-
-document.onmousemove = (e) => {
-    if (dragTarget) {
-        dragTarget.style.left = e.clientX + "px";
-        dragTarget.style.top = e.clientY + "px";
-    }
-};
-
-document.onmouseup = () => dragTarget = null;
 
 /* ================= TASKBAR ================= */
 function addTask(id, app) {
@@ -314,7 +293,7 @@ function addTask(id, app) {
         const w = windows[id];
         if (w) {
             w.style.display = "flex";
-            w.style.zIndex = z++;
+            w.style.zIndex = ++z;
         }
     };
 
@@ -330,28 +309,6 @@ function closeWin(id) {
 
     delete windows[id];
     delete tasks[id];
-}
-
-/* ================= MINIMIZE ================= */
-function minimize(id) {
-    windows[id].style.display = "none";
-}
-
-/* ================= MAXIMIZE ================= */
-function maximize(id) {
-    const w = windows[id];
-
-    if (!w.dataset.max) {
-        w.dataset.max = "1";
-        w.style.top = "0";
-        w.style.left = "0";
-        w.style.width = "100vw";
-        w.style.height = "calc(100vh - 40px)";
-    } else {
-        w.dataset.max = "";
-        w.style.width = "760px";
-        w.style.height = "480px";
-    }
 }
 
 </script>
