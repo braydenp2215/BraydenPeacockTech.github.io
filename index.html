@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Vista Aero OS - Taskbar Fixed</title>
+<title>Vista Aero OS - Instant Boot</title>
 
 <style>
 * {
@@ -24,7 +24,7 @@ body {
     background-size: cover;
 }
 
-/* DESKTOP */
+/* ================= DESKTOP ================= */
 .desktop {
     position: absolute;
     top: 20px;
@@ -52,10 +52,9 @@ body {
     margin: 0 auto 5px;
 }
 
-/* WINDOW */
+/* ================= WINDOW ================= */
 .window {
     position: absolute;
-
     width: 760px;
     height: 480px;
 
@@ -64,17 +63,17 @@ body {
 
     border-radius: 10px;
 
-    background: rgba(235, 240, 255, 0.18);
+    background: rgba(235,240,255,0.18);
     border: 1px solid rgba(255,255,255,0.35);
 
-    backdrop-filter: blur(38px) saturate(200%);
-    -webkit-backdrop-filter: blur(38px) saturate(200%);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
 
     box-shadow: 0 60px 140px rgba(0,0,0,0.75);
     overflow: hidden;
 }
 
-/* TITLE BAR */
+/* ================= TITLE BAR ================= */
 .title-bar {
     height: 38px;
 
@@ -84,11 +83,7 @@ body {
 
     padding: 0 6px 0 10px;
 
-    background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.75),
-        rgba(255,255,255,0.25)
-    );
+    background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25));
 
     cursor: grab;
     user-select: none;
@@ -101,7 +96,7 @@ body {
     text-shadow: 0 2px 8px black;
 }
 
-/* BUTTONS */
+/* ================= BUTTONS ================= */
 .controls {
     display: flex;
     gap: 3px;
@@ -122,18 +117,25 @@ body {
 
     border: 1px solid rgba(0,0,0,0.35);
 
-    background: linear-gradient(to bottom, white, #cfe0ff);
-
+    background: linear-gradient(to bottom, #fff, #cfe0ff);
     cursor: pointer;
 }
 
 .winbtn.close {
     width: 46px;
+
     color: white;
-    background: linear-gradient(to bottom, #ffaaaa, #c40000);
+
+    background: linear-gradient(to bottom, #ff6a6a, #b30000);
+
+    box-shadow: 0 0 10px rgba(255,0,0,0.6);
 }
 
-/* CONTENT */
+.winbtn.close:hover {
+    box-shadow: 0 0 22px rgba(255,0,0,0.9);
+}
+
+/* ================= CONTENT ================= */
 .content {
     flex: 1;
     padding: 40px;
@@ -142,7 +144,7 @@ body {
     text-shadow: 0 2px 10px black;
 }
 
-/* TASKBAR */
+/* ================= TASKBAR ================= */
 #taskbar {
     position: absolute;
     bottom: 0;
@@ -156,27 +158,54 @@ body {
 
     padding: 5px;
 
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.65);
 }
 
 .taskbtn {
     padding: 6px 12px;
     margin-right: 6px;
 
+    font-size: 12px;
     color: white;
-    font-size: 13px;
-
-    border-radius: 3px;
 
     background: rgba(255,255,255,0.15);
     border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 3px;
 
     cursor: pointer;
-    user-select: none;
 }
 
-.taskbtn.active {
-    background: rgba(120,170,255,0.45);
+.taskbtn:hover {
+    background: rgba(120,170,255,0.4);
+}
+
+/* ================= PREVIEW ================= */
+.preview {
+    position: fixed;
+    width: 240px;
+    height: 140px;
+
+    display: none;
+    pointer-events: none;
+
+    border-radius: 6px;
+    overflow: hidden;
+
+    background: rgba(20,20,20,0.9);
+    border: 1px solid rgba(255,255,255,0.25);
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+
+.preview-inner {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+
+    color: white;
+    font-size: 12px;
+
+    background: linear-gradient(135deg, rgba(120,170,255,0.35), rgba(255,255,255,0.05));
 }
 </style>
 </head>
@@ -213,15 +242,50 @@ body {
 
 let z = 10;
 let windows = {};
+let tasks = {};
+let previews = {};
+let dragTarget = null;
 
-/* OPEN APP */
+/* ================= APP CONTENT ================= */
+const appContent = {
+    Home: "Hello and welcome to my site.",
+    About: "Hi I'm Brayden Peacock I'm a tech YouTuber and I love messing with software and Operating Systems when I have the time for it thanks for supporting me and the channel.",
+    Downloads: "Downloads coming soon.",
+    Videos: "Videos coming soon."
+};
+
+/* ================= YOUR EXACT BOOT SYSTEM ================= */
+let booted = false;
+const bootSound = new Audio("https://www.myinstants.com/media/sounds/windows-vista-startup.mp3");
+bootSound.volume = 0.4;
+
+function bootSystem() {
+    if (booted) return;
+    booted = true;
+
+    try {
+        bootSound.currentTime = 0;
+        bootSound.play();
+    } catch (e) {}
+
+    openApp("Home");
+}
+
+/* ================= INSTANT START ================= */
+bootSystem();
+
+/* fallback for autoplay restrictions */
+document.addEventListener("click", () => {
+    bootSystem();
+}, { once: true });
+
+/* ================= WINDOW SYSTEM ================= */
 function openApp(app) {
 
-    const id = "win_" + app + "_" + Date.now();
+    const id = "win_" + Date.now();
 
     const win = document.createElement("div");
     win.className = "window";
-    win.id = id;
 
     win.style.top = "120px";
     win.style.left = "120px";
@@ -229,116 +293,120 @@ function openApp(app) {
 
     win.innerHTML = `
         <div class="title-bar">
-            <span>${app} - Vista OS</span>
-
+            <span>${app}</span>
             <div class="controls">
-                <div class="winbtn" onclick="minimizeWindow('${id}')">—</div>
-                <div class="winbtn" onclick="maximizeWindow('${id}')">□</div>
-                <div class="winbtn close" onclick="closeWindow('${id}')">✕</div>
+                <div class="winbtn" onclick="minimize('${id}')">—</div>
+                <div class="winbtn" onclick="maximize('${id}')">□</div>
+                <div class="winbtn close" onclick="closeWin('${id}')">✕</div>
             </div>
         </div>
 
         <div class="content">
             <h1>${app}</h1>
-            <p>${app} window active.</p>
+            <p>${appContent[app] || ""}</p>
         </div>
     `;
 
     document.body.appendChild(win);
 
-    windows[id] = { app: app, state: "open" };
+    windows[id] = win;
 
     enableDrag(win);
-    createTaskbarButton(id, app);
+    addTask(id, app);
 }
 
-/* DRAG */
+/* ================= DRAG ================= */
 function enableDrag(win) {
     const bar = win.querySelector(".title-bar");
 
-    let offsetX = 0;
-    let offsetY = 0;
-    let dragging = false;
-
-    bar.addEventListener("mousedown", (e) => {
-        dragging = true;
-        offsetX = e.clientX - win.offsetLeft;
-        offsetY = e.clientY - win.offsetTop;
-
+    bar.onmousedown = () => {
+        dragTarget = win;
         win.style.zIndex = z++;
-    });
-
-    document.addEventListener("mousemove", (e) => {
-        if (dragging) {
-            win.style.left = (e.clientX - offsetX) + "px";
-            win.style.top = (e.clientY - offsetY) + "px";
-        }
-    });
-
-    document.addEventListener("mouseup", () => {
-        dragging = false;
-    });
+    };
 }
 
-/* MINIMIZE (keeps taskbar button) */
-function minimizeWindow(id) {
-    const win = document.getElementById(id);
-    win.style.display = "none";
-
-    if (windows[id]) {
-        windows[id].state = "minimized";
+document.onmousemove = (e) => {
+    if (dragTarget) {
+        dragTarget.style.left = e.clientX + "px";
+        dragTarget.style.top = e.clientY + "px";
     }
-}
+};
 
-/* MAXIMIZE */
-function maximizeWindow(id) {
-    const win = document.getElementById(id);
+document.onmouseup = () => dragTarget = null;
 
-    if (!win.dataset.max) {
-        win.dataset.max = "1";
-        win.style.top = "0";
-        win.style.left = "0";
-        win.style.width = "100vw";
-        win.style.height = "calc(100vh - 40px)";
-    } else {
-        win.dataset.max = "";
-        win.style.width = "760px";
-        win.style.height = "480px";
-    }
-}
-
-/* CLOSE (removes taskbar properly) */
-function closeWindow(id) {
-    document.getElementById(id).remove();
-
-    const btn = document.getElementById("task_" + id);
-    if (btn) btn.remove();
-
-    delete windows[id];
-}
-
-/* TASKBAR SYSTEM (FIXED) */
-function createTaskbarButton(id, app) {
+/* ================= TASKBAR + PREVIEW ================= */
+function addTask(id, app) {
 
     const bar = document.getElementById("taskbar");
 
     const btn = document.createElement("div");
     btn.className = "taskbtn";
-    btn.id = "task_" + id;
     btn.innerText = app;
 
+    const preview = document.createElement("div");
+    preview.className = "preview";
+
+    const inner = document.createElement("div");
+    inner.className = "preview-inner";
+    inner.innerText = app + " - " + (appContent[app] || "");
+
+    preview.appendChild(inner);
+    document.body.appendChild(preview);
+
+    btn.onmouseenter = () => {
+        const r = btn.getBoundingClientRect();
+        preview.style.display = "block";
+        preview.style.left = r.left + "px";
+        preview.style.top = (r.top - 150) + "px";
+    };
+
+    btn.onmouseleave = () => preview.style.display = "none";
+
     btn.onclick = () => {
-        const win = document.getElementById(id);
-
-        if (!win) return;
-
-        win.style.display = "flex";
-        win.style.zIndex = z++;
-
-        windows[id].state = "open";
+        const w = windows[id];
+        if (w) {
+            w.style.display = "flex";
+            w.style.zIndex = z++;
+        }
     };
 
     bar.appendChild(btn);
+
+    tasks[id] = btn;
+    previews[id] = preview;
+}
+
+/* ================= CLOSE ================= */
+function closeWin(id) {
+    if (windows[id]) windows[id].remove();
+    if (tasks[id]) tasks[id].remove();
+    if (previews[id]) previews[id].remove();
+
+    delete windows[id];
+    delete tasks[id];
+    delete previews[id];
+}
+
+/* ================= MINIMIZE ================= */
+function minimize(id) {
+    windows[id].style.display = "none";
+}
+
+/* ================= MAXIMIZE ================= */
+function maximize(id) {
+    const w = windows[id];
+
+    if (!w.dataset.max) {
+        w.dataset.max = "1";
+        w.style.top = "0";
+        w.style.left = "0";
+        w.style.width = "100vw";
+        w.style.height = "calc(100vh - 40px)";
+    } else {
+        w.dataset.max = "";
+        w.style.width = "760px";
+        w.style.height = "480px";
+    }
 }
 
 </script>
