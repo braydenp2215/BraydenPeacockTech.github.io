@@ -13,19 +13,22 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 .icon { width: 80px; text-align: center; color: white; font-size: 12px; text-shadow: 1px 1px 2px black; cursor: pointer; }
 .icon img { width: 48px; height: 48px; display: block; margin: 0 auto 5px; }
 
-/* MASSIVE ROVER & SEARCH */
+/* ROVER UI */
 #search-container { position: absolute; bottom: 60px; right: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 1000; }
-#rover-bubble { background: white; color: black; padding: 15px 20px; border-radius: 20px; border: 3px solid #78aaff; font-size: 14px; width: 280px; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 15px; font-weight: 500; }
+#rover-bubble { background: white; color: black; padding: 15px 20px; border-radius: 20px; border: 3px solid #78aaff; font-size: 14px; width: 280px; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 15px; font-weight: 500; min-height: 80px; }
 #rover-bubble::after { content: ''; position: absolute; bottom: -15px; right: 60px; border-width: 15px 15px 0; border-style: solid; border-color: white transparent; }
+
+/* YES/NO BUTTONS */
+#rover-choice-buttons { display: none; gap: 10px; margin-top: 10px; justify-content: center; }
+.choice-btn { padding: 5px 15px; border-radius: 5px; border: 1px solid #ccc; cursor: pointer; font-weight: bold; font-size: 12px; }
+.choice-btn.yes { background: #78aaff; color: white; border-color: #3a7bd5; }
+.choice-btn.no { background: #eee; color: #333; }
+
 #rover-dog { width: 240px; cursor: pointer; }
 #rover-dog img { width: 100%; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
 #search-box { background: rgba(235, 240, 255, 0.3); backdrop-filter: blur(25px); padding: 12px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.5); display: flex; gap: 8px; }
 #site-search { background: none; border: none; color: white; outline: none; padding: 5px; width: 200px; font-size: 16px; }
 .search-btn { background: #78aaff; border: none; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-
-/* TASKBAR */
-#taskbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; display: flex; align-items: center; padding: 5px; background: rgba(0,0,0,0.65); z-index: 10001; }
-.taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; }
 
 /* WINDOWS */
 .window { position: absolute; width: 760px; height: 480px; display: flex; flex-direction: column; border-radius: 10px; background: rgba(235,240,255,0.18); border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(40px) saturate(200%); box-shadow: 0 60px 140px rgba(0,0,0,0.75); overflow: hidden; transition: width 0.2s, height 0.2s, top 0.2s, left 0.2s; }
@@ -36,17 +39,15 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 .winbtn.close { width: 46px; color: white; background: linear-gradient(to bottom, #ff6a6a, #b30000); }
 .content { flex: 1; padding: 30px; color: white; text-shadow: 0 2px 10px black; overflow-y: auto; }
 
-/* BLOG STYLING */
-.blog-entry { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.2); }
-.blog-date { font-size: 0.95em; color: white; font-weight: bold; display: block; margin-bottom: 8px; }
-.open-full-btn { background: #78aaff; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+/* TASKBAR */
+#taskbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; display: flex; align-items: center; padding: 5px; background: rgba(0,0,0,0.65); z-index: 10001; }
+.taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; }
 
-/* FULL READER */
+/* READER */
 #blog-reader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.98); backdrop-filter: blur(25px); z-index: 10002; display: none; flex-direction: column; color: white; }
 .reader-header { padding: 15px 25px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
 .reader-body { flex: 1; padding: 60px 20%; overflow-y: auto; scroll-behavior: smooth; }
-.reader-author-info { color: white; font-weight: bold; font-style: italic; margin-bottom: 40px; display: block; font-size: 1.2em; }
-#backToTop { position: fixed; bottom: 30px; right: 140px; background: rgba(120,170,255,0.6); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px 15px; border-radius: 5px; cursor: pointer; display: none; }
+.blog-date-white { font-size: 0.95em; color: white; font-weight: bold; display: block; margin-bottom: 8px; }
 </style>
 </head>
 
@@ -61,10 +62,16 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 </div>
 
 <div id="search-container">
-    <div id="rover-bubble">Woof! I'm Rover. Type what you're looking for and I'll find it for you!</div>
+    <div id="rover-bubble">
+        <div id="rover-text">Woof! I'm Rover. Type what you're looking for and I'll find it for you!</div>
+        <div id="rover-choice-buttons">
+            <button class="choice-btn yes" id="rover-yes">Yes</button>
+            <button class="choice-btn no" id="rover-no">No</button>
+        </div>
+    </div>
     <div id="rover-dog"><img id="rover-img" src="./search.png" alt="Rover"></div>
     <div id="search-box">
-        <input type="text" id="site-search" placeholder="Search site, dates, or creator..." onkeydown="if(event.key==='Enter') executeSearch()">
+        <input type="text" id="site-search" placeholder="Search dates, names..." onkeydown="if(event.key==='Enter') executeSearch()">
         <button class="search-btn" onclick="executeSearch()">Search</button>
     </div>
 </div>
@@ -76,9 +83,8 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     </div>
     <div class="reader-body" id="readerBody">
         <h1 id="reader-post-title" style="font-size: 3.5em; color: #78aaff; margin-bottom: 10px;"></h1>
-        <span id="reader-post-author" class="reader-author-info"></span>
+        <span id="reader-post-author" style="color: white; font-weight: bold; font-style: italic; margin-bottom: 40px; display: block; font-size: 1.2em;"></span>
         <div id="reader-post-content" style="font-size: 1.3em; line-height: 1.7; white-space: pre-wrap;"></div>
-        <div id="backToTop" onclick="scrollToTop()">↑ Back to Top</div>
     </div>
 </div>
 
@@ -89,6 +95,7 @@ let z = 10;
 let windows = {};
 let tasks = {};
 let booted = false;
+let choiceTimeout = null;
 const bootSound = new Audio("./Start.mp3");
 
 const myBlogs = [{
@@ -104,34 +111,58 @@ function executeSearch() {
     if (!query) return;
 
     const img = document.getElementById('rover-img');
-    const bubble = document.getElementById('rover-bubble');
+    const bubbleText = document.getElementById('rover-text');
+    const choiceDiv = document.getElementById('rover-choice-buttons');
     
     img.src = "./finding.gif";
-    bubble.innerText = "Sniff sniff... Rover is looking everywhere for '" + query + "'!";
+    bubbleText.innerText = "Sniff sniff... Rover is looking for '" + query + "'!";
+    choiceDiv.style.display = "none";
 
     setTimeout(() => {
         img.src = "./search.png"; 
         
-        // Advanced Search: Dates, Author, Title, and Content
-        const bIndex = myBlogs.findIndex(b => 
+        let foundBlogIndex = -1;
+        let foundPage = "";
+
+        const pages = ['home', 'about', 'downloads', 'videos', 'blog'];
+        if (pages.includes(query)) {
+            foundPage = query.charAt(0).toUpperCase() + query.slice(1);
+        }
+
+        foundBlogIndex = myBlogs.findIndex(b => 
             b.title.toLowerCase().includes(query) || 
             b.fullText.toLowerCase().includes(query) || 
             b.author.toLowerCase().includes(query) || 
             b.date.toLowerCase().includes(query)
         );
 
-        if (bIndex !== -1) {
-            launch('Blog');
-            openReader(bIndex);
-            bubble.innerText = "Rover wants to know: Is this the right program? Found it in the blog!";
+        if (foundPage || foundBlogIndex !== -1) {
+            bubbleText.innerText = "Rover wants to know: Is this the right program?";
+            choiceDiv.style.display = "flex";
+
+            const handleResult = () => {
+                clearTimeout(choiceTimeout);
+                choiceDiv.style.display = "none";
+                if (foundPage) launch(foundPage);
+                if (foundBlogIndex !== -1) {
+                    launch('Blog');
+                    openReader(foundBlogIndex);
+                }
+                bubbleText.innerText = "Woof! Found it.";
+            };
+
+            document.getElementById('rover-yes').onclick = handleResult;
+            document.getElementById('rover-no').onclick = () => {
+                clearTimeout(choiceTimeout);
+                choiceDiv.style.display = "none";
+                bubbleText.innerText = "Okay, I'll stop searching!";
+            };
+
+            // 7 SECOND AUTO-OPEN
+            choiceTimeout = setTimeout(handleResult, 7000);
+
         } else {
-            const pages = ['home', 'about', 'downloads', 'videos', 'blog'];
-            if (pages.includes(query)) {
-                launch(query.charAt(0).toUpperCase() + query.slice(1));
-                bubble.innerText = "Rover wants to know: Is this the right program? Opening the page!";
-            } else {
-                bubble.innerText = "Woof! Rover couldn't find any dates, names, or creators matching '" + query + "'.";
-            }
+            bubbleText.innerText = "Woof! Rover couldn't find any results for '" + query + "'.";
         }
     }, 10000); 
 }
@@ -160,7 +191,7 @@ function getContent(app) {
     if (app === "Blog") {
         let listHtml = "<h1>Latest Posts</h1>";
         myBlogs.forEach((post, index) => {
-            listHtml += `<div class="blog-entry"><span class="blog-date">${post.date}</span><h2>${post.title}</h2><button class="open-full-btn" onclick="openReader(${index})">Open in Full</button></div>`;
+            listHtml += `<div class="blog-entry"><span class="blog-date-white">${post.date}</span><h2>${post.title}</h2><button class="winbtn" style="width:100px; margin-top:10px;" onclick="openReader(${index})">Read Full</button></div>`;
         });
         return listHtml;
     }
@@ -176,8 +207,8 @@ function openReader(index) {
 }
 
 function closeReader() { document.getElementById('blog-reader').style.display = 'none'; }
-function closeWin(id) { if (windows[id]) windows[id].remove(); if (tasks[id]) tasks[id].remove(); delete windows[id]; delete tasks[id]; }
-function minimizeWin(id) { if (windows[id]) windows[id].style.display = "none"; }
+function closeWin(id) { if(windows[id]) windows[id].remove(); if(tasks[id]) tasks[id].remove(); delete windows[id]; delete tasks[id]; }
+function minimizeWin(id) { if(windows[id]) windows[id].style.display = "none"; }
 function maximizeWin(id) {
     const w = windows[id];
     if (w.style.width === "100vw") {
@@ -187,12 +218,7 @@ function maximizeWin(id) {
     }
 }
 
-function scrollToTop() { document.getElementById('readerBody').scrollTo({ top: 0, behavior: 'smooth' }); }
-document.getElementById('readerBody').onscroll = function() {
-    let btn = document.getElementById("backToTop");
-    if (this.scrollTop > 300) btn.style.display = "block"; else btn.style.display = "none";
-};
-
+/* DRAG LOGIC */
 let dragTarget = null, offsetX = 0, offsetY = 0;
 document.addEventListener("mousedown", (e) => {
     const bar = e.target.closest(".title-bar");
