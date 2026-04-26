@@ -5,242 +5,310 @@
 <title>BraydenPeacockTech</title>
 
 <style>
-/* CORE AERO STYLING */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", Tahoma, sans-serif; background: url("./wallpaper.jpg") no-repeat center center fixed; background-size: cover; }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-.desktop { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 20px; z-index: 5; }
-.icon { width: 80px; text-align: center; color: white; font-size: 12px; text-shadow: 1px 1px 2px black; cursor: pointer; }
-.icon img { width: 48px; height: 48px; display: block; margin: 0 auto 5px; }
+body{
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    font-family:"Segoe UI",Tahoma;
+    background:url("./wallpaper.jpg") center/cover no-repeat fixed;
+}
 
-/* ROVER UI */
-#search-container { position: absolute; bottom: 60px; right: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 1000; }
-#rover-bubble { background: white; color: black; padding: 15px 20px; border-radius: 20px; border: 3px solid #78aaff; font-size: 14px; width: 300px; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 15px; font-weight: 500; min-height: 80px; }
-#rover-bubble::after { content: ''; position: absolute; bottom: -15px; right: 60px; border-width: 15px 15px 0; border-style: solid; border-color: white transparent; }
+/* DESKTOP */
+.desktop{
+    position:absolute;
+    top:20px;
+    left:20px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+.icon{
+    width:80px;
+    text-align:center;
+    color:white;
+    cursor:pointer;
+}
+.icon img{
+    width:48px;
+    display:block;
+    margin:auto;
+}
 
-#rover-choice-buttons { display: none; gap: 10px; margin-top: 10px; justify-content: center; }
-.choice-btn { padding: 5px 15px; border-radius: 5px; border: 1px solid #ccc; cursor: pointer; font-weight: bold; font-size: 12px; }
-.choice-btn.yes { background: #78aaff; color: white; border-color: #3a7bd5; }
-.choice-btn.no { background: #eee; color: #333; }
+/* WINDOW */
+.window{
+    position:absolute;
+    width:800px;
+    height:500px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(30px);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 40px 100px rgba(0,0,0,0.7);
+}
 
-#rover-dog { width: 240px; cursor: pointer; }
-#rover-dog img { width: 100%; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
-#search-box { background: rgba(235, 240, 255, 0.3); backdrop-filter: blur(25px); padding: 12px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.5); display: flex; gap: 8px; }
-#site-search { background: none; border: none; color: white; outline: none; padding: 5px; width: 200px; font-size: 16px; }
-.search-btn { background: #78aaff; border: none; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+.title-bar{
+    height:35px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 10px;
+    background:linear-gradient(#ffffffaa,#ffffff33);
+}
 
-/* WINDOWS */
-.window { position: absolute; width: 760px; height: 480px; display: flex; flex-direction: column; border-radius: 10px; background: rgba(235,240,255,0.18); border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(40px) saturate(200%); box-shadow: 0 60px 140px rgba(0,0,0,0.75); overflow: hidden; transition: width 0.2s, height 0.2s, top 0.2s, left 0.2s; }
-.title-bar { height: 38px; display: flex; justify-content: space-between; align-items: center; padding: 0 8px; background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25)); cursor: grab; user-select: none; }
-.title-bar span { color: white; font-size: 13px; font-weight: 600; text-shadow: 0 2px 8px black; pointer-events: none; }
-.controls { display: flex; gap: 4px; }
-.winbtn { width: 34px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.3); color: black; background: linear-gradient(to bottom, #fff, #ddd); }
-.winbtn.close { width: 46px; color: white; background: linear-gradient(to bottom, #ff6a6a, #b30000); }
-.content { flex: 1; padding: 30px; color: white; text-shadow: 0 2px 10px black; overflow-y: auto; }
+.title-bar span{color:white;}
+
+.controls{display:flex;gap:5px;}
+
+.winbtn{
+    width:30px;
+    height:20px;
+    background:#ddd;
+    text-align:center;
+    cursor:pointer;
+}
+
+.winbtn.close{
+    background:red;
+    color:white;
+}
+
+.content{
+    padding:20px;
+    color:white;
+    overflow:auto;
+    height:calc(100% - 35px);
+}
 
 /* TASKBAR */
-#taskbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; display: flex; align-items: center; padding: 5px; background: rgba(0,0,0,0.65); z-index: 10001; }
-.taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; }
+#taskbar{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:40px;
+    background:rgba(0,0,0,0.7);
+    display:flex;
+    align-items:center;
+    padding:5px;
+}
 
-/* READER */
-#blog-reader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.98); backdrop-filter: blur(25px); z-index: 10002; display: none; flex-direction: column; color: white; }
-.reader-header { padding: 15px 25px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
-.reader-body { flex: 1; padding: 60px 20%; overflow-y: auto; scroll-behavior: smooth; }
-.blog-date-white { font-size: 0.95em; color: white !important; font-weight: bold; display: block; margin-bottom: 8px; }
+.taskbtn{
+    color:white;
+    margin-right:5px;
+    padding:5px 10px;
+    background:rgba(255,255,255,0.2);
+    cursor:pointer;
+}
+
+/* VIDEOS */
+.video-card{
+    background:rgba(255,255,255,0.1);
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+.video-card iframe{
+    width:100%;
+    height:250px;
+    border:none;
+    margin-top:10px;
+}
+
+/* 🐶 ROVER */
+#rover-container{
+    position:absolute;
+    bottom:60px;
+    right:30px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+}
+
+#rover-bubble{
+    background:white;
+    color:black;
+    padding:12px 16px;
+    border-radius:15px;
+    width:260px;
+    font-size:14px;
+    font-weight:500;
+}
+
+#rover-img{
+    width:120px;
+    cursor:pointer;
+}
+
+#search-box{
+    display:flex;
+    gap:5px;
+}
+
+#search-box input{
+    padding:6px;
+    border-radius:5px;
+    border:none;
+    outline:none;
+}
+
+#search-box button{
+    padding:6px 10px;
+    background:#4da3ff;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
 <div class="desktop">
-    <div class="icon" onclick="launch('Home')"><img src="./home.png">Home</div>
-    <div class="icon" onclick="launch('About')"><img src="./aboutme.png">About</div>
-    <div class="icon" onclick="launch('Downloads')"><img src="./downloads.png">Downloads</div>
-    <div class="icon" onclick="launch('Videos')"><img src="./videos.png">Videos</div>
-    <div class="icon" onclick="launch('Blog')"><img src="./pic.png">Blog</div>
+    <div class="icon" onclick="openApp('Home')"><img src="./home.png">Home</div>
+    <div class="icon" onclick="openApp('About')"><img src="./aboutme.png">About</div>
+    <div class="icon" onclick="openApp('Videos')"><img src="./videos.png">Videos</div>
 </div>
 
-<div id="search-container">
-    <div id="rover-bubble">
-        <div id="rover-text">Woof! I'm Rover. Type what you're looking for and I'll find it for you!</div>
-        <div id="rover-choice-buttons">
-            <button class="choice-btn yes" id="rover-yes">Yes</button>
-            <button class="choice-btn no" id="rover-no">No</button>
-        </div>
-    </div>
-    <div id="rover-dog"><img id="rover-img" src="./search.png" alt="Rover"></div>
+<!-- 🐶 ROVER -->
+<div id="rover-container">
+    <div id="rover-bubble">Woof! I'm Rover. Type what you're looking for and I'll find it for you!</div>
+    <img id="rover-img" src="./search.png">
+
     <div id="search-box">
-        <input type="text" id="site-search" placeholder="Search site..." onkeydown="if(event.key==='Enter') executeSearch()">
-        <button class="search-btn" onclick="executeSearch()">Search</button>
-    </div>
-</div>
-
-<div id="blog-reader">
-    <div class="reader-header">
-        <span>BRAYDENPEACOCKTECH BLOG READER</span>
-        <div class="winbtn close" onclick="closeReader()">✕ Close</div>
-    </div>
-    <div class="reader-body" id="readerBody">
-        <h1 id="reader-post-title" style="font-size: 3.5em; color: #78aaff; margin-bottom: 10px;"></h1>
-        <span id="reader-post-author" style="color: white; font-weight: bold; font-style: italic; margin-bottom: 40px; display: block; font-size: 1.2em;"></span>
-        <div id="reader-post-content" style="font-size: 1.3em; line-height: 1.7; white-space: pre-wrap;"></div>
+        <input id="search" placeholder="Search...">
+        <button onclick="searchSite()">Search</button>
     </div>
 </div>
 
 <div id="taskbar"></div>
 
 <script>
-let z = 10;
 let windows = {};
-let tasks = {};
-let booted = false;
-let choiceTimeout = null;
-const bootSound = new Audio("./Start.mp3");
+let z = 5;
 
-const myBlogs = [{
-    title: "Is Microsoft finally doing things right",
-    author: "Brayden Peacock",
-    date: "April, 26th 2026",
-    preview: "Microsoft has released Windows 11 build 26300.2289 on 4/26/26...",
-    fullText: "Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.\n\n1st Change: Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.\n\n2nd Change: Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!\n\n3rd Change: Microsoft said they would let users skip Windows Update in OOBE.\n\n4th Change: Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.\n\n5th and Final: In Windows Update, Dev and Canary were merged into the Experimental Channel.\n\nThanks for reading this blog and have a great day."
-}];
+/* VIDEOS */
+const videos = [
+{title:"Windows Vista dies part 1", id:"YhPE3z1WeVA"},
+{title:"Upgrading through every version of Windows Part 1", id:"t684MtGv31Y"},
+{title:"Installing and Exploring Windows 8 8032", id:"rkuYDSrxreA"},
+{title:"The Evolution of Windows", id:"49OH_v64Fpg"},
+{title:"New BetaTester Intro", id:"XR2AoWhmjMk"},
+{title:"Upgrading to Windows 10 like its 2016", id:"ugu-VQdo-8I"},
+{title:"Exploring Windows 11 Build 29531.1000", id:"Psd7wpNbGRQ"},
+{title:"My PC and a weird video", id:"vFLD3-0Cs4E"},
+{title:"Installing & Exploring Windows 10 10074", id:"CNeIqVY3niM"},
+{title:"Upgrading through almost every version of Windows Part 2", id:"b5A4vUXMPpg"}
+];
 
-function executeSearch() {
-    const query = document.getElementById('site-search').value.toLowerCase().trim();
-    if (!query) return;
+/* OPEN WINDOW */
+function openApp(name){
+    if(windows[name]){
+        windows[name].style.display="block";
+        windows[name].style.zIndex=++z;
+        return;
+    }
 
-    const img = document.getElementById('rover-img');
-    const bubbleText = document.getElementById('rover-text');
-    const choiceDiv = document.getElementById('rover-choice-buttons');
-    
-    img.src = "./finding.gif";
-    bubbleText.innerText = "Sniff sniff... searching for '" + query + "'!";
-    choiceDiv.style.display = "none";
+    let win=document.createElement("div");
+    win.className="window";
+    win.style.top="100px";
+    win.style.left="100px";
+    win.style.zIndex=++z;
 
-    setTimeout(() => {
-        img.src = "./search.png"; 
-        let foundPage = "";
-        let foundBlogIndex = -1;
-        let programName = "";
+    win.innerHTML=`
+        <div class="title-bar">
+            <span>${name}</span>
+            <div class="controls">
+                <div class="winbtn" onclick="this.closest('.window').style.display='none'">_</div>
+                <div class="winbtn close" onclick="this.closest('.window').remove()">X</div>
+            </div>
+        </div>
+        <div class="content">${getContent(name)}</div>
+    `;
 
-        // 1. CHECK PAGES FIRST (Fixed Priority)
-        const pages = ['home', 'about', 'downloads', 'videos', 'blog'];
-        if (pages.includes(query)) {
-            foundPage = query.charAt(0).toUpperCase() + query.slice(1);
-            programName = foundPage;
-        } 
-        // 2. CHECK BLOGS ONLY IF PAGE NOT FOUND
-        else {
-            foundBlogIndex = myBlogs.findIndex(b => 
-                b.title.toLowerCase().includes(query) || b.fullText.toLowerCase().includes(query) || 
-                b.author.toLowerCase().includes(query) || b.date.toLowerCase().includes(query)
-            );
-            if (foundBlogIndex !== -1) programName = "Blog Update";
-        }
-
-        if (foundPage || foundBlogIndex !== -1) {
-            bubbleText.innerText = "Rover wants to know: Is '" + programName + "' the right program?";
-            choiceDiv.style.display = "flex";
-
-            const handleYes = () => {
-                clearTimeout(choiceTimeout);
-                choiceDiv.style.display = "none";
-                if (foundPage) launch(foundPage);
-                if (foundBlogIndex !== -1) launch('Blog');
-                bubbleText.innerText = "Woof! Opening it.";
-                setTimeout(() => { bubbleText.innerText = "Woof! I'm Rover. Type what you're looking for!"; }, 3000);
-            };
-
-            document.getElementById('rover-yes').onclick = handleYes;
-            document.getElementById('rover-no').onclick = () => {
-                clearTimeout(choiceTimeout);
-                choiceDiv.style.display = "none";
-                bubbleText.innerText = "Okay, I'll stand by!";
-            };
-
-            choiceTimeout = setTimeout(handleYes, 7000);
-        } else {
-            bubbleText.innerText = "Woof! Couldn't find '" + query + "'.";
-        }
-    }, 10000); 
-}
-
-function launch(app) {
-    const id = "win_" + app;
-    if (windows[id]) { windows[id].style.display = "flex"; windows[id].style.zIndex = ++z; return; }
-    const win = document.createElement("div");
-    win.className = "window";
-    win.style.top = "100px"; win.style.left = "100px"; win.style.zIndex = ++z;
-    win.innerHTML = `<div class="title-bar"><span>${app} - BraydenPeacockTech</span><div class="controls"><div class="winbtn" onclick="minimizeWin('${id}')">_</div><div class="winbtn" onclick="maximizeWin('${id}')">□</div><div class="winbtn close" onclick="closeWin('${id}')">✕</div></div></div><div class="content">${getContent(app)}</div>`;
     document.body.appendChild(win);
-    windows[id] = win;
-    addTask(id, app);
+    windows[name]=win;
+    addTask(name);
 }
 
-function addTask(id, app) {
-    const bar = document.getElementById("taskbar");
-    const btn = document.createElement("div");
-    btn.className = "taskbtn"; btn.innerText = app;
-    btn.onclick = () => { if (windows[id]) { windows[id].style.display = "flex"; windows[id].style.zIndex = ++z; } };
-    bar.appendChild(btn); tasks[id] = btn;
+/* TASKBAR */
+function addTask(name){
+    let btn=document.createElement("div");
+    btn.className="taskbtn";
+    btn.innerText=name;
+    btn.onclick=()=>openApp(name);
+    document.getElementById("taskbar").appendChild(btn);
 }
 
-function getContent(app) {
-    if (app === "Blog") {
-        let listHtml = "<h1>Latest Posts</h1>";
-        myBlogs.forEach((post, index) => {
-            listHtml += `<div class="blog-entry" style="background:rgba(255,255,255,0.1); padding:15px; border-radius:8px; margin-top:10px;"><span style="color:white; font-weight:bold;">${post.date}</span><h2>${post.title}</h2><button class="winbtn" style="width:100px; margin-top:10px;" onclick="openReader(${index})">Read Full</button></div>`;
+/* CONTENT */
+function getContent(name){
+    if(name==="Home") return "<h1>Welcome to BraydenPeacockTech</h1>";
+    if(name==="About") return "<h2>Brayden Peacock</h2><p>Tech modder and YouTuber.</p>";
+
+    if(name==="Videos"){
+        let html="<h1>My Videos</h1>";
+        videos.forEach(v=>{
+            html+=`
+            <div class="video-card">
+                <h3>${v.title}</h3>
+                <iframe src="https://www.youtube.com/embed/${v.id}" allowfullscreen></iframe>
+            </div>`;
         });
-        return listHtml;
+        return html;
     }
-    if (app === "Home") return "Welcome to the official site!";
-    if (app === "About") return "Brayden Peacock: Tech Modder and YouTuber.";
-    return app + " content coming soon!";
+
+    return "Coming soon...";
 }
 
-function openReader(index) {
-    const post = myBlogs[index];
-    document.getElementById('reader-post-title').innerText = post.title;
-    document.getElementById('reader-post-author').innerText = "By " + post.author + " | " + post.date;
-    document.getElementById('reader-post-content').innerText = post.fullText;
-    document.getElementById('blog-reader').style.display = 'flex';
+/* 🐶 ROVER SEARCH (WITH DELAY) */
+function searchSite(){
+    let q=document.getElementById("search").value.toLowerCase().trim();
+    let bubble=document.getElementById("rover-bubble");
+    let img=document.getElementById("rover-img");
+
+    if(!q) return;
+
+    // start animation
+    img.src="./finding.gif";
+    bubble.innerText="Sniff sniff... searching for '" + q + "'...";
+
+    setTimeout(()=>{
+
+        img.src="./search.png";
+
+        if(q.includes("home")){
+            openApp("Home");
+            bubble.innerText="Woof! Opening Home!";
+            return;
+        }
+
+        if(q.includes("about")){
+            openApp("About");
+            bubble.innerText="Woof! Opening About!";
+            return;
+        }
+
+        if(q.includes("video")){
+            openApp("Videos");
+            bubble.innerText="Woof! Here are your videos!";
+            return;
+        }
+
+        let found=videos.find(v=>v.title.toLowerCase().includes(q));
+
+        if(found){
+            openApp("Videos");
+            bubble.innerText="Woof! Found: " + found.title;
+        }else{
+            bubble.innerText="Woof... couldn't find that 😢";
+        }
+
+    },10000); // ⏳ 10 second delay
 }
-
-function closeReader() { document.getElementById('blog-reader').style.display = 'none'; }
-function closeWin(id) { if(windows[id]) windows[id].remove(); if(tasks[id]) tasks[id].remove(); delete windows[id]; delete tasks[id]; }
-function minimizeWin(id) { if(windows[id]) windows[id].style.display = "none"; }
-function maximizeWin(id) {
-    const w = windows[id];
-    if (w.style.width === "100vw") {
-        w.style.width = "760px"; w.style.height = "480px"; w.style.top = "100px"; w.style.left = "100px";
-    } else {
-        w.style.width = "100vw"; w.style.height = "calc(100vh - 40px)"; w.style.top = "0"; w.style.left = "0";
-    }
-}
-
-let dragTarget = null, offsetX = 0, offsetY = 0;
-document.addEventListener("mousedown", (e) => {
-    const bar = e.target.closest(".title-bar");
-    if (!bar) return;
-    dragTarget = bar.parentElement;
-    if(dragTarget.style.width === "100vw") { dragTarget = null; return; }
-    offsetX = e.clientX - dragTarget.offsetLeft;
-    offsetY = e.clientY - dragTarget.offsetTop;
-    dragTarget.style.zIndex = ++z;
-});
-document.addEventListener("mousemove", (e) => {
-    if (!dragTarget) return;
-    dragTarget.style.left = (e.clientX - offsetX) + "px";
-    dragTarget.style.top = (e.clientY - offsetY) + "px";
-});
-document.addEventListener("mouseup", () => { dragTarget = null; });
-
-document.addEventListener("pointerdown", () => {
-    if (booted) return;
-    booted = true;
-    bootSound.play().catch(() => {});
-    launch("Home"); 
-}, { once: true });
 </script>
+
 </body>
 </html>
