@@ -5,7 +5,6 @@
 <title>BraydenPeacockTech</title>
 
 <style>
-/* (STYLING UPDATED FOR BRAYDENPEACOCKTECH) */
 * {
     margin: 0;
     padding: 0;
@@ -97,8 +96,14 @@ body {
     border: 1px solid rgba(0,0,0,0.3);
 }
 
-.winbtn.min { background: linear-gradient(to bottom, #fff, #cfd8ff); }
-.winbtn.max { background: linear-gradient(to bottom, #fff, #d0ffd6); }
+.winbtn.min {
+    background: linear-gradient(to bottom, #fff, #cfd8ff);
+}
+
+.winbtn.max {
+    background: linear-gradient(to bottom, #fff, #d0ffd6);
+}
+
 .winbtn.close {
     width: 46px;
     color: white;
@@ -155,7 +160,7 @@ body {
 <div class="desktop">
     <div class="icon" onclick="launch('Home')"><img src="./home.png">Home</div>
     <div class="icon" onclick="launch('About')"><img src="./aboutme.png">About</div>
-    <div class="icon" onclick="launch('Blog')"><img src="./blog.png">Blog</div>
+    <div class="icon" onclick="launch('Blog')"><img src="./pic.png">Blog</div>
     <div class="icon" onclick="launch('Downloads')"><img src="./downloads.png">Downloads</div>
     <div class="icon" onclick="launch('Videos')"><img src="./videos.png">Videos</div>
 </div>
@@ -173,18 +178,22 @@ function getContent(app) {
         case "Home":
             return "Welcome to the official BraydenPeacockTech site. Check the Blog for my latest experiments!";
         case "About":
-            return "Hi, I'm Brayden Peacock. I'm a tech YouTuber who loves custom OS projects and breaking software (for science!).";
+            return "Hi, I'm Brayden Peacock. I'm a tech YouTuber who loves custom OS projects and breaking software (for science!). Thanks for supporting me and the channel.";
         case "Blog":
             return `
                 <div class="blog-entry">
-                    <h2>First Post!</h2>
-                    <p>This is where I'll be posting updates on my 26H2 builds and Spectem OS progress. Stay tuned!</p>
+                    <h2>Windows 11 26H2 - Experimental Build News</h2>
+                    <p>I am testing the new 26H2 build on VMware. The restored taskbar features are finally here!</p>
+                </div>
+                <div class="blog-entry">
+                    <h2>Spectem OS Progress</h2>
+                    <p>Working on the Nano11 base for Spectem OS to make it the fastest custom OS out there.</p>
                 </div>
             `;
         case "Downloads":
-            return "Downloads for my custom scripts and ISOs will appear here soon.";
+            return "Downloads coming soon.";
         case "Videos":
-            return "Latest tech videos coming soon.";
+            return "Videos coming soon.";
         default:
             return "";
     }
@@ -266,7 +275,7 @@ function maximize(id) {
     }
 }
 
-/* Simple drag logic */
+/* Drag logic */
 let dragTarget = null;
 let offsetX = 0; let offsetY = 0;
 document.addEventListener("mousedown", (e) => {
