@@ -5,10 +5,11 @@
 <title>BraydenPeacockTech</title>
 
 <style>
-/* (STYLING REMAINS THE SAME) */
+/* (CORE STYLES - FIXED FOR CLICKABILITY) */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", Tahoma, sans-serif; background: url("./wallpaper.jpg") no-repeat center center fixed; background-size: cover; }
-.desktop { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 20px; }
+
+.desktop { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 20px; z-index: 5; }
 .icon { width: 80px; text-align: center; color: white; font-size: 12px; text-shadow: 1px 1px 2px black; cursor: pointer; }
 .icon img { width: 48px; height: 48px; display: block; margin: 0 auto 5px; }
 
@@ -17,31 +18,28 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 .title-bar span { color: white; font-size: 13px; font-weight: 600; text-shadow: 0 2px 8px black; }
 .controls { display: flex; gap: 4px; }
 .winbtn { width: 34px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.3); }
-.winbtn.min { background: linear-gradient(to bottom, #fff, #cfd8ff); }
-.winbtn.max { background: linear-gradient(to bottom, #fff, #d0ffd6); }
 .winbtn.close { width: 46px; color: white; background: linear-gradient(to bottom, #ff6a6a, #b30000); }
 
 .content { flex: 1; padding: 30px; color: white; text-shadow: 0 2px 10px black; overflow-y: auto; }
 
-/* Clickable Blog Styling */
-.blog-entry { 
-    background: rgba(0, 0, 0, 0.3); 
-    padding: 15px; 
-    border-radius: 8px; 
-    margin-bottom: 15px; 
-    border: 1px solid rgba(255,255,255,0.1); 
-    cursor: pointer; /* Makes it look clickable */
-    transition: background 0.2s;
+/* FULLSCREEN READER - FIXED 'POINTER-EVENTS' BUG */
+#blog-reader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.98);
+    backdrop-filter: blur(25px);
+    z-index: 9999;
+    display: none; 
+    flex-direction: column;
+    color: white;
+    pointer-events: auto; /* Ensures it only blocks clicks when 'display: flex' */
 }
-.blog-entry:hover { 
-    background: rgba(255, 255, 255, 0.1); 
-    border: 1px solid rgba(255,255,255,0.4);
-}
-.blog-entry h2 { margin-bottom: 5px; font-size: 1.2em; color: #78aaff; }
-.blog-entry p { font-size: 0.95em; line-height: 1.4; opacity: 0.9; }
+.reader-header { padding: 15px 25px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.reader-body { flex: 1; padding: 60px 20%; overflow-y: auto; }
 
-#taskbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; display: flex; align-items: center; padding: 5px; background: rgba(0,0,0,0.65); }
-.taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 3px; cursor: pointer; }
+#taskbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; display: flex; align-items: center; padding: 5px; background: rgba(0,0,0,0.65); z-index: 10000; }
+.taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; }
 </style>
 </head>
 
@@ -50,9 +48,21 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 <div class="desktop">
     <div class="icon" onclick="launch('Home')"><img src="./home.png">Home</div>
     <div class="icon" onclick="launch('About')"><img src="./aboutme.png">About</div>
-    <div class="icon" onclick="launch('Blog')"><img src="./pic.png">Blog</div>
     <div class="icon" onclick="launch('Downloads')"><img src="./downloads.png">Downloads</div>
     <div class="icon" onclick="launch('Videos')"><img src="./videos.png">Videos</div>
+    <div class="icon" onclick="launch('Blog')"><img src="./pic.png">Blog</div>
+</div>
+
+<div id="blog-reader">
+    <div class="reader-header">
+        <span style="font-weight: bold; letter-spacing: 1px;">BRAYDENPEACOCKTECH BLOG</span>
+        <div class="winbtn close" style="height: 30px; width: 80px;" onclick="closeReader()">✕ Close</div>
+    </div>
+    <div class="reader-body">
+        <h1 id="reader-post-title"></h1>
+        <span id="reader-post-author" style="color: #888; font-style: italic; margin-bottom: 40px; display: block;"></span>
+        <div id="reader-post-content" style="font-size: 1.3em; line-height: 1.7;"></div>
+    </div>
 </div>
 
 <div id="taskbar"></div>
@@ -63,69 +73,50 @@ let windows = {};
 let tasks = {};
 let booted = false;
 
-// Function to handle clicking on a blog post
-function openBlogPost(url) {
-    // You can change this to open a new window or launch an internal app!
-    window.open(url, '_blank');
+// Sample blog for test
+const myBlogs = [
+    { title: "Masterpiece Placeholder", author: "Brayden Peacock", preview: "No posts yet...", fullText: "No posts yet. Check back soon for the BraydenPeacockTech Masterpiece!" }
+];
+
+function openReader(index) {
+    const post = myBlogs[index];
+    document.getElementById('reader-post-title').innerText = post.title;
+    document.getElementById('reader-post-author').innerText = "By " + post.author;
+    document.getElementById('reader-post-content').innerText = post.fullText;
+    document.getElementById('blog-reader').style.display = 'flex';
 }
 
+function closeReader() { document.getElementById('blog-reader').style.display = 'none'; }
+
 function getContent(app) {
+    if (app === "Blog") {
+        let listHtml = "<h1>Latest Posts</h1>";
+        myBlogs.forEach((post, index) => {
+            listHtml += `<div onclick="openReader(${index})" style="cursor:pointer; background:rgba(255,255,255,0.1); padding:15px; border-radius:8px; margin-top:10px;"><h2>${post.title}</h2><p>${post.preview}</p></div>`;
+        });
+        return listHtml;
+    }
     switch(app) {
-        case "Home":
-            return "Welcome to the official BraydenPeacockTech site. Check the Blog for my latest experiments!";
-        case "About":
-            return "Hi, I'm Brayden Peacock. I'm a tech YouTuber who loves custom OS projects and breaking software (for science!). Thanks for supporting me and the channel.";
-        case "Blog":
-            return `
-                <p style="margin-bottom: 20px;">No posts yet! Brayden is currently working on his masterpiece.</p>
-                <!-- Example of how to add a clickable post later:
-                <div class="blog-entry" onclick="openBlogPost('https://youtube.com')">
-                    <h2>TITLE HERE</h2>
-                    <p>Click this to read more about my latest project.</p>
-                </div>
-                -->
-            `;
-        case "Downloads":
-            return "Downloads for my custom scripts and ISOs will appear here soon.";
-        case "Videos":
-            return "Latest tech videos coming soon.";
-        default:
-            return "";
+        case "Home": return "Welcome to BraydenPeacockTech.";
+        case "About": return "Hi, I'm Brayden Peacock. Tech YouTuber and enthusiast.";
+        case "Downloads": return "Downloads coming soon.";
+        case "Videos": return "Videos coming soon.";
+        default: return "";
     }
 }
 
 const bootSound = new Audio("./Start.mp3");
-bootSound.volume = 0.5;
-
 function launch(app) {
     const id = "win_" + app;
-    if (windows[id]) {
-        windows[id].style.display = "flex";
-        windows[id].style.zIndex = ++z;
-        return;
+    if (windows[id]) { 
+        windows[id].style.display = "flex"; 
+        windows[id].style.zIndex = ++z; 
+        return; 
     }
-
     const win = document.createElement("div");
     win.className = "window";
-    win.style.top = "100px";
-    win.style.left = "100px";
-    win.style.zIndex = ++z;
-
-    win.innerHTML = `
-        <div class="title-bar">
-            <span>${app} - BraydenPeacockTech</span>
-            <div class="controls">
-                <div class="winbtn min" onclick="minimize('${id}')">—</div>
-                <div class="winbtn max" onclick="maximize('${id}')">□</div>
-                <div class="winbtn close" onclick="closeWin('${id}')">✕</div>
-            </div>
-        </div>
-        <div class="content">
-            <h1>${app}</h1>
-            <div id="content_${app}">${getContent(app)}</div>
-        </div>
-    `;
-
+    win.style.top = "100px"; win.style.left = "100px"; win.style.zIndex = ++z;
+    win.innerHTML = `<div class="title-bar"><span>${app} - BraydenPeacockTech</span><div class="controls"><div class="winbtn min" onclick="minimize('${id}')">—</div><div class="winbtn max" onclick="maximize('${id}')">□</div><div class="winbtn close" onclick="closeWin('${id}')">✕</div></div></div><div class="content"><div>${getContent(app)}</div></div>`;
     document.body.appendChild(win);
     windows[id] = win;
     addTask(id, app);
@@ -134,67 +125,30 @@ function launch(app) {
 function addTask(id, app) {
     const bar = document.getElementById("taskbar");
     const btn = document.createElement("div");
-    btn.className = "taskbtn";
-    btn.innerText = app;
-    btn.onclick = () => {
-        const w = windows[id];
-        if (w) {
-            w.style.display = "flex";
-            w.style.zIndex = ++z;
-        }
-    };
-    bar.appendChild(btn);
-    tasks[id] = btn;
+    btn.className = "taskbtn"; btn.innerText = app;
+    btn.onclick = () => { if (windows[id]) { windows[id].style.display = "flex"; windows[id].style.zIndex = ++z; } };
+    bar.appendChild(btn); tasks[id] = btn;
 }
 
-function closeWin(id) {
-    if (windows[id]) windows[id].remove();
-    if (tasks[id]) tasks[id].remove();
-    delete windows[id];
-    delete tasks[id];
-}
-
+function closeWin(id) { if (windows[id]) windows[id].remove(); if (tasks[id]) tasks[id].remove(); delete windows[id]; delete tasks[id]; }
 function minimize(id) { if (windows[id]) windows[id].style.display = "none"; }
-
 function maximize(id) {
-    const w = windows[id];
-    if (!w) return;
-    if (!w.dataset.max) {
-        w.dataset.max = "1";
-        w.style.top = "0"; w.style.left = "0";
-        w.style.width = "100vw"; w.style.height = "calc(100vh - 40px)";
-    } else {
-        w.dataset.max = "";
-        w.style.width = "760px"; w.style.height = "480px";
-        w.style.top = "120px"; w.style.left = "120px";
-    }
+    const w = windows[id]; if (!w) return;
+    if (!w.dataset.max) { w.dataset.max = "1"; w.style.top = "0"; w.style.left = "0"; w.style.width = "100vw"; w.style.height = "calc(100vh - 40px)"; }
+    else { w.dataset.max = ""; w.style.width = "760px"; w.style.height = "480px"; w.style.top = "120px"; w.style.left = "120px"; }
 }
 
-/* Drag logic */
-let dragTarget = null;
-let offsetX = 0; let offsetY = 0;
-document.addEventListener("mousedown", (e) => {
-    const bar = e.target.closest(".title-bar");
-    if (!bar) return;
-    dragTarget = bar.parentElement;
-    offsetX = e.clientX - dragTarget.offsetLeft;
-    offsetY = e.clientY - dragTarget.offsetTop;
-    dragTarget.style.zIndex = ++z;
-});
-document.addEventListener("mousemove", (e) => {
-    if (!dragTarget) return;
-    dragTarget.style.left = (e.clientX - offsetX) + "px";
-    dragTarget.style.top = (e.clientY - offsetY) + "px";
-});
+let dragTarget = null; let offsetX = 0; let offsetY = 0;
+document.addEventListener("mousedown", (e) => { const bar = e.target.closest(".title-bar"); if (!bar) return; dragTarget = bar.parentElement; offsetX = e.clientX - dragTarget.offsetLeft; offsetY = e.clientY - dragTarget.offsetTop; dragTarget.style.zIndex = ++z; });
+document.addEventListener("mousemove", (e) => { if (!dragTarget) return; dragTarget.style.left = (e.clientX - offsetX) + "px"; dragTarget.style.top = (e.clientY - offsetY) + "px"; });
 document.addEventListener("mouseup", () => { dragTarget = null; });
 
 document.addEventListener("pointerdown", () => {
     if (booted) return;
     booted = true;
     bootSound.play().catch(() => {});
-    launch("Home");
+    launch("Home"); 
 }, { once: true });
 </script>
-
 </body>
 </html>
