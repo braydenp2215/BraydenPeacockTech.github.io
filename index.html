@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BraydenPeacockTech</title>
+
+<style>
+/* CORE AERO STYLING */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", Tahoma, sans-serif; background: url("./wallpaper.jpg") no-repeat center center fixed; background-size: cover; }
+
+.desktop { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 20px; z-index: 5; }
+.icon { width: 80px; text-align: center; color: white; font-size: 12px; text-shadow: 1px 1px 2px black; cursor: pointer; }
+.icon img { width: 48px; height: 48px; display: block; margin: 0 auto 5px; }
+
+/* MASSIVE ROVER & SEARCH */
+#search-container { position: absolute; bottom: 60px; right: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 1000; }
+#rover-bubble { background: white; color: black; padding: 15px 20px; border-radius: 20px; border: 3px solid #78aaff; font-size: 15px; width: 280px; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 15px; font-weight: 500; }
+#rover-bubble::after { content: ''; position: absolute; bottom: -15px; right: 60px; border-width: 15px 15px 0; border-style: solid; border-color: white transparent; }
+#rover-dog { width: 240px; cursor: pointer; transition: transform 0.2s; }
+#rover-dog img { width: 100%; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+#search-box { background: rgba(235, 240, 255, 0.3); backdrop-filter: blur(25px); padding: 12px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.5); display: flex; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+#site-search { background: none; border: none; color: white; outline: none; padding: 5px; width: 200px; font-size: 16px; }
+.search-btn { background: #78aaff; border: none; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+/* TASKBAR */
+#taskbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; display: flex; align-items: center; padding: 5px; background: rgba(0,0,0,0.65); z-index: 10001; }
+.taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; }
+
+/* WINDOWS */
+.window { position: absolute; width: 760px; height: 480px; display: flex; flex-direction: column; border-radius: 10px; background: rgba(235,240,255,0.18); border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(40px) saturate(200%); box-shadow: 0 60px 140px rgba(0,0,0,0.75); overflow: hidden; }
+.title-bar { height: 38px; display: flex; justify-content: space-between; align-items: center; padding: 0 8px; background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25)); cursor: grab; user-select: none; }
+.title-bar span { color: white; font-size: 13px; font-weight: 600; text-shadow: 0 2px 8px black; pointer-events: none; }
+.winbtn { width: 34px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.3); }
+.winbtn.close { width: 46px; color: white; background: linear-gradient(to bottom, #ff6a6a, #b30000); }
+.content { flex: 1; padding: 30px; color: white; text-shadow: 0 2px 10px black; overflow-y: auto; }
+
+/* BLOG STYLING */
+.blog-entry { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.2); }
+.blog-date { font-size: 0.8em; color: #aaa; display: block; margin-bottom: 5px; }
+.open-full-btn { background: #78aaff; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+
+/* READER */
+#blog-reader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.98); backdrop-filter: blur(25px); z-index: 10002; display: none; flex-direction: column; color: white; }
+.reader-header { padding: 15px 25px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+.reader-body { flex: 1; padding: 60px 20%; overflow-y: auto; scroll-behavior: smooth; }
+#backToTop { position: fixed; bottom: 30px; right: 140px; background: rgba(120,170,255,0.6); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px 15px; border-radius: 5px; cursor: pointer; display: none; }
+</style>
+</head>
+
+<body>
+
+<div class="desktop">
+    <div class="icon" onclick="launch('Home')"><img src="./home.png">Home</div>
+    <div class="icon" onclick="launch('About')"><img src="./aboutme.png">About</div>
+    <div class="icon" onclick="launch('Downloads')"><img src="./downloads.png">Downloads</div>
+    <div class="icon" onclick="launch('Videos')"><img src="./videos.png">Videos</div>
+    <div class="icon" onclick="launch('Blog')"><img src="./pic.png">Blog</div>
+</div>
+
+<div id="search-container">
+    <div id="rover-bubble">Woof! I'm Rover. Type what you're looking for and I'll find it for you!</div>
+    <div id="rover-dog"><img src="./search.png" alt="Rover"></div>
+    <div id="search-box">
+        <input type="text" id="site-search" placeholder="Ask Rover..." onkeydown="if(event.key==='Enter') executeSearch()">
+        <button class="search-btn" onclick="executeSearch()">Search</button>
+    </div>
+</div>
+
+<div id="blog-reader">
+    <div class="reader-header">
+        <span>BRAYDENPEACOCKTECH BLOG</span>
+        <div class="winbtn close" onclick="closeReader()">✕ Close</div>
+    </div>
+    <div class="reader-body" id="readerBody">
+        <h1 id="reader-post-title" style="font-size: 3.5em; color: #78aaff;"></h1>
+        <span id="reader-post-author" style="font-style: italic; color: #888; margin-bottom: 30px; display: block; font-size: 1.2em;"></span>
+        <div id="reader-post-content" style="font-size: 1.3em; line-height: 1.7; white-space: pre-wrap;"></div>
+        <div id="backToTop" onclick="scrollToTop()">↑ Back to Top</div>
+    </div>
+</div>
+
+<div id="taskbar"></div>
+
+<script>
+let z = 10;
+let windows = {};
+let tasks = {};
+let booted = false;
+
+const myBlogs = [{
+    title: "Is Microsoft finally doing things right",
+    author: "Brayden Peacock",
+    date: "April, 26th 2026",
+    preview: "Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it...",
+    fullText: "Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.\n\n1st Change: Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.\n\n2nd Change: Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!\n\n3rd Change: Microsoft said they would let users skip Windows Update in OOBE.\n\n4th Change: Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.\n\n5th and Final: In Windows Update, Dev and Canary were merged into the Experimental Channel.\n\nThanks for reading this blog and have a great day."
+}];
+
+function executeSearch() {
+    const query = document.getElementById('site-search').value.toLowerCase().trim();
+    if (!query) return;
+    const pages = ['home', 'about', 'downloads', 'videos', 'blog'];
+    if (pages.includes(query)) {
+        launch(query.charAt(0).toUpperCase() + query.slice(1));
+        return;
+    }
+    const bIndex = myBlogs.findIndex(b => b.title.toLowerCase().includes(query) || b.fullText.toLowerCase().includes(query));
+    if (bIndex !== -1) {
+        launch('Blog');
+        setTimeout(() => openReader(bIndex), 200);
+    } else {
+        document.getElementById('rover-bubble').innerText = "Woof? I couldn't find '" + query + "'.";
+    }
+}
+
+const bootSound = new Audio("./Start.mp3");
+
+function launch(app) {
+    const id = "win_" + app;
+    if (windows[id]) { windows[id].style.display = "flex"; windows[id].style.zIndex = ++z; return; }
+    const win = document.createElement("div");
+    win.className = "window";
+    win.style.top = "100px"; win.style.left = "100px"; win.style.zIndex = ++z;
+    win.innerHTML = `<div class="title-bar"><span>${app} - BraydenPeacockTech</span><div class="controls"><div class="winbtn close" onclick="closeWin('${id}')">✕</div></div></div><div class="content">${getContent(app)}</div>`;
+    document.body.appendChild(win);
+    windows[id] = win;
+    addTask(id, app);
+}
+
+function addTask(id, app) {
+    const bar = document.getElementById("taskbar");
+    const btn = document.createElement("div");
+    btn.className = "taskbtn"; btn.innerText = app;
+    btn.onclick = () => { if (windows[id]) { windows[id].style.display = "flex"; windows[id].style.zIndex = ++z; } };
+    bar.appendChild(btn); tasks[id] = btn;
+}
+
+function getContent(app) {
+    if (app === "Blog") {
+        let listHtml = "<h1>Latest Posts</h1>";
+        myBlogs.forEach((post, index) => {
+            listHtml += `<div class="blog-entry">
+                <span class="blog-date">${post.date}</span>
+                <h2>${post.title}</h2>
+                <p>${post.preview}</p>
+                <button class="open-full-btn" onclick="openReader(${index})">Open in Full</button>
+            </div>`;
+        });
+        return listHtml;
+    }
+    return app + " content for BraydenPeacockTech.";
+}
+
+function openReader(index) {
+    const post = myBlogs[index];
+    document.getElementById('reader-post-title').innerText = post.title;
+    document.getElementById('reader-post-author').innerText = "By " + post.author + " | " + post.date;
+    document.getElementById('reader-post-content').innerText = post.fullText;
+    document.getElementById('blog-reader').style.display = 'flex';
+}
+
+function closeReader() { document.getElementById('blog-reader').style.display = 'none'; }
+function closeWin(id) { if (windows[id]) windows[id].remove(); if (tasks[id]) tasks[id].remove(); delete windows[id]; delete tasks[id]; }
+function scrollToTop() { document.getElementById('readerBody').scrollTo({ top: 0, behavior: 'smooth' }); }
+
+document.getElementById('readerBody').onscroll = function() {
+    let btn = document.getElementById("backToTop");
+    if (this.scrollTop > 300) btn.style.display = "block";
+    else btn.style.display = "none";
+};
+
+/* DRAG LOGIC */
+let dragTarget = null;
+let offsetX = 0, offsetY = 0;
+document.addEventListener("mousedown", (e) => {
+    const bar = e.target.closest(".title-bar");
+    if (!bar) return;
+    dragTarget = bar.parentElement;
+    offsetX = e.clientX - dragTarget.offsetLeft;
+    offsetY = e.clientY - dragTarget.offsetTop;
+    dragTarget.style.zIndex = ++z;
+});
+document.addEventListener("mousemove", (e) => {
+    if (!dragTarget) return;
+    dragTarget.style.left = (e.clientX - offsetX) + "px";
+    dragTarget.style.top = (e.clientY - offsetY) + "px";
+});
+document.addEventListener("mouseup", () => { dragTarget = null; });
+
+document.addEventListener("pointerdown", () => {
+    if (booted) return;
+    booted = true;
+    bootSound.play().catch(() => {});
+    launch("Home"); 
+}, { once: true });
+</script>
+</body>
+</html>
