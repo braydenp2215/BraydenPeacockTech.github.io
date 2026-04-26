@@ -5,7 +5,7 @@
 <title>BraydenPeacockTech</title>
 
 <style>
-/* (CORE STYLES - FIXED FOR CLICKABILITY) */
+/* AERO GLASS STYLING */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", Tahoma, sans-serif; background: url("./wallpaper.jpg") no-repeat center center fixed; background-size: cover; }
 
@@ -13,16 +13,19 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 .icon { width: 80px; text-align: center; color: white; font-size: 12px; text-shadow: 1px 1px 2px black; cursor: pointer; }
 .icon img { width: 48px; height: 48px; display: block; margin: 0 auto 5px; }
 
+/* Window UI */
 .window { position: absolute; width: 760px; height: 480px; display: flex; flex-direction: column; border-radius: 10px; background: rgba(235,240,255,0.18); border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); box-shadow: 0 60px 140px rgba(0,0,0,0.75); overflow: hidden; }
 .title-bar { height: 38px; display: flex; justify-content: space-between; align-items: center; padding: 0 8px; background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25)); cursor: grab; user-select: none; }
 .title-bar span { color: white; font-size: 13px; font-weight: 600; text-shadow: 0 2px 8px black; }
 .controls { display: flex; gap: 4px; }
 .winbtn { width: 34px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.3); }
+.winbtn.min { background: linear-gradient(to bottom, #fff, #cfd8ff); }
+.winbtn.max { background: linear-gradient(to bottom, #fff, #d0ffd6); }
 .winbtn.close { width: 46px; color: white; background: linear-gradient(to bottom, #ff6a6a, #b30000); }
 
 .content { flex: 1; padding: 30px; color: white; text-shadow: 0 2px 10px black; overflow-y: auto; }
 
-/* FULLSCREEN READER - FIXED 'POINTER-EVENTS' BUG */
+/* FULLSCREEN READER */
 #blog-reader {
     position: fixed;
     top: 0; left: 0;
@@ -33,10 +36,11 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     display: none; 
     flex-direction: column;
     color: white;
-    pointer-events: auto; /* Ensures it only blocks clicks when 'display: flex' */
 }
 .reader-header { padding: 15px 25px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
 .reader-body { flex: 1; padding: 60px 20%; overflow-y: auto; }
+.reader-body h1 { font-size: 3.5em; margin-bottom: 10px; color: #78aaff; }
+.author-tag { color: #888; font-style: italic; margin-bottom: 40px; display: block; font-size: 1.2em; }
 
 #taskbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; display: flex; align-items: center; padding: 5px; background: rgba(0,0,0,0.65); z-index: 10000; }
 .taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; }
@@ -50,6 +54,7 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     <div class="icon" onclick="launch('About')"><img src="./aboutme.png">About</div>
     <div class="icon" onclick="launch('Downloads')"><img src="./downloads.png">Downloads</div>
     <div class="icon" onclick="launch('Videos')"><img src="./videos.png">Videos</div>
+    <!-- BLOG AT THE BOTTOM -->
     <div class="icon" onclick="launch('Blog')"><img src="./pic.png">Blog</div>
 </div>
 
@@ -60,7 +65,7 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     </div>
     <div class="reader-body">
         <h1 id="reader-post-title"></h1>
-        <span id="reader-post-author" style="color: #888; font-style: italic; margin-bottom: 40px; display: block;"></span>
+        <span id="reader-post-author" class="author-tag"></span>
         <div id="reader-post-content" style="font-size: 1.3em; line-height: 1.7;"></div>
     </div>
 </div>
@@ -73,9 +78,14 @@ let windows = {};
 let tasks = {};
 let booted = false;
 
-// Sample blog for test
+// BLOG DATA
 const myBlogs = [
-    { title: "Masterpiece Placeholder", author: "Brayden Peacock", preview: "No posts yet...", fullText: "No posts yet. Check back soon for the BraydenPeacockTech Masterpiece!" }
+    {
+        title: "Is Microsoft finally doing things right",
+        author: "Brayden Peacock",
+        preview: "Check out my thoughts on the latest 26H2 update...",
+        fullText: "" // BLANK FOR YOU TO FILL OUT
+    }
 ];
 
 function openReader(index) {
@@ -98,7 +108,7 @@ function getContent(app) {
     }
     switch(app) {
         case "Home": return "Welcome to BraydenPeacockTech.";
-        case "About": return "Hi, I'm Brayden Peacock. Tech YouTuber and enthusiast.";
+        case "About": return "Hi, I'm Brayden Peacock. YouTuber and tech enthusiast.";
         case "Downloads": return "Downloads coming soon.";
         case "Videos": return "Videos coming soon.";
         default: return "";
@@ -108,11 +118,7 @@ function getContent(app) {
 const bootSound = new Audio("./Start.mp3");
 function launch(app) {
     const id = "win_" + app;
-    if (windows[id]) { 
-        windows[id].style.display = "flex"; 
-        windows[id].style.zIndex = ++z; 
-        return; 
-    }
+    if (windows[id]) { windows[id].style.display = "flex"; windows[id].style.zIndex = ++z; return; }
     const win = document.createElement("div");
     win.className = "window";
     win.style.top = "100px"; win.style.left = "100px"; win.style.zIndex = ++z;
