@@ -5,9 +5,10 @@
 <title>BraydenPeacockTech</title>
 
 <style>
-/* (CORE STYLES UNCHANGED) */
+/* CORE AERO STYLING */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", Tahoma, sans-serif; background: url("./wallpaper.jpg") no-repeat center center fixed; background-size: cover; }
+
 .desktop { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 20px; z-index: 5; }
 .icon { width: 80px; text-align: center; color: white; font-size: 12px; text-shadow: 1px 1px 2px black; cursor: pointer; }
 .icon img { width: 48px; height: 48px; display: block; margin: 0 auto 5px; }
@@ -21,7 +22,7 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     flex-direction: column;
     align-items: flex-end;
     gap: 5px;
-    z-index: 1000;
+    z-index: 1000; /* Stays above windows but below taskbar */
 }
 
 #rover-bubble {
@@ -35,10 +36,8 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     position: relative;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     margin-bottom: 10px;
-    display: block; /* Stays visible now */
 }
 
-/* The little arrow on the bubble */
 #rover-bubble::after {
     content: '';
     position: absolute;
@@ -49,7 +48,7 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
     border-color: white transparent;
 }
 
-#rover-dog { width: 80px; cursor: pointer; align-self: flex-end; }
+#rover-dog { width: 80px; cursor: pointer; }
 #rover-dog img { width: 100%; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); }
 
 #search-box {
@@ -65,15 +64,32 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 #site-search { background: none; border: none; color: white; outline: none; padding: 5px; width: 140px; }
 .search-btn { background: #78aaff; border: none; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
 
-/* (WINDOW & TASKBAR STYLES SAME AS BEFORE) */
+/* TASKBAR PINNED TO FRONT */
+#taskbar { 
+    position: absolute; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 40px; 
+    display: flex; 
+    align-items: center; 
+    padding: 5px; 
+    background: rgba(0,0,0,0.65); 
+    z-index: 10001; /* Highest priority */
+}
+.taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; }
+
+/* (WINDOW & READER STYLES) */
 .window { position: absolute; width: 760px; height: 480px; display: flex; flex-direction: column; border-radius: 10px; background: rgba(235,240,255,0.18); border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(40px) saturate(200%); box-shadow: 0 60px 140px rgba(0,0,0,0.75); overflow: hidden; }
 .title-bar { height: 38px; display: flex; justify-content: space-between; align-items: center; padding: 0 8px; background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25)); }
 .title-bar span { color: white; font-size: 13px; font-weight: 600; text-shadow: 0 2px 8px black; }
 .winbtn { width: 34px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.3); }
 .winbtn.close { width: 46px; color: white; background: linear-gradient(to bottom, #ff6a6a, #b30000); }
 .content { flex: 1; padding: 30px; color: white; text-shadow: 0 2px 10px black; overflow-y: auto; }
-#taskbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; display: flex; align-items: center; padding: 5px; background: rgba(0,0,0,0.65); z-index: 10000; }
-.taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; }
+
+#blog-reader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.98); backdrop-filter: blur(25px); z-index: 10002; display: none; flex-direction: column; color: white; }
+.reader-header { padding: 15px 25px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+.reader-body { flex: 1; padding: 60px 20%; overflow-y: auto; }
 </style>
 </head>
 
@@ -90,14 +106,26 @@ body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", T
 <!-- ROVER WITH BUBBLE -->
 <div id="search-container">
     <div id="rover-bubble">Woof! I'm Rover. Type what you're looking for and I'll find it!</div>
-    <div id="rover-dog">
-        <img src="./search.png" alt="Rover">
-    </div>
+    <div id="rover-dog"><img src="./search.png" alt="Rover"></div>
     <div id="search-box">
         <input type="text" id="site-search" placeholder="Ask Rover..." onkeydown="if(event.key==='Enter') executeSearch()">
         <button class="search-btn" onclick="executeSearch()">Go</button>
     </div>
 </div>
+
+<div id="blog-reader">
+    <div class="reader-header">
+        <span>BRAYDENPEACOCKTECH BLOG</span>
+        <div class="winbtn close" onclick="closeReader()">✕ Close</div>
+    </div>
+    <div class="reader-body">
+        <h1 id="reader-post-title" style="font-size: 3em; color: #78aaff;"></h1>
+        <span id="reader-post-author" style="font-style: italic; color: #888;"></span>
+        <div id="reader-post-content" style="font-size: 1.2em; white-space: pre-wrap; margin-top: 20px;"></div>
+    </div>
+</div>
+
+<div id="taskbar"></div>
 
 <script>
 let z = 10;
@@ -113,35 +141,79 @@ const myBlogs = [{
     fullText: "Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.\n\n1st Change: New spinny animations.\n\n2nd Change: Flexible taskbar.\n\n3rd Change: Skip OOBE updates.\n\n4th Change: Modern Run.\n\n5th Change: Experimental Channel.\n\nThanks for reading!"
 }];
 
-// FIXED SEARCH LOGIC
+// SEARCH ENGINE FIXED
 function executeSearch() {
     const query = document.getElementById('site-search').value.toLowerCase().trim();
     if (!query) return;
 
-    // 1. Check for specific page names first
+    // 1. Pages
     const pages = ['home', 'about', 'downloads', 'videos', 'blog'];
     if (pages.includes(query)) {
-        const target = query.charAt(0).toUpperCase() + query.slice(1);
-        launch(target);
+        launch(query.charAt(0).toUpperCase() + query.slice(1));
         return;
     }
 
-    // 2. Search in blog content
-    const blogIndex = myBlogs.findIndex(b => b.title.toLowerCase().includes(query) || b.fullText.toLowerCase().includes(query));
-    if (blogIndex !== -1) {
-        // Open the blog window first
-        launch('Blog');
-        // Then open the reader for that specific post
-        setTimeout(() => openReader(blogIndex), 200);
+    // 2. Blogs
+    const bIndex = myBlogs.findIndex(b => b.title.toLowerCase().includes(query) || b.fullText.toLowerCase().includes(query));
+    if (bIndex !== -1) {
+        openReader(bIndex);
     } else {
-        document.getElementById('rover-bubble').innerText = "Grrr... I couldn't find '" + query + "'. Try 'About' or 'Taskbar'!";
-        setTimeout(() => {
-            document.getElementById('rover-bubble').innerText = "Woof! I'm Rover. Type what you're looking for and I'll find it!";
-        }, 3000);
+        document.getElementById('rover-bubble').innerText = "Woof? Couldn't find '" + query + "'.";
     }
 }
 
-// ... (KEEP ALL OTHER FUNCTIONS LIKE launch, openReader, closeWin FROM PREVIOUS CODE) ...
+const bootSound = new Audio("./Start.mp3");
+
+function launch(app) {
+    const id = "win_" + app;
+    if (windows[id]) { windows[id].style.display = "flex"; windows[id].style.zIndex = ++z; return; }
+    const win = document.createElement("div");
+    win.className = "window";
+    win.style.top = "100px"; win.style.left = "100px"; win.style.zIndex = ++z;
+    win.innerHTML = `<div class="title-bar"><span>${app} - BraydenPeacockTech</span><div class="controls"><div class="winbtn close" onclick="closeWin('${id}')">✕</div></div></div><div class="content">${getContent(app)}</div>`;
+    document.body.appendChild(win);
+    windows[id] = win;
+    addTask(id, app);
+}
+
+function addTask(id, app) {
+    const bar = document.getElementById("taskbar");
+    const btn = document.createElement("div");
+    btn.className = "taskbtn"; btn.innerText = app;
+    btn.onclick = () => { if (windows[id]) { windows[id].style.display = "flex"; windows[id].style.zIndex = ++z; } };
+    bar.appendChild(btn); tasks[id] = btn;
+}
+
+function getContent(app) {
+    if (app === "Blog") {
+        let listHtml = "<h1>Latest Posts</h1>";
+        myBlogs.forEach((post, index) => {
+            listHtml += `<div onclick="openReader(${index})" style="cursor:pointer; background:rgba(255,255,255,0.1); padding:10px; border-radius:5px; margin-top:10px;"><h2>${post.title}</h2></div>`;
+        });
+        return listHtml;
+    }
+    if (app === "Home") return "Welcome to the site!";
+    if (app === "About") return "I'm Brayden Peacock, a tech modder.";
+    return app + " content coming soon.";
+}
+
+function openReader(index) {
+    const post = myBlogs[index];
+    document.getElementById('reader-post-title').innerText = post.title;
+    document.getElementById('reader-post-author').innerText = "By " + post.author + " | " + post.date;
+    document.getElementById('reader-post-content').innerText = post.fullText;
+    document.getElementById('blog-reader').style.display = 'flex';
+}
+
+function closeReader() { document.getElementById('blog-reader').style.display = 'none'; }
+function closeWin(id) { windows[id].remove(); tasks[id].remove(); delete windows[id]; delete tasks[id]; }
+
+document.addEventListener("pointerdown", () => {
+    if (booted) return;
+    booted = true;
+    bootSound.play().catch(() => {});
+    launch("Home"); 
+}, { once: true });
 </script>
 </body>
 </html>
