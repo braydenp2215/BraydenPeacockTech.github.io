@@ -5,153 +5,43 @@
 <title>BraydenPeacockTech</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* (STYLING REMAINS THE SAME) */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 100vw; height: 100vh; overflow: hidden; font-family: "Segoe UI", Tahoma, sans-serif; background: url("./wallpaper.jpg") no-repeat center center fixed; background-size: cover; }
+.desktop { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 20px; }
+.icon { width: 80px; text-align: center; color: white; font-size: 12px; text-shadow: 1px 1px 2px black; cursor: pointer; }
+.icon img { width: 48px; height: 48px; display: block; margin: 0 auto 5px; }
 
-body {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    font-family: "Segoe UI", Tahoma, sans-serif;
-    background: url("./wallpaper.jpg") no-repeat center center fixed;
-    background-size: cover;
-}
+.window { position: absolute; width: 760px; height: 480px; display: flex; flex-direction: column; border-radius: 10px; background: rgba(235,240,255,0.18); border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); box-shadow: 0 60px 140px rgba(0,0,0,0.75); overflow: hidden; }
+.title-bar { height: 38px; display: flex; justify-content: space-between; align-items: center; padding: 0 8px; background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25)); cursor: grab; user-select: none; }
+.title-bar span { color: white; font-size: 13px; font-weight: 600; text-shadow: 0 2px 8px black; }
+.controls { display: flex; gap: 4px; }
+.winbtn { width: 34px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid rgba(0,0,0,0.3); }
+.winbtn.min { background: linear-gradient(to bottom, #fff, #cfd8ff); }
+.winbtn.max { background: linear-gradient(to bottom, #fff, #d0ffd6); }
+.winbtn.close { width: 46px; color: white; background: linear-gradient(to bottom, #ff6a6a, #b30000); }
 
-.desktop {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+.content { flex: 1; padding: 30px; color: white; text-shadow: 0 2px 10px black; overflow-y: auto; }
 
-.icon {
-    width: 80px;
-    text-align: center;
-    color: white;
-    font-size: 12px;
-    text-shadow: 1px 1px 2px black;
-    cursor: pointer;
+/* Clickable Blog Styling */
+.blog-entry { 
+    background: rgba(0, 0, 0, 0.3); 
+    padding: 15px; 
+    border-radius: 8px; 
+    margin-bottom: 15px; 
+    border: 1px solid rgba(255,255,255,0.1); 
+    cursor: pointer; /* Makes it look clickable */
+    transition: background 0.2s;
 }
-
-.icon img {
-    width: 48px;
-    height: 48px;
-    display: block;
-    margin: 0 auto 5px;
+.blog-entry:hover { 
+    background: rgba(255, 255, 255, 0.1); 
+    border: 1px solid rgba(255,255,255,0.4);
 }
-
-.window {
-    position: absolute;
-    width: 760px;
-    height: 480px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    background: rgba(235,240,255,0.18);
-    border: 1px solid rgba(255,255,255,0.35);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    box-shadow: 0 60px 140px rgba(0,0,0,0.75);
-    overflow: hidden;
-}
-
-.title-bar {
-    height: 38px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 8px;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.25));
-    cursor: grab;
-    user-select: none;
-}
-
-.title-bar span {
-    color: white;
-    font-size: 13px;
-    font-weight: 600;
-    text-shadow: 0 2px 8px black;
-}
-
-.controls {
-    display: flex;
-    gap: 4px;
-}
-
-.winbtn {
-    width: 34px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-    border-radius: 3px;
-    cursor: pointer;
-    border: 1px solid rgba(0,0,0,0.3);
-}
-
-.winbtn.min {
-    background: linear-gradient(to bottom, #fff, #cfd8ff);
-}
-
-.winbtn.max {
-    background: linear-gradient(to bottom, #fff, #d0ffd6);
-}
-
-.winbtn.close {
-    width: 46px;
-    color: white;
-    background: linear-gradient(to bottom, #ff6a6a, #b30000);
-}
-
-.content {
-    flex: 1;
-    padding: 30px;
-    color: white;
-    text-shadow: 0 2px 10px black;
-    overflow-y: auto;
-}
-
-/* Blog Styling */
-.blog-entry {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-.blog-entry h2 { margin-bottom: 5px; font-size: 1.2em; }
+.blog-entry h2 { margin-bottom: 5px; font-size: 1.2em; color: #78aaff; }
 .blog-entry p { font-size: 0.95em; line-height: 1.4; opacity: 0.9; }
 
-#taskbar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    background: rgba(0,0,0,0.65);
-}
-
-.taskbtn {
-    padding: 6px 12px;
-    margin-right: 6px;
-    font-size: 12px;
-    color: white;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 3px;
-    cursor: pointer;
-}
+#taskbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; display: flex; align-items: center; padding: 5px; background: rgba(0,0,0,0.65); }
+.taskbtn { padding: 6px 12px; margin-right: 6px; font-size: 12px; color: white; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 3px; cursor: pointer; }
 </style>
 </head>
 
@@ -160,7 +50,6 @@ body {
 <div class="desktop">
     <div class="icon" onclick="launch('Home')"><img src="./home.png">Home</div>
     <div class="icon" onclick="launch('About')"><img src="./aboutme.png">About</div>
-    <!-- BLOG ICON UPDATED TO pic.png -->
     <div class="icon" onclick="launch('Blog')"><img src="./pic.png">Blog</div>
     <div class="icon" onclick="launch('Downloads')"><img src="./downloads.png">Downloads</div>
     <div class="icon" onclick="launch('Videos')"><img src="./videos.png">Videos</div>
@@ -174,6 +63,12 @@ let windows = {};
 let tasks = {};
 let booted = false;
 
+// Function to handle clicking on a blog post
+function openBlogPost(url) {
+    // You can change this to open a new window or launch an internal app!
+    window.open(url, '_blank');
+}
+
 function getContent(app) {
     switch(app) {
         case "Home":
@@ -182,19 +77,18 @@ function getContent(app) {
             return "Hi, I'm Brayden Peacock. I'm a tech YouTuber who loves custom OS projects and breaking software (for science!). Thanks for supporting me and the channel.";
         case "Blog":
             return `
-                <div class="blog-entry">
-                    <h2>Windows 11 26H2 - Experimental Build News</h2>
-                    <p>I am testing the new 26H2 build on VMware. The restored taskbar features are finally here!</p>
+                <p style="margin-bottom: 20px;">No posts yet! Brayden is currently working on his masterpiece.</p>
+                <!-- Example of how to add a clickable post later:
+                <div class="blog-entry" onclick="openBlogPost('https://youtube.com')">
+                    <h2>TITLE HERE</h2>
+                    <p>Click this to read more about my latest project.</p>
                 </div>
-                <div class="blog-entry">
-                    <h2>Spectem OS Progress</h2>
-                    <p>Working on the Nano11 base for Spectem OS to make it the fastest custom OS out there.</p>
-                </div>
+                -->
             `;
         case "Downloads":
-            return "Downloads coming soon.";
+            return "Downloads for my custom scripts and ISOs will appear here soon.";
         case "Videos":
-            return "Videos coming soon.";
+            return "Latest tech videos coming soon.";
         default:
             return "";
     }
