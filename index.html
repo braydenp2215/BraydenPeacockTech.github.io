@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BraydenPeacockTech - Build 4032t</title>
+    <title>BraydenPeacockTech - Build 4032u</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { 
@@ -12,7 +12,6 @@
             background-size: cover;
         }
 
-        /* Aero Taskbar */
         #taskbar {
             position: fixed; bottom: 0; width: 100%; height: 40px;
             background: rgba(255, 255, 255, 0.2);
@@ -25,7 +24,6 @@
             display: flex; align-items: center; gap: 8px;
         }
 
-        /* Draggable Window */
         #window {
             position: absolute; top: 30px; left: 50px;
             width: 1100px; height: 820px;
@@ -54,17 +52,13 @@
         .nav-icon { width: 38px; height: 38px; display: block; margin: 0 auto 5px; }
         .nav-label { font-size: 10px; text-shadow: 0 1px 2px black; }
 
-        .content-area { flex: 1; padding: 25px; color: white; overflow-y: auto; background: rgba(0,0,0,0.1); position: relative; }
+        .content-area { flex: 1; padding: 20px; color: white; overflow-y: auto; background: rgba(0,0,0,0.1); }
 
-        /* Video Grid */
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
-        .video-card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 6px; cursor: pointer; border-radius: 4px; transition: 0.2s; }
-        .video-card:hover { border-color: #00adef; transform: translateY(-3px); background: rgba(0,0,0,0.6); }
-
-        /* WMP Player Skin */
+        /* Integrated Video Player */
         #wmp-player { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #000; z-index: 5000; display: none; flex-direction: column; 
+            width: 100%; height: 450px; 
+            background: #000; display: none; flex-direction: column; 
+            border: 1px solid #444; border-radius: 4px; margin-bottom: 20px;
         }
         .wmp-header { 
             height: 30px; background: linear-gradient(to bottom, #4a4a4a, #222); 
@@ -79,12 +73,14 @@
             width: 35px; height: 35px; border-radius: 50%; border: 1px solid #555;
             background: radial-gradient(circle, #666, #222); color: white;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
-            font-size: 14px;
         }
-        .wmp-btn:hover { background: radial-gradient(circle, #777, #333); border-color: #00adef; }
-        .wmp-back { background: transparent; border: none; color: #ccc; cursor: pointer; font-size: 11px; }
+
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
+        .video-card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 6px; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        .video-card:hover { border-color: #00adef; transform: translateY(-3px); background: rgba(0,0,0,0.6); }
 
         .hidden { display: none !important; }
+        .search-container { display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid #555; padding: 8px 12px; border-radius: 4px; margin-bottom: 15px; }
     </style>
 </head>
 <body onload="init()">
@@ -110,53 +106,42 @@
             </div>
 
             <div class="content-area">
-                <div id="wmp-player">
-                    <div class="wmp-header">
-                        <button class="wmp-back" onclick="stopVideo()">File  |  View  |  Play  |  Tools  |  Help  [X]</button>
-                        <span id="p-title" style="margin-left:auto; font-size: 11px; color: #00adef;"></span>
-                    </div>
-                    <div style="flex: 1; background: #000; position: relative;">
-                        <iframe id="p-frame" width="100%" height="100%" frameborder="0" 
-                            allow="autoplay; fullscreen" 
-                            style="position: absolute; top: 0; left: 0;"></iframe>
-                    </div>
-                    <div class="wmp-controls">
-                        <div class="wmp-btn" onclick="stopVideo()">■</div>
-                        <div class="wmp-btn" style="width: 45px; height: 45px; font-size: 18px;">►</div>
-                        <div class="wmp-btn">||</div>
-                        <div style="width: 100px; height: 5px; background: #555; border-radius: 5px;">
-                            <div style="width: 70%; height: 100%; background: #00adef; border-radius: 5px;"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <div id="view-home">
                     <h1>Welcome, Brayden</h1>
-                    <p style="margin-top:10px;">Build 4032t: Archive Updated with your Videos.</p>
+                    <p style="margin-top:10px;">Build 4032u: Integrated Video Experience.</p>
                 </div>
 
                 <div id="view-videos" class="hidden">
-                    <div style="display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid #555; padding: 5px 10px; border-radius: 4px;">
-                        <img src="search.png" width="18" style="margin-right: 10px;">
+                    <div id="wmp-player">
+                        <div class="wmp-header">
+                            <button style="background:transparent; border:none; color:#ccc; cursor:pointer;" onclick="stopVideo()">[X] Close Player</button>
+                            <span id="p-title" style="margin-left:auto; font-size: 11px; color: #00adef;"></span>
+                        </div>
+                        <div style="flex: 1; background: #000;">
+                            <iframe id="p-frame" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen"></iframe>
+                        </div>
+                        <div class="wmp-controls">
+                            <div class="wmp-btn" onclick="stopVideo()">■</div>
+                            <div class="wmp-btn" style="width: 45px; height: 45px; font-size: 18px;">►</div>
+                            <div class="wmp-btn">||</div>
+                        </div>
+                    </div>
+
+                    <div class="search-container">
                         <input type="text" id="vSearch" placeholder="Search your archive..." onkeyup="searchVids()" style="background: transparent; border: none; color: white; outline: none; width: 100%;">
                     </div>
+
                     <div class="video-grid" id="v-grid"></div>
                 </div>
 
-                <div id="view-blog" class="hidden">
-                    <div class="blog-post">
-                        <h2>Blog — Brayden Peacock</h2>
-                        <p style="margin-top:15px;">Latest tech updates and OS explorations.</p>
-                    </div>
-                </div>
-
+                <div id="view-blog" class="hidden"><h2>Blog</h2></div>
                 <div id="view-downloads" class="hidden"><h2>Downloads</h2></div>
                 <div id="view-about" class="hidden"><h2>About Me</h2></div>
             </div>
         </div>
     </div>
 
-    <div id="taskbar"><div class="task-item" onclick="restoreWin()"><img src="home.png" width="16"> Explorer</div></div>
+    <div id="taskbar"><div class="task-item" onclick="restoreWin()">Explorer</div></div>
 
     <script>
         const vData = [
@@ -240,7 +225,7 @@
                 const card = document.createElement('div');
                 card.className = 'video-card';
                 card.onclick = () => play(v.id, v.t);
-                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" onerror="this.src='videos.png'" style="width:100%; border-radius: 2px;"><p style="font-size:11px; margin-top:5px; height: 30px; overflow: hidden;">${v.t}</p>`;
+                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" style="width:100%;"><p style="font-size:11px; margin-top:5px;">${v.t}</p>`;
                 grid.appendChild(card);
             });
             dragElement(document.getElementById("window"));
@@ -248,9 +233,9 @@
 
         function play(id, title) {
             document.getElementById('wmp-player').style.display = 'flex';
-            const frame = document.getElementById('p-frame');
-            frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+            document.getElementById('p-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
             document.getElementById('p-title').innerText = title;
+            document.getElementById('view-videos').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function stopVideo() {
@@ -264,7 +249,6 @@
                 if(el) el.classList.add('hidden');
             });
             document.getElementById('view-'+id).classList.remove('hidden');
-            stopVideo();
         }
 
         function searchVids() {
