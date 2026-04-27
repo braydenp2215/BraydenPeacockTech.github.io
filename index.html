@@ -11,160 +11,126 @@
             font-family: 'Segoe UI', Tahoma, sans-serif; 
             background: #003366 url('wallpaper.jpg') no-repeat center center fixed;
             background-size: cover;
+            display: flex; align-items: center; justify-content: center;
         }
         
         #window {
-            position: absolute; top: 30px; left: 30px; width: 1000px; height: 700px;
-            background: rgba(45, 115, 185, 0.9); border: 2px solid rgba(255, 255, 255, 0.6);
-            border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            display: flex; flex-direction: column; z-index: 100; transition: all 0.2s ease;
+            position: relative;
+            width: 1000px; height: 750px;
+            background: rgba(45, 115, 185, 0.92); 
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; z-index: 100;
+            backdrop-filter: blur(20px); overflow: hidden;
         }
 
-        #window.fullscreen { top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; border-radius: 0; }
+        .title-bar { 
+            height: 40px; padding: 0 15px; display: flex; 
+            justify-content: space-between; align-items: center; 
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .title-text { color: white; font-size: 13px; font-weight: bold; text-shadow: 0 1px 2px black; }
+        .close-btn { width: 45px; height: 22px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; }
+        .close-btn:hover { background: #e81123; }
 
-        .title-bar { height: 40px; padding: 0 15px; display: flex; justify-content: space-between; align-items: center; cursor: move; background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent); user-select: none; }
-        .title-text { color: white; font-size: 14px; text-shadow: 0 1px 3px black; font-weight: bold; }
-        .controls { display: flex; gap: 4px; }
-        .btn { width: 46px; height: 24px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255,255,255,0.3); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .close { background: rgba(232, 17, 35, 0.9); }
-
-        .main-view { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: 120px; background: rgba(0,0,0,0.4); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
-        .icon-box { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; cursor: pointer; width: 90%; padding: 5px; border-radius: 5px; }
-        .icon-box:hover { background: rgba(255,255,255,0.15); }
-        .icon-img { width: 42px; height: 42px; filter: drop-shadow(0 2px 4px black); }
-        .icon-label { color: white; font-size: 10px; margin-top: 5px; text-align: center; }
-
-        .content-area { flex: 1; padding: 30px; color: white; background: rgba(0,0,0,0.2); overflow-y: auto; position: relative; }
+        .main-view { display: flex; flex: 1; overflow: hidden; position: relative; }
         
-        /* Global Search Box Styling */
-        .global-search-container { position: sticky; top: -30px; float: right; margin-bottom: 20px; z-index: 50; }
-        .search-box { padding: 6px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.4); background: rgba(0,0,0,0.5); color: white; width: 200px; outline: none; }
-        .search-box:focus { border-color: #00adef; }
+        .sidebar { 
+            width: 140px; background: rgba(0,0,0,0.4); 
+            border-right: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px; z-index: 50;
+        }
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center;
+            padding: 15px 5px; color: white; cursor: pointer; transition: 0.2s;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.2); }
+        .nav-icon { width: 42px; height: 42px; margin-bottom: 5px; filter: drop-shadow(0 2px 4px black); }
+        .nav-label { font-size: 11px; text-align: center; }
 
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; clear: both; }
-        .video-card { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 5px; text-align: left; cursor: pointer; transition: 0.2s; }
-        .video-card:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
-        .video-thumb { width: 100%; border-radius: 3px; margin-bottom: 8px; }
-        .video-title { font-size: 12px; font-weight: bold; height: 40px; overflow: hidden; }
+        .content-area { 
+            flex: 1; padding: 25px; color: white; 
+            background: rgba(0,0,0,0.2); overflow-y: auto; position: relative;
+        }
 
-        /* Windows Media Player 12 Style Overlay */
+        /* Search Box */
+        .search-container { margin-bottom: 20px; display: flex; justify-content: flex-end; }
+        .search-input { 
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 8px 12px; border-radius: 4px; width: 250px; outline: none;
+        }
+        .search-input:focus { border-color: #00adef; }
+
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .video-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        .video-card:hover { border-color: #00adef; background: rgba(255,255,255,0.15); transform: translateY(-3px); }
+        .thumb { width: 100%; border-radius: 2px; margin-bottom: 8px; }
+
         #wmp-player {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: black; z-index: 200; display: flex; flex-direction: column;
+            background: #000; z-index: 1000; display: none; flex-direction: column;
         }
-        .wmp-header {
-            height: 50px; background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
-            display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .wmp-video-container { flex: 1; display: flex; justify-content: center; background: black; }
-        .wmp-controls {
-            height: 100px; background: linear-gradient(to top, rgba(30, 30, 30, 0.9), rgba(60, 60, 60, 0.8));
-            border-top: 1px solid rgba(255,255,255,0.2); display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .wmp-buttons { display: flex; gap: 20px; align-items: center; margin-top: 10px; }
-        .play-btn { 
-            width: 50px; height: 50px; border-radius: 50%; border: 2px solid white; 
-            background: radial-gradient(circle, #444, #111); color: white; cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; font-weight: bold;
-            box-shadow: 0 0 10px rgba(0,173,239,0.5);
-        }
-        .wmp-seekbar { width: 80%; height: 5px; background: #333; margin-top: 10px; position: relative; border-radius: 5px; }
-        .wmp-progress { width: 30%; height: 100%; background: #00adef; border-radius: 5px; box-shadow: 0 0 8px #00adef; }
+        .player-header { height: 45px; background: #111; display: flex; align-items: center; padding: 0 15px; }
+        .back-btn { background: #333; color: white; border: 1px solid #555; padding: 5px 12px; cursor: pointer; border-radius: 3px; }
 
-        .blog-preview { background: rgba(0,0,0,0.4); padding: 25px; border-radius: 8px; border-left: 5px solid #00adef; clear: both; }
-        .see-more { color: #00adef; cursor: pointer; font-weight: bold; text-decoration: underline; margin-top: 15px; display: inline-block; }
-        .full-blog-view { line-height: 1.8; font-size: 16px; background: rgba(0,0,0,0.6); padding: 40px; border-radius: 10px; clear: both; }
+        .rover-container { position: absolute; bottom: 20px; right: 20px; z-index: 500; }
+        .bubble { background: #ffffcc; color: black; padding: 10px; border: 1px solid #999; border-radius: 10px; font-size: 11px; width: 150px; margin-bottom: 10px; text-align: center; box-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
 
-        .hidden { display: none; }
-        
-        .rover-container { position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; z-index: 1000; }
-        .bubble { background: #ffffcc; color: black; padding: 10px; border-radius: 10px; border: 1px solid #999; font-size: 12px; margin-bottom: 5px; width: 140px; text-align: center; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+        .hidden { display: none !important; }
     </style>
 </head>
-<body onload="playStartup()">
+<body onload="init()">
 
-    <audio id="startup-sound" src="Start.mp3"></audio>
+    <audio id="startup" src="Start.mp3"></audio>
 
     <div id="window">
-        <div id="drag-handle" class="title-bar">
+        <div class="title-bar">
             <span class="title-text">Explorer - Build 4032e</span>
             <div class="controls">
-                <div class="btn" onclick="toggleFullscreen()">[ ]</div>
-                <div class="btn close" onclick="document.getElementById('window').style.display='none'">X</div>
+                <button class="close-btn" onclick="document.getElementById('window').style.display='none'">✕</button>
             </div>
         </div>
 
         <div class="main-view">
             <div class="sidebar">
-                <div class="icon-box" onclick="openApp('Home')"><img src="home.png" class="icon-img"><span class="icon-label">Home</span></div>
-                <div class="icon-box" onclick="openApp('Blog')"><img src="pic.png" class="icon-img"><span class="icon-label">My Blog</span></div>
-                <div class="icon-box" onclick="openApp('Videos')"><img src="videos.png" class="icon-img"><span class="icon-label">Videos</span></div>
-                <div class="icon-box" onclick="openApp('About')"><img src="aboutme.png" class="icon-img"><span class="icon-label">About</span></div>
+                <div class="nav-item" onclick="showApp('home')"><img src="home.png" class="nav-icon" onerror="this.style.background='#333'"><span class="nav-label">Home</span></div>
+                <div class="nav-item" onclick="showApp('videos')"><img src="videos.png" class="nav-icon" onerror="this.style.background='#333'"><span class="nav-label">Videos</span></div>
+                <div class="nav-item" onclick="showApp('blog')"><img src="pic.png" class="nav-icon" onerror="this.style.background='#333'"><span class="nav-label">My Blog</span></div>
+                <div class="nav-item" onclick="showApp('downloads')"><img src="aboutme.png" class="nav-icon" onerror="this.style.background='#333'"><span class="nav-label">About</span></div>
             </div>
-            
-            <div class="content-area" id="main-content-scroll">
-                
-                <div id="wmp-player" class="hidden">
-                    <div class="wmp-header">
-                        <button onclick="closeVideo()" style="background:none; border:1px solid white; color:white; cursor:pointer; padding:2px 10px; margin-right:15px;">&larr; Library</button>
-                        <span id="now-playing-title" style="font-size:14px; font-weight:lighter;">Now Playing</span>
+
+            <div class="content-area">
+                <div id="wmp-player">
+                    <div class="player-header">
+                        <button class="back-btn" onclick="stopVideo()">← Library</button>
+                        <span id="p-title" style="margin-left:20px; font-size:13px; color:#00adef;"></span>
                     </div>
-                    <div class="wmp-video-container">
-                        <iframe id="wmp-iframe" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                    </div>
-                    <div class="wmp-controls">
-                        <div class="wmp-seekbar"><div class="wmp-progress"></div></div>
-                        <div class="wmp-buttons">
-                            <span style="color:white; cursor:pointer;">⏮</span>
-                            <div class="play-btn">||</div>
-                            <span style="color:white; cursor:pointer;">⏭</span>
-                        </div>
-                    </div>
+                    <iframe id="p-frame" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 </div>
 
-                <div class="global-search-container" id="search-area">
-                    <input type="text" id="globalSearch" class="search-box" placeholder="Search page..." onkeyup="handleGlobalSearch()">
-                </div>
-
-                <div id="Home-app">
+                <div id="view-home">
                     <h1>System Explorer</h1>
-                    <p>Build 4032e is running. Use the search box above to find content on any page.</p>
+                    <p style="margin-top:10px;">Build 4032e is running with the full video archive.</p>
                 </div>
 
-                <div id="Blog-app" class="hidden">
-                    <div id="blog-list">
-                        <div class="blog-preview">
-                            <h2>Is Microsoft finally doing things right?</h2>
-                            <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it...</p>
-                            <span class="see-more" onclick="showFullBlog()">See More (Fullscreen)</span>
-                        </div>
+                <div id="view-videos" class="hidden">
+                    <div class="search-container">
+                        <input type="text" id="vSearch" class="search-input" placeholder="Search your videos..." onkeyup="searchVideos()">
                     </div>
-                    
-                    <div id="full-blog-view" class="hidden full-blog-view">
-                        <button onclick="hideFullBlog()" style="margin-bottom: 20px; cursor: pointer;">&larr; Back to List</button>
-                        <h2>Is Microsoft finally doing things right?</h2>
-                        <hr><br>
-                        <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p>
-                        <p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p>
-                        <p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p>
-                        <p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p>
-                        <p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p>
-                        <p><b>5th and Final:</b> In Windows Update, Dev and Canary were merged into the Experimental Channel.</p>
-                        <p><br><i>Thanks for reading this blog and have a great day.</i></p>
-                    </div>
+                    <div class="video-grid" id="v-grid"></div>
                 </div>
 
-                <div id="Videos-app" class="hidden">
-                    <h1>Video Archive</h1>
-                    <div class="video-grid" id="video-grid"></div>
+                <div id="view-blog" class="hidden">
+                    <h2>Blog</h2>
+                    <p style="margin-top:15px;">Microsoft released Windows 11 build 26300.2289 on 4/26/26...</p>
                 </div>
 
-                <div id="About-app" class="hidden"><h1>About</h1><p>Created by Brayden Peacock.</p></div>
+                <div id="view-downloads" class="hidden"><h2>About</h2><p>Created by Brayden Peacock.</p></div>
 
                 <div class="rover-container">
-                    <div id="rover-bubble" class="bubble">Woof! Search is active!</div>
-                    <img id="rover-img" src="search.png" width="80">
+                    <div id="rover-bubble" class="bubble">I've loaded all 75+ of your videos! Use the search bar to find one.</div>
+                    <img src="search.png" width="90" onerror="this.style.display='none'">
                 </div>
             </div>
         </div>
@@ -243,109 +209,52 @@
             { t: "Installing Windows 11 in 2024 (in PowerPoint)", id: "H1wF0ftcEWc" },
             { t: "Windows 95 vs Windows 2000 (OUTDATED)", id: "XgYAN_2cyA0" },
             { t: "Installing Windows XP in 2024!", id: "FXk4J_g1IqU" },
-            { t: "Drink challenge", id: "CK9utZVFBz4" },
-            { t: "I’m a 2nd grader!!!!!!!!!", id: "ZpSjSj5Ka1ykU" }
+          }
         ];
 
-        let currentApp = "Home";
-
-        function playStartup() {
-            document.getElementById("startup-sound").play().catch(() => {});
-            loadVideos(videoData);
+        function init() {
+            document.getElementById('startup').play().catch(()=>{});
+            renderVideos(videoData);
         }
 
-        function loadVideos(data) {
-            const grid = document.getElementById('video-grid');
+        function renderVideos(data) {
+            const grid = document.getElementById('v-grid');
             grid.innerHTML = '';
             data.forEach(v => {
                 const card = document.createElement('div');
                 card.className = 'video-card';
-                card.onclick = () => playInWMP(v.id, v.t);
-                card.innerHTML = `
-                    <img class="video-thumb" src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg">
-                    <div class="video-title">${v.t}</div>
-                `;
+                card.onclick = () => play(v.id, v.t);
+                card.innerHTML = `<img class="thumb" src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg"><div style="font-size:12px;">${v.t}</div>`;
                 grid.appendChild(card);
             });
         }
 
-        function playInWMP(id, title) {
-            document.getElementById('wmp-player').classList.remove('hidden');
-            document.getElementById('wmp-iframe').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-            document.getElementById('now-playing-title').innerText = "Now Playing: " + title;
-            document.getElementById('search-area').style.display = "none";
+        function searchVideos() {
+            const query = document.getElementById('vSearch').value.toLowerCase();
+            const filtered = videoData.filter(v => v.t.toLowerCase().includes(query));
+            renderVideos(filtered);
+            document.getElementById('rover-bubble').innerText = `Found ${filtered.length} videos!`;
         }
 
-        function closeVideo() {
-            document.getElementById('wmp-player').classList.add('hidden');
-            document.getElementById('wmp-iframe').src = "";
-            document.getElementById('search-area').style.display = "block";
+        function play(id, title) {
+            const p = document.getElementById('wmp-player');
+            p.style.display = 'flex';
+            document.getElementById('p-frame').src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+            document.getElementById('p-title').innerText = "Now Playing: " + title;
         }
 
-        function handleGlobalSearch() {
-            const val = document.getElementById('globalSearch').value.toLowerCase();
-            const b = document.getElementById("rover-bubble");
-
-            if (currentApp === "Videos") {
-                const filtered = videoData.filter(v => v.t.toLowerCase().includes(val));
-                loadVideos(filtered);
-                b.innerText = filtered.length > 0 ? "Found " + filtered.length + " videos!" : "No videos found.";
-            } else if (currentApp === "Blog") {
-                const blog = document.querySelector(".blog-preview");
-                if (blog.innerText.toLowerCase().includes(val)) {
-                    blog.style.display = "block";
-                    b.innerText = "Found it in the blog!";
-                } else {
-                    blog.style.display = "none";
-                    b.innerText = "Nothing found here.";
-                }
-            }
+        function stopVideo() {
+            document.getElementById('wmp-player').style.display = 'none';
+            document.getElementById('p-frame').src = "";
         }
 
-        function openApp(name) {
-            currentApp = name;
-            closeVideo();
-            document.getElementById('globalSearch').value = "";
-            ['Home','Blog','Videos','About'].forEach(a => document.getElementById(a + '-app').classList.add('hidden'));
-            document.getElementById(name + '-app').classList.remove('hidden');
-            loadVideos(videoData); 
-            if(name === "Blog") document.querySelector(".blog-preview").style.display = "block";
+        function showApp(id) {
+            stopVideo();
+            ['home', 'videos', 'blog', 'downloads'].forEach(v => {
+                document.getElementById('view-'+v).classList.add('hidden');
+            });
+            document.getElementById('view-'+id).classList.remove('hidden');
         }
-
-        function showFullBlog() {
-            document.getElementById('blog-list').classList.add('hidden');
-            document.getElementById('full-blog-view').classList.remove('hidden');
-            document.getElementById('window').classList.add('fullscreen');
-            document.querySelector(".global-search-container").style.display = "none";
-        }
-
-        function hideFullBlog() {
-            document.getElementById('blog-list').classList.remove('hidden');
-            document.getElementById('full-blog-view').classList.add('hidden');
-            document.getElementById('window').classList.remove('fullscreen');
-            document.querySelector(".global-search-container").style.display = "block";
-        }
-
-        function toggleFullscreen() {
-            document.getElementById('window').classList.toggle('fullscreen');
-        }
-
-        // Drag Logic
-        const win = document.getElementById("window");
-        const handle = document.getElementById("drag-handle");
-        let dragging = false, offsetX, offsetY;
-        handle.onmousedown = (e) => {
-            if(win.classList.contains('fullscreen')) return;
-            dragging = true;
-            offsetX = e.clientX - win.offsetLeft;
-            offsetY = e.clientY - win.offsetTop;
-        };
-        document.onmousemove = (e) => {
-            if (!dragging) return;
-            win.style.left = (e.clientX - offsetX) + "px";
-            win.style.top = (e.clientY - offsetY) + "px";
-        };
-        document.onmouseup = () => dragging = false;
     </script>
 </body>
 </html>
