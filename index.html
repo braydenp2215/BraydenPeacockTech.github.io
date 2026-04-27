@@ -15,7 +15,7 @@ body{
     background:url("./wallpaper.jpg") center/cover no-repeat fixed;
 }
 
-/* DESKTOP */
+/* 🖥️ DESKTOP */
 .desktop{
     position:absolute;
     top:20px;
@@ -39,7 +39,7 @@ body{
     height:48px;
 }
 
-/* WINDOW */
+/* 🪟 WINDOW */
 .window{
     position:absolute;
     width:850px;
@@ -58,10 +58,10 @@ body{
     box-shadow:0 80px 180px rgba(0,0,0,0.85);
 }
 
-/* BLOG SMALL DEFAULT SIZE */
-.window.small{
+/* BLOG SMALL */
+.window.blog{
     width:650px;
-    height:420px;
+    height:450px;
 }
 
 /* FULLSCREEN */
@@ -72,7 +72,7 @@ body{
     height:calc(100vh - 40px) !important;
 }
 
-/* TITLE BAR */
+/* TITLE */
 .title-bar{
     height:38px;
     display:flex;
@@ -81,8 +81,8 @@ body{
     padding:0 10px;
 
     background:linear-gradient(to bottom,
-        rgba(255,255,255,0.90),
-        rgba(255,255,255,0.35));
+        rgba(255,255,255,0.9),
+        rgba(255,255,255,0.3));
 
     backdrop-filter:blur(25px);
     cursor:grab;
@@ -134,8 +134,6 @@ body{
     width:100%;
     height:40px;
     background:rgba(0,0,0,0.65);
-    display:flex;
-    align-items:center;
 }
 
 /* BLOG */
@@ -143,6 +141,8 @@ body{
     background:rgba(255,255,255,0.12);
     padding:15px;
     border-radius:10px;
+    white-space:pre-wrap;
+    line-height:1.6;
 }
 
 /* VIDEO */
@@ -152,11 +152,61 @@ body{
     border-radius:10px;
     margin-bottom:15px;
 }
+
+/* 🐶 ROVER */
+#rover{
+    position:absolute;
+    bottom:60px;
+    right:30px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+}
+
+#rover img{
+    width:200px;
+    filter:drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+}
+
+#bubble{
+    background:white;
+    color:black;
+    padding:12px 16px;
+    border-radius:15px;
+    width:280px;
+    font-size:14px;
+}
+
+#searchbox{
+    display:flex;
+    gap:5px;
+}
+
+#searchbox input{
+    padding:6px;
+    border-radius:5px;
+    border:none;
+    outline:none;
+}
+
+#searchbox button{
+    padding:6px 10px;
+    background:#4da3ff;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
+<!-- 🔊 START SOUND -->
+<audio id="startupSound" src="./vista-startup.mp3"></audio>
+
+<!-- 🖥️ ICONS -->
 <div class="desktop">
     <div class="icon" onclick="openApp('Home')"><img src="./home.png">Home</div>
     <div class="icon" onclick="openApp('About')"><img src="./aboutme.png">About</div>
@@ -167,139 +217,179 @@ body{
 
 <div id="taskbar"></div>
 
+<!-- 🐶 ROVER (BACK + FIXED) -->
+<div id="rover">
+    <div id="bubble">Woof! I'm Rover. Type what you're looking for and I'll find it for you!</div>
+    <img id="dog" src="./search.png">
+
+    <div id="searchbox">
+        <input id="search">
+        <button onclick="searchSite()">Search</button>
+    </div>
+</div>
+
 <script>
 let z=5;
-let windows={};
-let states={};
+let win={};
+let full={};
 
-/* OPEN APP */
+/* SOUND */
+document.addEventListener("pointerdown",()=>{
+    const a=document.getElementById("startupSound");
+    a.volume=0.6;
+    a.play().catch(()=>{});
+},{once:true});
+
+/* OPEN */
 function openApp(name){
 
-if(windows[name]){
-    windows[name].style.display="block";
-    windows[name].style.zIndex=++z;
+if(win[name]){
+    win[name].style.display="block";
+    win[name].style.zIndex=++z;
     return;
 }
 
-let win=document.createElement("div");
-win.className="window";
+let w=document.createElement("div");
+w.className="window";
 
-/* BLOG OPENS SMALL */
-if(name==="Blog") win.classList.add("small");
+if(name==="Blog") w.classList.add("blog");
 
-win.style.top="120px";
-win.style.left="120px";
-win.style.zIndex=++z;
+w.style.top="120px";
+w.style.left="120px";
+w.style.zIndex=++z;
 
-win.innerHTML=`
+w.innerHTML=`
 <div class="title-bar">
-    <span>${name}</span>
-    <div class="controls">
-        <div class="winbtn" onclick="minimizeWin(this)">_</div>
-        <div class="winbtn" onclick="toggleFull(this)">□</div>
-        <div class="winbtn close" onclick="this.closest('.window').remove()">X</div>
-    </div>
+<span>${name}</span>
+<div class="controls">
+<div class="winbtn" onclick="min(this)">_</div>
+<div class="winbtn" onclick="max(this)">□</div>
+<div class="winbtn close" onclick="this.closest('.window').remove()">X</div>
 </div>
-<div class="content">${getContent(name)}</div>
+</div>
+<div class="content">${content(name)}</div>
 `;
 
-document.body.appendChild(win);
-windows[name]=win;
+document.body.appendChild(w);
+win[name]=w;
 }
 
-/* MINIMIZE */
-function minimizeWin(btn){
-    btn.closest(".window").style.display="none";
+/* MIN */
+function min(b){
+b.closest(".window").style.display="none";
 }
 
-/* FULLSCREEN TOGGLE */
-function toggleFull(btn){
-    let win=btn.closest(".window");
+/* MAX */
+function max(b){
+let w=b.closest(".window");
 
-    if(!states[win]){
-        states[win]={
-            top:win.style.top,
-            left:win.style.left,
-            width:win.style.width,
-            height:win.style.height
-        };
-        win.classList.add("fullscreen");
-    }else{
-        let s=states[win];
-        win.classList.remove("fullscreen");
-        win.style.top=s.top;
-        win.style.left=s.left;
-        win.style.width=s.width;
-        win.style.height=s.height;
-        delete states[win];
-    }
+if(!full[w]){
+    full[w]={
+        top:w.style.top,
+        left:w.style.left,
+        width:w.style.width,
+        height:w.style.height
+    };
+
+    w.classList.add("fullscreen");
+}else{
+    w.classList.remove("fullscreen");
+    let s=full[w];
+    w.style.top=s.top;
+    w.style.left=s.left;
+    w.style.width=s.width;
+    w.style.height=s.height;
+    delete full[w];
+}
 }
 
 /* CONTENT */
-function getContent(name){
+function content(n){
 
-if(name==="Videos"){
+if(n==="Videos"){
 
-const videos=[
-{title:"Windows Vista dies part 1",id:"YhPE3z1WeVA"},
-{title:"Windows 8",id:"rkuYDSrxreA"},
-{title:"Evolution of Windows",id:"49OH_v64Fpg"},
-{title:"Windows 11 build",id:"Psd7wpNbGRQ"}
+const v=[
+["Vista dies part 1","YhPE3z1WeVA"],
+["Windows XP","YZYM4031WoI"],
+["Windows 11","Psd7wpNbGRQ"],
+["System","mEoJBW3VvGQ"],
+["Win 10 install","CNeIqVY3niM"],
+["Windows 8","rkuYDSrxreA"]
 ];
 
-let html="<h1>Videos</h1>";
+let h="<h1>Videos</h1>";
 
-videos.forEach(v=>{
-html+=`
+v.forEach(x=>{
+h+=`
 <div class="video-card">
-<h3>${v.title}</h3>
+<h3>${x[0]}</h3>
 <iframe width="100%" height="260"
-src="https://www.youtube.com/embed/${v.id}"
-frameborder="0" allowfullscreen></iframe>
+src="https://www.youtube.com/embed/${x[1]}"
+allowfullscreen></iframe>
 </div>`;
 });
 
-return html;
+return h;
 }
 
-if(name==="Blog"){
+if(n==="Blog"){
 return `
 <h1>Blog</h1>
 
 <div class="blog-card">
-<h2>Is Microsoft finally doing things right</h2>
-<br>
+Is Microsoft finally doing things right
+
 Microsoft released Windows 11 build 26300.2289 on 4/26/26.
 
-<br><br>
-
-1. New animations everywhere  
-2. Taskbar moves freely  
-3. Skip updates in setup  
-4. New Run tool  
-5. Dev + Canary merged  
-
-<br><br>
+1st Change: new animations  
+2nd Change: movable taskbar  
+3rd Change: skip updates  
+4th Change: new Run menu  
+5th Change: merged channels  
 
 Thanks for reading.
-</div>
-`;
+</div>`;
 }
 
-if(name==="Home") return "<h1>Welcome</h1>";
-if(name==="About") return "<h2>Brayden Peacock</h2>";
-if(name==="Downloads") return "<h1>Downloads</h1>";
+if(n==="Home") return "<h1>Welcome</h1>";
+if(n==="About") return "<h2>Brayden Peacock</h2>";
+if(n==="Downloads") return "<h1>Downloads</h1>";
 
 return "Coming soon...";
+}
+
+/* 🐶 ROVER SEARCH (10 SEC DELAY) */
+function searchSite(){
+
+let q=document.getElementById("search").value.toLowerCase();
+let b=document.getElementById("bubble");
+let d=document.getElementById("dog");
+
+if(!q) return;
+
+d.src="./finding.gif";
+b.innerText="Sniff sniff... searching...";
+
+setTimeout(()=>{
+
+d.src="./search.png";
+
+if(q.includes("video")) openApp("Videos");
+else if(q.includes("blog")) openApp("Blog");
+else if(q.includes("home")) openApp("Home");
+else if(q.includes("about")) openApp("About");
+else b.innerText="Woof... couldn't find it 😢";
+
+},10000);
 }
 
 /* DRAG */
 let drag=null,ox=0,oy=0;
 
 document.addEventListener("mousedown",(e)=>{
-let bar=e.target.closest(".title-bar");
-if(!bar) return;
-drag=bar.parentElement;
+let t=e.target.closest(".title-bar");
+if(!t) return;
+drag=t.parentElement;
 ox=e.clientX-drag.offsetLeft;
 oy=e.clientY-drag.offsetTop;
 });
