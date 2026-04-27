@@ -23,17 +23,20 @@ body{
     display:flex;
     flex-direction:column;
     gap:20px;
+    z-index:2;
 }
+
 .icon{
-    width:80px;
+    width:90px;
     text-align:center;
     color:white;
     cursor:pointer;
+    text-shadow:0 2px 6px black;
 }
+
 .icon img{
     width:48px;
-    display:block;
-    margin:auto;
+    height:48px;
 }
 
 /* WINDOW */
@@ -41,44 +44,87 @@ body{
     position:absolute;
     width:850px;
     height:540px;
-    background:rgba(255,255,255,0.15);
-    backdrop-filter:blur(30px);
-    border-radius:10px;
+
+    background:linear-gradient(to bottom,
+        rgba(255,255,255,0.25),
+        rgba(255,255,255,0.12),
+        rgba(255,255,255,0.08));
+
+    backdrop-filter:blur(70px) saturate(240%);
+    border:1px solid rgba(255,255,255,0.55);
+    border-radius:14px;
+
     overflow:hidden;
-    box-shadow:0 40px 100px rgba(0,0,0,0.7);
+    box-shadow:0 80px 180px rgba(0,0,0,0.85);
 }
 
+/* BLOG SMALL DEFAULT SIZE */
+.window.small{
+    width:650px;
+    height:420px;
+}
+
+/* FULLSCREEN */
+.window.fullscreen{
+    top:0 !important;
+    left:0 !important;
+    width:100vw !important;
+    height:calc(100vh - 40px) !important;
+}
+
+/* TITLE BAR */
 .title-bar{
-    height:35px;
+    height:38px;
     display:flex;
     justify-content:space-between;
     align-items:center;
     padding:0 10px;
-    background:linear-gradient(#ffffffaa,#ffffff33);
+
+    background:linear-gradient(to bottom,
+        rgba(255,255,255,0.90),
+        rgba(255,255,255,0.35));
+
+    backdrop-filter:blur(25px);
+    cursor:grab;
 }
 
-.title-bar span{color:white;}
+.title-bar span{
+    color:white;
+    font-weight:600;
+    text-shadow:0 2px 8px black;
+}
 
-.controls{display:flex;gap:5px;}
+/* BUTTONS */
+.controls{display:flex;gap:4px;}
 
 .winbtn{
-    width:30px;
-    height:20px;
-    background:#ddd;
-    text-align:center;
+    width:28px;
+    height:19px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:12px;
+    font-weight:bold;
+
+    background:linear-gradient(to bottom,#fff,#ccc);
+    border:1px solid rgba(0,0,0,0.3);
     cursor:pointer;
 }
 
 .winbtn.close{
-    background:red;
+    width:46px;
     color:white;
+    background:linear-gradient(to bottom,#ff6a6a,#b30000);
 }
 
+/* CONTENT */
 .content{
     padding:20px;
     color:white;
+    height:calc(100% - 38px);
     overflow:auto;
-    height:calc(100% - 35px);
+    text-shadow:0 2px 8px black;
 }
 
 /* TASKBAR */
@@ -87,81 +133,30 @@ body{
     bottom:0;
     width:100%;
     height:40px;
-    background:rgba(0,0,0,0.7);
+    background:rgba(0,0,0,0.65);
     display:flex;
     align-items:center;
-    padding:5px;
-}
-
-.taskbtn{
-    color:white;
-    margin-right:5px;
-    padding:5px 10px;
-    background:rgba(255,255,255,0.2);
-    cursor:pointer;
 }
 
 /* BLOG */
 .blog-card{
-    background:rgba(255,255,255,0.1);
-    padding:20px;
+    background:rgba(255,255,255,0.12);
+    padding:15px;
     border-radius:10px;
-    white-space:pre-wrap;
 }
 
-/* ROVER */
-#rover-container{
-    position:absolute;
-    bottom:60px;
-    right:30px;
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    gap:10px;
-}
-
-#rover-bubble{
-    background:white;
-    color:black;
-    padding:12px 16px;
-    border-radius:15px;
-    width:280px;
-    font-size:14px;
-    font-weight:500;
-}
-
-#rover-img{
-    width:200px;
-    cursor:pointer;
-    filter:drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-}
-
-#search-box{
-    display:flex;
-    gap:5px;
-}
-
-#search-box input{
-    padding:6px;
-    border-radius:5px;
-    border:none;
-    outline:none;
-}
-
-#search-box button{
-    padding:6px 10px;
-    background:#4da3ff;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
+/* VIDEO */
+.video-card{
+    background:rgba(255,255,255,0.12);
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:15px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- DESKTOP -->
 <div class="desktop">
     <div class="icon" onclick="openApp('Home')"><img src="./home.png">Home</div>
     <div class="icon" onclick="openApp('About')"><img src="./aboutme.png">About</div>
@@ -170,128 +165,152 @@ body{
     <div class="icon" onclick="openApp('Downloads')"><img src="./downloads.png">Downloads</div>
 </div>
 
-<!-- 🐶 ROVER -->
-<div id="rover-container">
-    <div id="rover-bubble">
-        Woof! I'm Rover. Type what you're looking for and I'll find it for you!
-    </div>
-
-    <img id="rover-img" src="./search.png">
-
-    <div id="search-box">
-        <input id="search" placeholder="Search...">
-        <button onclick="searchSite()">Search</button>
-    </div>
-</div>
-
 <div id="taskbar"></div>
 
 <script>
-let windows={};
 let z=5;
-
-/* BLOG DATA (UPDATED EXACT TEXT) */
-const blogs=[
-{
-title:"Is Microsoft finally doing things right",
-text:`Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.
-
-1st Change: Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.
-
-2nd Change: Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!
-
-3rd Change: Microsoft said they would let users skip Windows Update in OOBE.
-
-4th Change: Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.
-
-5th and Final: In Windows Update, Dev and Canary were merged into the Experimental Channel.
-
-Thanks for reading this blog and have a great day.`
-}
-];
+let windows={};
+let states={};
 
 /* OPEN APP */
 function openApp(name){
 
-    if(windows[name]){
-        windows[name].style.display="block";
-        windows[name].style.zIndex=++z;
-        return;
-    }
-
-    let win=document.createElement("div");
-    win.className="window";
-    win.style.top="100px";
-    win.style.left="100px";
-    win.style.zIndex=++z;
-
-    win.innerHTML=`
-        <div class="title-bar">
-            <span>${name}</span>
-            <div class="controls">
-                <div class="winbtn" onclick="this.closest('.window').style.display='none'">_</div>
-                <div class="winbtn close" onclick="this.closest('.window').remove()">X</div>
-            </div>
-        </div>
-        <div class="content">${getContent(name)}</div>
-    `;
-
-    document.body.appendChild(win);
-    windows[name]=win;
-    addTask(name);
+if(windows[name]){
+    windows[name].style.display="block";
+    windows[name].style.zIndex=++z;
+    return;
 }
 
-/* TASKBAR */
-function addTask(name){
-    let b=document.createElement("div");
-    b.className="taskbtn";
-    b.innerText=name;
-    b.onclick=()=>openApp(name);
-    document.getElementById("taskbar").appendChild(b);
+let win=document.createElement("div");
+win.className="window";
+
+/* BLOG OPENS SMALL */
+if(name==="Blog") win.classList.add("small");
+
+win.style.top="120px";
+win.style.left="120px";
+win.style.zIndex=++z;
+
+win.innerHTML=`
+<div class="title-bar">
+    <span>${name}</span>
+    <div class="controls">
+        <div class="winbtn" onclick="minimizeWin(this)">_</div>
+        <div class="winbtn" onclick="toggleFull(this)">□</div>
+        <div class="winbtn close" onclick="this.closest('.window').remove()">X</div>
+    </div>
+</div>
+<div class="content">${getContent(name)}</div>
+`;
+
+document.body.appendChild(win);
+windows[name]=win;
+}
+
+/* MINIMIZE */
+function minimizeWin(btn){
+    btn.closest(".window").style.display="none";
+}
+
+/* FULLSCREEN TOGGLE */
+function toggleFull(btn){
+    let win=btn.closest(".window");
+
+    if(!states[win]){
+        states[win]={
+            top:win.style.top,
+            left:win.style.left,
+            width:win.style.width,
+            height:win.style.height
+        };
+        win.classList.add("fullscreen");
+    }else{
+        let s=states[win];
+        win.classList.remove("fullscreen");
+        win.style.top=s.top;
+        win.style.left=s.left;
+        win.style.width=s.width;
+        win.style.height=s.height;
+        delete states[win];
+    }
 }
 
 /* CONTENT */
 function getContent(name){
 
-    if(name==="Home") return "<h1>Welcome to BraydenPeacockTech</h1>";
-    if(name==="About") return "<h2>Brayden Peacock</h2><p>YouTuber & Tech Modder</p>";
+if(name==="Videos"){
 
-    if(name==="Blog"){
-        return `<div class="blog-card">
-            <h1>${blogs[0].title}</h1>
-            <p>${blogs[0].text}</p>
-        </div>`;
-    }
+const videos=[
+{title:"Windows Vista dies part 1",id:"YhPE3z1WeVA"},
+{title:"Windows 8",id:"rkuYDSrxreA"},
+{title:"Evolution of Windows",id:"49OH_v64Fpg"},
+{title:"Windows 11 build",id:"Psd7wpNbGRQ"}
+];
 
-    if(name==="Videos") return "<h1>Videos (unchanged)</h1>";
-    if(name==="Downloads") return "<h1>Downloads (unchanged)</h1>";
+let html="<h1>Videos</h1>";
 
-    return "Coming soon...";
+videos.forEach(v=>{
+html+=`
+<div class="video-card">
+<h3>${v.title}</h3>
+<iframe width="100%" height="260"
+src="https://www.youtube.com/embed/${v.id}"
+frameborder="0" allowfullscreen></iframe>
+</div>`;
+});
+
+return html;
 }
 
-/* ROVER (unchanged behavior kept minimal here) */
-function searchSite(){
-    let q=document.getElementById("search").value.toLowerCase().trim();
-    let b=document.getElementById("rover-bubble");
-    let img=document.getElementById("rover-img");
+if(name==="Blog"){
+return `
+<h1>Blog</h1>
 
-    if(!q) return;
+<div class="blog-card">
+<h2>Is Microsoft finally doing things right</h2>
+<br>
+Microsoft released Windows 11 build 26300.2289 on 4/26/26.
 
-    img.src="./finding.gif";
-    b.innerText="Sniff sniff... searching...";
+<br><br>
 
-    setTimeout(()=>{
-        img.src="./search.png";
+1. New animations everywhere  
+2. Taskbar moves freely  
+3. Skip updates in setup  
+4. New Run tool  
+5. Dev + Canary merged  
 
-        if(q.includes("blog")) openApp("Blog");
-        else if(q.includes("video")) openApp("Videos");
-        else if(q.includes("about")) openApp("About");
-        else if(q.includes("home")) openApp("Home");
-        else if(q.includes("download")) openApp("Downloads");
-        else b.innerText="Woof... couldn't find that 😢";
+<br><br>
 
-    },10000);
+Thanks for reading.
+</div>
+`;
 }
+
+if(name==="Home") return "<h1>Welcome</h1>";
+if(name==="About") return "<h2>Brayden Peacock</h2>";
+if(name==="Downloads") return "<h1>Downloads</h1>";
+
+return "Coming soon...";
+}
+
+/* DRAG */
+let drag=null,ox=0,oy=0;
+
+document.addEventListener("mousedown",(e)=>{
+let bar=e.target.closest(".title-bar");
+if(!bar) return;
+drag=bar.parentElement;
+ox=e.clientX-drag.offsetLeft;
+oy=e.clientY-drag.offsetTop;
+});
+
+document.addEventListener("mousemove",(e)=>{
+if(!drag) return;
+drag.style.left=(e.clientX-ox)+"px";
+drag.style.top=(e.clientY-oy)+"px";
+});
+
+document.addEventListener("mouseup",()=>drag=null);
 </script>
 
 </body>
