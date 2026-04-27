@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BraydenPeacockTech - Build 4032u</title>
+    <title>BraydenPeacockTech - Build 4032w</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { 
@@ -25,9 +25,9 @@
         }
 
         #window {
-            position: absolute; top: 30px; left: 50px;
-            width: 1100px; height: 820px;
-            background: rgba(255, 255, 255, 0.15);
+            position: absolute; top: 20px; left: 30px;
+            width: 1200px; height: 900px;
+            background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 8px; box-shadow: 0 25px 60px rgba(0,0,0,0.6);
             display: flex; flex-direction: column;
@@ -38,7 +38,7 @@
         .title-bar { 
             height: 38px; cursor: move; display: flex; 
             justify-content: space-between; align-items: center; padding: 0 12px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.05));
         }
         .title-text { color: white; font-size: 13px; text-shadow: 0 1px 2px black; pointer-events: none; }
 
@@ -47,40 +47,48 @@
 
         .main-view { display: flex; flex: 1; overflow: hidden; position: relative; }
         
-        .sidebar { width: 120px; background: rgba(0,0,0,0.2); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding-top: 15px; }
-        .nav-item { margin-bottom: 20px; color: white; cursor: pointer; text-align: center; width: 100%; padding: 10px 0; }
-        .nav-icon { width: 38px; height: 38px; display: block; margin: 0 auto 5px; }
-        .nav-label { font-size: 10px; text-shadow: 0 1px 2px black; }
+        .sidebar { width: 140px; background: rgba(0,0,0,0.2); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding-top: 15px; }
+        .nav-item { margin-bottom: 20px; color: white; cursor: pointer; text-align: center; width: 100%; padding: 10px 0; transition: 0.2s; }
+        .nav-item:hover { background: rgba(255,255,255,0.1); }
+        .nav-icon { width: 32px; height: 32px; display: block; margin: 0 auto 5px; }
+        .nav-label { font-size: 11px; text-shadow: 0 1px 2px black; }
 
-        .content-area { flex: 1; padding: 20px; color: white; overflow-y: auto; background: rgba(0,0,0,0.1); }
+        .content-area { flex: 1; display: flex; flex-direction: column; background: rgba(0,0,0,0.25); }
 
-        /* Integrated Video Player */
-        #wmp-player { 
-            width: 100%; height: 450px; 
-            background: #000; display: none; flex-direction: column; 
-            border: 1px solid #444; border-radius: 4px; margin-bottom: 20px;
+        /* Video List Area */
+        .video-container { flex: 1; overflow-y: auto; padding: 20px; }
+        .search-box { width: 100%; padding: 8px; background: rgba(0,0,0,0.4); border: 1px solid #555; color: white; border-radius: 4px; margin-bottom: 20px; outline: none; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        .video-card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 5px; cursor: pointer; border-radius: 3px; transition: 0.1s; }
+        .video-card:hover { border-color: #5da9e9; transform: scale(1.02); }
+        .video-card p { font-size: 11px; color: white; margin-top: 5px; height: 28px; overflow: hidden; line-height: 1.3; }
+
+        /* Docked Legacy Player */
+        #legacy-player {
+            height: 400px; background: #000;
+            display: none; flex-direction: column;
+            border-top: 2px solid #444; position: relative;
         }
-        .wmp-header { 
-            height: 30px; background: linear-gradient(to bottom, #4a4a4a, #222); 
-            display: flex; align-items: center; padding: 0 10px; border-bottom: 1px solid #111;
+        .legacy-header {
+            background: linear-gradient(to right, rgba(0,173,239,0.3), transparent);
+            padding: 6px 15px; font-size: 11px; color: #5da9e9; border-bottom: 1px solid #222;
         }
-        .wmp-controls { 
-            height: 60px; background: linear-gradient(to bottom, #333, #111); 
-            display: flex; align-items: center; justify-content: center; gap: 20px;
+        .legacy-controls {
+            height: 70px; background: linear-gradient(to bottom, #2a2a2a, #000);
+            display: flex; align-items: center; justify-content: center; gap: 15px;
             border-top: 1px solid #444;
         }
-        .wmp-btn {
-            width: 35px; height: 35px; border-radius: 50%; border: 1px solid #555;
-            background: radial-gradient(circle, #666, #222); color: white;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
+        .l-btn {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: radial-gradient(circle, #5da9e9, #1c4a7a);
+            border: 2px solid #fff; color: white; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 18px;
         }
-
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
-        .video-card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 6px; cursor: pointer; border-radius: 4px; transition: 0.2s; }
-        .video-card:hover { border-color: #00adef; transform: translateY(-3px); background: rgba(0,0,0,0.6); }
-
-        .hidden { display: none !important; }
-        .search-container { display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid #555; padding: 8px 12px; border-radius: 4px; margin-bottom: 15px; }
+        .l-btn-small {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: #333; border: 1px solid #666; color: #ccc; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 12px;
+        }
     </style>
 </head>
 <body onload="init()">
@@ -89,7 +97,7 @@
 
     <div id="window">
         <div class="title-bar" id="windowHeader">
-            <span class="title-text">Brayden Peacock Tech Archive</span>
+            <span class="title-text">Windows Media Player Legacy - Brayden Peacock Tech Archive</span>
             <div class="controls">
                 <button class="win-btn" onclick="minimizeWin()">_</button>
                 <button class="win-btn close-btn" onclick="closeWin()">✕</button>
@@ -98,50 +106,40 @@
 
         <div class="main-view">
             <div class="sidebar">
-                <div class="nav-item" onclick="showPage('home')"><img src="home.png" class="nav-icon"><span class="nav-label">Home</span></div>
-                <div class="nav-item" onclick="showPage('videos')"><img src="videos.png" class="nav-icon"><span class="nav-label">Videos</span></div>
-                <div class="nav-item" onclick="showPage('blog')"><img src="pic.png" class="nav-icon"><span class="nav-label">Blog</span></div>
-                <div class="nav-item" onclick="showPage('downloads')"><img src="downloads.png" class="nav-icon"><span class="nav-label">Downloads</span></div>
-                <div class="nav-item" onclick="showPage('about')"><img src="aboutme.png" class="nav-icon"><span class="nav-label">About Me</span></div>
+                <div class="nav-item"><img src="videos.png" class="nav-icon"><span class="nav-label">Library</span></div>
+                <div class="nav-item"><img src="downloads.png" class="nav-icon"><span class="nav-label">Playlists</span></div>
+                <div class="nav-item"><img src="pic.png" class="nav-icon"><span class="nav-label">Pictures</span></div>
             </div>
 
             <div class="content-area">
-                <div id="view-home">
-                    <h1>Welcome, Brayden</h1>
-                    <p style="margin-top:10px;">Build 4032u: Integrated Video Experience.</p>
-                </div>
-
-                <div id="view-videos" class="hidden">
-                    <div id="wmp-player">
-                        <div class="wmp-header">
-                            <button style="background:transparent; border:none; color:#ccc; cursor:pointer;" onclick="stopVideo()">[X] Close Player</button>
-                            <span id="p-title" style="margin-left:auto; font-size: 11px; color: #00adef;"></span>
-                        </div>
-                        <div style="flex: 1; background: #000;">
-                            <iframe id="p-frame" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen"></iframe>
-                        </div>
-                        <div class="wmp-controls">
-                            <div class="wmp-btn" onclick="stopVideo()">■</div>
-                            <div class="wmp-btn" style="width: 45px; height: 45px; font-size: 18px;">►</div>
-                            <div class="wmp-btn">||</div>
-                        </div>
-                    </div>
-
-                    <div class="search-container">
-                        <input type="text" id="vSearch" placeholder="Search your archive..." onkeyup="searchVids()" style="background: transparent; border: none; color: white; outline: none; width: 100%;">
-                    </div>
-
+                <div class="video-container">
+                    <input type="text" id="vSearch" class="search-box" placeholder="Search your videos..." onkeyup="searchVids()">
                     <div class="video-grid" id="v-grid"></div>
                 </div>
 
-                <div id="view-blog" class="hidden"><h2>Blog</h2></div>
-                <div id="view-downloads" class="hidden"><h2>Downloads</h2></div>
-                <div id="view-about" class="hidden"><h2>About Me</h2></div>
+                <div id="legacy-player">
+                    <div class="legacy-header">
+                        Now Playing: <span id="now-playing-title">None</span>
+                        <button style="float:right; background:transparent; border:none; color:white; cursor:pointer;" onclick="closePlayer()">[X]</button>
+                    </div>
+                    <div style="flex: 1; background: black;">
+                        <iframe id="video-frame" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <div class="legacy-controls">
+                        <div class="l-btn-small">⏮</div>
+                        <div class="l-btn" onclick="closePlayer()">■</div>
+                        <div class="l-btn" style="width:50px; height:50px; font-size: 24px;">►</div>
+                        <div class="l-btn-small">⏭</div>
+                        <div style="width: 180px; height: 5px; background: #333; margin-left: 20px; border-radius: 3px; border: 1px solid #444;">
+                            <div style="width: 65%; height: 100%; background: #00adef;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="taskbar"><div class="task-item" onclick="restoreWin()">Explorer</div></div>
+    <div id="taskbar"><div class="task-item" onclick="restoreWin()">Media Player</div></div>
 
     <script>
         const vData = [
@@ -224,31 +222,22 @@
             vData.forEach(v => {
                 const card = document.createElement('div');
                 card.className = 'video-card';
-                card.onclick = () => play(v.id, v.t);
-                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" style="width:100%;"><p style="font-size:11px; margin-top:5px;">${v.t}</p>`;
+                card.onclick = () => playVideo(v.id, v.t);
+                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" style="width:100%; border-radius: 2px;"><p>${v.t}</p>`;
                 grid.appendChild(card);
             });
             dragElement(document.getElementById("window"));
         }
 
-        function play(id, title) {
-            document.getElementById('wmp-player').style.display = 'flex';
-            document.getElementById('p-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-            document.getElementById('p-title').innerText = title;
-            document.getElementById('view-videos').scrollTo({ top: 0, behavior: 'smooth' });
+        function playVideo(id, title) {
+            document.getElementById('legacy-player').style.display = 'flex';
+            document.getElementById('video-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+            document.getElementById('now-playing-title').innerText = title;
         }
 
-        function stopVideo() {
-            document.getElementById('wmp-player').style.display = 'none';
-            document.getElementById('p-frame').src = "";
-        }
-
-        function showPage(id) {
-            ['home', 'videos', 'blog', 'downloads', 'about'].forEach(p => {
-                const el = document.getElementById('view-'+p);
-                if(el) el.classList.add('hidden');
-            });
-            document.getElementById('view-'+id).classList.remove('hidden');
+        function closePlayer() {
+            document.getElementById('legacy-player').style.display = 'none';
+            document.getElementById('video-frame').src = "";
         }
 
         function searchVids() {
