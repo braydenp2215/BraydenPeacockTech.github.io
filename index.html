@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BraydenPeacockTech - Build 4030</title>
+    <title>BraydenPeacockTech - Build 4032</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -52,7 +52,6 @@
 
         .main-view { display: flex; flex: 1; overflow: hidden; position: relative; }
 
-        /* Sidebar Navigation */
         .sidebar {
             width: 120px;
             background: rgba(0,0,0,0.3);
@@ -78,7 +77,6 @@
             line-height: 1.6;
         }
 
-        /* Search Bar Restored */
         .search-container { margin-bottom: 25px; display: flex; gap: 10px; }
         #search {
             background: rgba(0,0,0,0.5);
@@ -94,7 +92,6 @@
         .blog-content p { margin-bottom: 12px; }
         .hidden { display: none; }
 
-        /* Rover Restored */
         .rover-container {
             position: absolute; bottom: 20px; right: 20px;
             display: flex; flex-direction: column; align-items: center;
@@ -119,7 +116,7 @@
 
     <div id="window">
         <div id="drag-handle" class="title-bar">
-            <span class="title-text">Explorer - Build 4030</span>
+            <span class="title-text">Explorer - Build 4032</span>
             <div class="controls">
                 <div class="btn">_</div>
                 <div class="btn">□</div>
@@ -159,20 +156,19 @@
 
                 <div id="Home-app">
                     <h1>System Explorer</h1>
-                    <p>Build 4030 Restoration Successful.</p>
+                    <p>Build 4032 Active. Enhanced Rover AI is online.</p>
                 </div>
 
                 <div id="Blog-app" class="hidden">
                     <div class="blog-content">
                         <h2>Is Microsoft finally doing things right?</h2>
                         <div class="blog-meta">Creator: Brayden Peacock | Date: 4/26/2026</div>
-                        <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p>
-                        <p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p>
-                        <p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p>
-                        <p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p>
-                        <p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p>
-                        <p><b>5th and Final:</b> In Windows Update, Dev and Canary were merged into the Experimental Channel.</p>
-                        <p><i>Thanks for reading this blog and have a great day.</i></p>
+                        <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26.</p>
+                        <p><b>1st Change:</b> Added the new spinny animation from Windows 10X/11.</p>
+                        <p><b>2nd Change:</b> Taskbar can now go to the top, left, and right!</p>
+                        <p><b>3rd Change:</b> Ability to skip Windows Update in OOBE.</p>
+                        <p><b>4th Change:</b> Modern Run enabled in Advanced Settings.</p>
+                        <p><b>5th Change:</b> Dev and Canary merged into Experimental Channel.</p>
                     </div>
                 </div>
 
@@ -188,7 +184,7 @@
 
                 <div id="About-app" class="hidden">
                     <h1>About</h1>
-                    <p>Created by Brayden Peacock.</p>
+                    <p>Created by Brayden Peacock. Dedicated to Aero aesthetics.</p>
                 </div>
 
                 <div class="rover-container">
@@ -211,20 +207,45 @@
             document.getElementById(name + '-app').classList.remove('hidden');
         }
 
+        /* ROVER ENHANCED SEARCH LOGIC */
         function searchSite(){
             let q = document.getElementById("search").value.toLowerCase().trim();
             let b = document.getElementById("rover-bubble");
             let img = document.getElementById("rover-img");
+
             if(!q) return;
+
+            // Start Sniffing
             img.src = "finding.gif";
-            b.innerText = "Searching...";
-            setTimeout(()=>{
+            b.innerText = "Sniff sniff... looking for '" + q + "'...";
+
+            setTimeout(() => {
                 img.src = "search.png";
-                if(q.includes("blog")) { openApp("Blog"); b.innerText = "Found it!"; }
-                else if(q.includes("video")) { openApp("Videos"); b.innerText = "Here's Videos!"; }
-                else if(q.includes("download")) { openApp("Downloads"); b.innerText = "Here's Downloads!"; }
-                else if(q.includes("home")) { openApp("Home"); b.innerText = "Back Home!"; }
-                else { b.innerText = "Woof... no luck."; }
+
+                // Advanced Keyword Mapping
+                if(q.includes("blog") || q.includes("post") || q.includes("news")) {
+                    openApp("Blog");
+                    b.innerText = "Woof! Found your blog!";
+                }
+                else if(q.includes("about") || q.includes("who") || q.includes("brayden")) {
+                    openApp("About");
+                    b.innerText = "I found the About page!";
+                }
+                else if(q.includes("video") || q.includes("movie") || q.includes("clip")) {
+                    openApp("Videos");
+                    b.innerText = "Here are your videos!";
+                }
+                else if(q.includes("download") || q.includes("file") || q.includes("stuff")) {
+                    openApp("Downloads");
+                    b.innerText = "Opening Downloads folder!";
+                }
+                else if(q.includes("home") || q.includes("start") || q.includes("main")) {
+                    openApp("Home");
+                    b.innerText = "Back to the start!";
+                }
+                else {
+                    b.innerText = "Aww... I couldn't find '" + q + "'. Try 'blog' or 'about'!";
+                }
             }, 1200);
         }
 
