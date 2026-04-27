@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BraydenPeacockTech Beta Build - 4028</title>
+    <title>BraydenPeacockTech - Build 4030</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -15,10 +15,9 @@
             background-size: cover;
         }
 
-        /* Fixed Window Positioning */
         #window {
             position: absolute;
-            top: 50px; left: 50px; /* Specific starting point to ensure visibility */
+            top: 50px; left: 50px; 
             width: 950px; height: 650px;
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(25px) saturate(200%);
@@ -53,6 +52,7 @@
 
         .main-view { display: flex; flex: 1; overflow: hidden; position: relative; }
 
+        /* Sidebar Navigation */
         .sidebar {
             width: 120px;
             background: rgba(0,0,0,0.3);
@@ -66,7 +66,7 @@
             margin-bottom: 20px; cursor: pointer; width: 90%; transition: 0.2s;
             padding: 5px; border-radius: 5px;
         }
-        .icon-box:hover { background: rgba(255,255,255,0.1); transform: scale(1.05); }
+        .icon-box:hover { background: rgba(255,255,255,0.15); transform: scale(1.05); }
         .icon-img { width: 42px; height: 42px; filter: drop-shadow(0 2px 4px black); }
         .icon-label { color: white; font-size: 10px; margin-top: 5px; text-align: center; }
 
@@ -75,8 +75,10 @@
             background: rgba(0,0,0,0.1);
             overflow-y: auto;
             position: relative;
+            line-height: 1.6;
         }
 
+        /* Search Bar Restored */
         .search-container { margin-bottom: 25px; display: flex; gap: 10px; }
         #search {
             background: rgba(0,0,0,0.5);
@@ -88,9 +90,166 @@
             border: 1px solid white; color: white; padding: 5px 15px; cursor: pointer;
         }
 
+        .blog-meta { font-size: 13px; color: #ddd; margin-bottom: 15px; font-style: italic; }
+        .blog-content p { margin-bottom: 12px; }
+        .hidden { display: none; }
+
+        /* Rover Restored */
         .rover-container {
             position: absolute; bottom: 20px; right: 20px;
             display: flex; flex-direction: column; align-items: center;
         }
         .bubble {
-            background: #ffffcc; color
+            background: #ffffcc; color: black; padding: 10px; border-radius: 10px;
+            border: 1px solid #999; font-size: 12px; margin-bottom: 10px;
+            width: 150px; text-align: center; box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .bubble::after {
+            content: ''; position: absolute; bottom: -10px; right: 20px;
+            border-width: 10px 10px 0; border-style: solid;
+            border-color: #ffffcc transparent;
+        }
+        #rover-img { width: 80px; height: 80px; }
+    </style>
+</head>
+<body onload="playStartup()">
+
+    <audio id="startup-sound" src="Start.mp3"></audio>
+
+    <div id="window">
+        <div id="drag-handle" class="title-bar">
+            <span class="title-text">Explorer - Build 4030</span>
+            <div class="controls">
+                <div class="btn">_</div>
+                <div class="btn">□</div>
+                <div class="btn close" onclick="document.getElementById('window').style.display='none'">X</div>
+            </div>
+        </div>
+
+        <div class="main-view">
+            <div class="sidebar">
+                <div class="icon-box" onclick="openApp('Home')">
+                    <img src="home.png" class="icon-img">
+                    <span class="icon-label">Home</span>
+                </div>
+                <div class="icon-box" onclick="openApp('Blog')">
+                    <img src="pic.png" class="icon-img">
+                    <span class="icon-label">My Blog</span>
+                </div>
+                <div class="icon-box" onclick="openApp('Downloads')">
+                    <img src="downloads.png" class="icon-img">
+                    <span class="icon-label">Downloads</span>
+                </div>
+                <div class="icon-box" onclick="openApp('Videos')">
+                    <img src="videos.png" class="icon-img">
+                    <span class="icon-label">Videos</span>
+                </div>
+                <div class="icon-box" onclick="openApp('About')">
+                    <img src="aboutme.png" class="icon-img">
+                    <span class="icon-label">About</span>
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <div class="search-container">
+                    <input type="text" id="search" placeholder="Ask Rover...">
+                    <button class="search-btn" onclick="searchSite()">Search</button>
+                </div>
+
+                <div id="Home-app">
+                    <h1>System Explorer</h1>
+                    <p>Build 4030 Restoration Successful.</p>
+                </div>
+
+                <div id="Blog-app" class="hidden">
+                    <div class="blog-content">
+                        <h2>Is Microsoft finally doing things right?</h2>
+                        <div class="blog-meta">Creator: Brayden Peacock | Date: 4/26/2026</div>
+                        <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p>
+                        <p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p>
+                        <p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p>
+                        <p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p>
+                        <p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p>
+                        <p><b>5th and Final:</b> In Windows Update, Dev and Canary were merged into the Experimental Channel.</p>
+                        <p><i>Thanks for reading this blog and have a great day.</i></p>
+                    </div>
+                </div>
+
+                <div id="Downloads-app" class="hidden">
+                    <h1>Downloads</h1>
+                    <p>Folder is currently empty.</p>
+                </div>
+
+                <div id="Videos-app" class="hidden">
+                    <h1>Videos</h1>
+                    <p>No video files found.</p>
+                </div>
+
+                <div id="About-app" class="hidden">
+                    <h1>About</h1>
+                    <p>Created by Brayden Peacock.</p>
+                </div>
+
+                <div class="rover-container">
+                    <div id="rover-bubble" class="bubble">Woof! Ready to help!</div>
+                    <img id="rover-img" src="search.png">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function playStartup() {
+            document.getElementById("startup-sound").play().catch(() => {});
+        }
+
+        function openApp(name) {
+            ['Home','Blog','Downloads','Videos','About'].forEach(a => {
+                document.getElementById(a + '-app').classList.add('hidden');
+            });
+            document.getElementById(name + '-app').classList.remove('hidden');
+        }
+
+        function searchSite(){
+            let q = document.getElementById("search").value.toLowerCase().trim();
+            let b = document.getElementById("rover-bubble");
+            let img = document.getElementById("rover-img");
+            if(!q) return;
+            img.src = "finding.gif";
+            b.innerText = "Searching...";
+            setTimeout(()=>{
+                img.src = "search.png";
+                if(q.includes("blog")) { openApp("Blog"); b.innerText = "Found it!"; }
+                else if(q.includes("video")) { openApp("Videos"); b.innerText = "Here's Videos!"; }
+                else if(q.includes("download")) { openApp("Downloads"); b.innerText = "Here's Downloads!"; }
+                else if(q.includes("home")) { openApp("Home"); b.innerText = "Back Home!"; }
+                else { b.innerText = "Woof... no luck."; }
+            }, 1200);
+        }
+
+        // DRAG LOGIC
+        const win = document.getElementById("window");
+        const handle = document.getElementById("drag-handle");
+        let dragging = false, offsetX, offsetY;
+
+        handle.onmousedown = (e) => {
+            dragging = true;
+            offsetX = e.clientX - win.offsetLeft;
+            offsetY = e.clientY - win.offsetTop;
+            handle.style.cursor = "grabbing";
+        };
+
+        document.onmousemove = (e) => {
+            if (!dragging) return;
+            win.style.left = (e.clientX - offsetX) + "px";
+            win.style.top = (e.clientY - offsetY) + "px";
+        };
+
+        document.onmouseup = () => {
+            dragging = false;
+            handle.style.cursor = "move";
+        };
+    </script>
+</body>
+</html>
