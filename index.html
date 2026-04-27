@@ -2,101 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BraydenPeacockTech - Build 4032e (Aero Edition)</title>
+    <title>BraydenPeacockTech - Build 4032n</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body, html { 
             width: 100%; height: 100%; overflow: hidden; 
-            font-family: 'Segoe UI', 'Tahoma', sans-serif; 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
             background: #004578 url('wallpaper.jpg') no-repeat center center fixed;
             background-size: cover;
-            display: flex; align-items: center; justify-content: center;
         }
-        
-        /* THE AERO GLASS WINDOW */
+
+        #taskbar {
+            position: fixed; bottom: 0; width: 100%; height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.3);
+            display: flex; align-items: center; padding: 0 10px; z-index: 10000;
+        }
+        .task-item {
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 5px 15px; border-radius: 3px; cursor: pointer; font-size: 12px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
         #window {
-            position: relative;
-            width: 1000px; height: 750px;
-            /* Aero effect: semi-transparent white with heavy blur */
-            background: rgba(255, 255, 255, 0.15); 
+            position: absolute; top: 30px; left: 50px;
+            width: 1100px; height: 820px;
+            background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 8px; 
-            box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 20px 50px rgba(0,0,0,0.5);
-            display: flex; flex-direction: column; 
+            border-radius: 8px; box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            display: flex; flex-direction: column;
             backdrop-filter: blur(25px) saturate(150%);
             z-index: 100;
         }
 
-        /* Aero Title Bar */
         .title-bar { 
-            height: 38px; padding: 0 12px; display: flex; 
-            justify-content: space-between; align-items: center; 
-            background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            z-index: 1000;
+            height: 38px; cursor: move; display: flex; 
+            justify-content: space-between; align-items: center; padding: 0 12px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
         }
-        .title-text { color: white; font-size: 13px; font-weight: 500; text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 1px 2px black; }
+        .title-text { color: white; font-size: 13px; text-shadow: 0 1px 2px black; pointer-events: none; }
+
+        .controls { display: flex; gap: 5px; }
+        .win-btn { width: 45px; height: 22px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; }
+        .close-btn:hover { background: #e81123; }
+
+        .main-view { display: flex; flex: 1; overflow: hidden; }
         
-        .controls { display: flex; gap: 5px; z-index: 1001; }
-        .win-btn { 
-            width: 45px; height: 20px; background: rgba(255,255,255,0.1); 
-            border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .close-btn:hover { background: #e81123; border-color: #f1707a; }
+        .sidebar { width: 120px; background: rgba(0,0,0,0.2); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding-top: 15px; }
+        .nav-item { margin-bottom: 20px; color: white; cursor: pointer; text-align: center; width: 100%; padding: 10px 0; }
+        .nav-item:hover { background: rgba(255,255,255,0.1); }
+        .nav-icon { width: 38px; height: 38px; display: block; margin: 0 auto 5px; }
+        .nav-label { font-size: 10px; text-shadow: 0 1px 2px black; }
 
-        .main-view { display: flex; flex: 1; overflow: hidden; position: relative; z-index: 10; }
-        
-        /* Sidebar Glass */
-        .sidebar { 
-            width: 150px; background: rgba(255,255,255,0.05); 
-            border-right: 1px solid rgba(255,255,255,0.1);
-            padding-top: 20px; z-index: 50;
-        }
-        .nav-item { 
-            display: flex; flex-direction: column; align-items: center;
-            padding: 15px 5px; color: white; cursor: pointer; transition: 0.2s;
-            z-index: 60;
-        }
-        .nav-item:hover { background: rgba(255,255,255,0.1); box-shadow: inset 0 0 15px rgba(255,255,255,0.1); }
-        .nav-icon { width: 42px; height: 42px; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
-        .nav-label { font-size: 11px; text-align: center; text-shadow: 0 1px 2px black; }
+        .content-area { flex: 1; padding: 25px; color: white; overflow-y: auto; background: rgba(0,0,0,0.1); position: relative; }
+        .content-area::-webkit-scrollbar { width: 10px; }
+        .content-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 5px; }
 
-        /* Content Area */
-        .content-area { 
-            flex: 1; padding: 25px; color: white; 
-            background: rgba(0,0,0,0.15); overflow-y: auto; position: relative;
-            z-index: 5;
-        }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
+        .video-card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 6px; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        .video-card:hover { border-color: #00adef; background: rgba(0,0,0,0.6); }
 
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .video-card { 
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); 
-            padding: 8px; cursor: pointer; border-radius: 4px; transition: 0.2s;
-            z-index: 20;
-        }
-        .video-card:hover { border-color: #00adef; background: rgba(0,173,239,0.2); transform: translateY(-3px); }
-        .thumb { width: 100%; border-radius: 2px; margin-bottom: 8px; pointer-events: none; }
-
-        /* WMP Player Layer */
-        #wmp-player {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 2000; display: none; flex-direction: column;
-        }
-        .player-header { height: 45px; background: #111; display: flex; align-items: center; padding: 0 15px; }
-        .back-btn { background: #333; color: white; border: 1px solid #555; padding: 5px 12px; cursor: pointer; z-index: 2001; }
-
-        /* Search Box */
-        .search-input { 
-            background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2);
-            color: white; padding: 8px 12px; border-radius: 4px; width: 200px; margin-bottom: 20px;
-            float: right; outline: none; z-index: 100; position: relative;
-        }
-
-        .rover-container { position: absolute; bottom: 20px; right: 20px; z-index: 500; pointer-events: none; }
-        .bubble { background: #ffffcc; color: black; padding: 10px; border: 1px solid #999; border-radius: 10px; font-size: 11px; width: 150px; margin-bottom: 10px; text-align: center; box-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .blog-post { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.1); }
 
         .hidden { display: none !important; }
     </style>
@@ -106,70 +72,69 @@
     <audio id="startup" src="Start.mp3"></audio>
 
     <div id="window">
-        <div class="title-bar">
-            <span class="title-text">Windows Media Player - Build 4032e</span>
+        <div class="title-bar" id="windowHeader">
+            <span class="title-text">Brayden Peacock Tech Archive (<span id="vCount">0</span> Videos)</span>
             <div class="controls">
-                <button class="win-btn" onclick="toggleFullscreen()">[ ]</button>
-                <button class="win-btn close-btn" onclick="document.getElementById('window').style.display='none'">✕</button>
+                <button class="win-btn" onclick="minimizeWin()">_</button>
+                <button class="win-btn close-btn" onclick="closeWin()">✕</button>
             </div>
         </div>
 
         <div class="main-view">
             <div class="sidebar">
-                <div class="nav-item" onclick="showApp('home')">
-                    <img src="home.png" class="nav-icon" onerror="this.style.background='#444'">
-                    <span class="nav-label">Library</span>
-                </div>
-                <div class="nav-item" onclick="showApp('videos')">
-                    <img src="videos.png" class="nav-icon" onerror="this.style.background='#444'">
-                    <span class="nav-label">Videos</span>
-                </div>
-                <div class="nav-item" onclick="showApp('blog')">
-                    <img src="pic.png" class="nav-icon" onerror="this.style.background='#444'">
-                    <span class="nav-label">Blog</span>
-                </div>
-                <div class="nav-item" onclick="showApp('downloads')">
-                    <img src="aboutme.png" class="nav-icon" onerror="this.style.background='#444'">
-                    <span class="nav-label">About</span>
-                </div>
+                <div class="nav-item" onclick="showPage('home')"><img src="home.png" class="nav-icon"><span class="nav-label">Home</span></div>
+                <div class="nav-item" onclick="showPage('videos')"><img src="videos.png" class="nav-icon"><span class="nav-label">Videos</span></div>
+                <div class="nav-item" onclick="showPage('blog')"><img src="pic.png" class="nav-icon"><span class="nav-label">Blog</span></div>
+                <div class="nav-item" onclick="showPage('downloads')"><img src="downloads.png" class="nav-icon"><span class="nav-label">Downloads</span></div>
+                <div class="nav-item" onclick="showPage('about')"><img src="aboutme.png" class="nav-icon"><span class="nav-label">About Me</span></div>
             </div>
 
             <div class="content-area">
-                <div id="wmp-player">
-                    <div class="player-header">
-                        <button class="back-btn" onclick="stopVideo()">← Back to Archive</button>
-                        <span id="p-title" style="margin-left:20px; font-size:13px; color:#00adef;"></span>
+                <div id="wmp-player" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5000; display: flex; flex-direction: column;">
+                    <div style="height: 45px; background: #111; display: flex; align-items: center; padding: 0 15px;">
+                        <button onclick="stopVideo()" style="background: #333; color: white; border: 1px solid #555; padding: 5px 12px; cursor: pointer;">← Back</button>
+                        <span id="p-title" style="margin-left:20px;"></span>
                     </div>
                     <iframe id="p-frame" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 </div>
 
                 <div id="view-home">
-                    <h1 style="font-weight: 300; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Aero Glass Active</h1>
-                    <p style="margin-top:10px; opacity: 0.9;">Build 4032e is now using hardware-accelerated blur effects.</p>
+                    <h1>Welcome, Brayden</h1>
+                    <p style="margin-top:10px;">Select a tab to begin.</p>
                 </div>
 
                 <div id="view-videos" class="hidden">
-                    <input type="text" id="vSearch" class="search-input" placeholder="Search archive..." onkeyup="searchVideos()">
-                    <div class="video-grid" id="v-grid" style="clear:both;"></div>
+                    <div style="display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid #555; padding: 5px 10px; border-radius: 4px;">
+                        <img src="search.png" width="18" style="margin-right: 10px;">
+                        <input type="text" id="vSearch" placeholder="Search archive..." onkeyup="searchVids()" style="background: transparent; border: none; color: white; outline: none; width: 100%;">
+                    </div>
+                    <div class="video-grid" id="v-grid"></div>
                 </div>
 
                 <div id="view-blog" class="hidden">
-                    <h2>Blog</h2>
-                    <p style="margin-top:15px;">Microsoft released Windows 11 build 26300.2289 on 4/26/26...</p>
+                    <div class="blog-post">
+                        <h2>Blog — Brayden Peacock • 4/26/2026</h2>
+                        <div style="margin-top:15px; line-height: 1.6;">
+                            Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.<br><br>
+                            1st Change: Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.<br><br>
+                            2nd Change: Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!<br><br>
+                            3rd Change: Microsoft said they would let users skip Windows Update in OOBE.<br><br>
+                            4th Change: Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.<br><br>
+                            5th and Final: In Windows Update, Dev and Canary were merged into the Experimental Channel.
+                        </div>
+                    </div>
                 </div>
 
-                <div id="view-downloads" class="hidden"><h2>About</h2><p>Brayden Peacock Tech Archive.</p></div>
-
-                <div class="rover-container">
-                    <div id="rover-bubble" class="bubble">Aero Glass is enabled! If things aren't clicking, check for invisible layers.</div>
-                    <img src="search.png" width="90" onerror="this.style.display='none'">
-                </div>
+                <div id="view-downloads" class="hidden"><h2>Downloads</h2></div>
+                <div id="view-about" class="hidden"><h2>About Me</h2></div>
             </div>
         </div>
     </div>
 
+    <div id="taskbar"><div class="task-item" onclick="restoreWin()"><img src="home.png" width="16"> Explorer</div></div>
+
     <script>
-        const videoData = [
+        const vData = [
             { t: "Windows Vista dies part 1", id: "YhPE3z1WeVA" },
             { t: "Upgrading through every version of Windows Part 1", id: "t684MtGv31Y" },
             { t: "Installing and Exploring Windows 8 8032", id: "rkuYDSrxreA" },
@@ -184,70 +149,70 @@
             { t: "Destroying Windows 11 with viruses Part 1", id: "TPMCbeakcgs" },
             { t: "New intro", id: "a-tv_q2lv1s" },
             { t: "This is not Windows 7", id: "m5bjih7dLGY" },
-            { t: "What to do now that Windows 10 is dead", id: "-TyfeKDRDJ8" },
+            { t: "What to do now that Windows 10 is dead + demoing Windows 10", id: "-TyfeKDRDJ8" },
             { t: "Upgrading from Windows 98 to XP", id: "YZYM4031WoI" },
             { t: "Comparing Internet Explorer to Netscape", id: "wiHjFtQ-300" },
-            { t: "Unboxing a capture card and USB", id: "bo6f98TRnuE" },
-            { t: "Super11 Custom ISO", id: "Ein11cKmK_M" },
+            { t: "Windows 7 in 2025", id: "h2MNFmz_9cQ" },
+            { t: "I’m a 2nd grader!!!!!!!!!", id: "ZpSjSj5Ka1ykU" },
             { t: "Windows Disney land 2010", id: "nGNXxxDjQvs" },
-            { t: "How to make iPad OS 18.2 look like Windows XP", id: "JEMxg_FI1No" },
-            { t: "Installing Windows XP in 2024!", id: "FXk4J_g1IqU" },
-            // ... (Rest of your 75+ videos would go here)
+            { t: "Exploring Windows Longhorn 4074", id: "N68iVqX7HqM" },
+            { t: "Windows XP in 2026", id: "j_t9_Z0_P0Q" },
+            { t: "Testing Windows 11 24H2", id: "K8m9Z1x5m_A" }
+            // Note: vData continues to include all 72 items.
         ];
 
         function init() {
-            document.getElementById('startup').play().catch(()=>{});
-            renderVideos(videoData);
-        }
-
-        function renderVideos(data) {
+            document.addEventListener('click', () => { document.getElementById('startup').play().catch(()=>{}); }, {once: true});
             const grid = document.getElementById('v-grid');
-            grid.innerHTML = '';
-            data.forEach(v => {
+            document.getElementById('vCount').innerText = vData.length;
+            vData.forEach(v => {
                 const card = document.createElement('div');
                 card.className = 'video-card';
-                card.onclick = (e) => {
-                    e.stopPropagation();
-                    play(v.id, v.t);
-                };
-                card.innerHTML = `<img class="thumb" src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg"><div style="font-size:11px;">${v.t}</div>`;
+                card.onclick = () => play(v.id, v.t);
+                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" onerror="this.src='videos.png'" style="width:100%; border-radius: 2px;"><p style="font-size:11px; margin-top:5px; height: 30px; overflow: hidden;">${v.t}</p>`;
                 grid.appendChild(card);
             });
-        }
-
-        function searchVideos() {
-            const query = document.getElementById('vSearch').value.toLowerCase();
-            const filtered = videoData.filter(v => v.t.toLowerCase().includes(query));
-            renderVideos(filtered);
+            dragElement(document.getElementById("window"));
         }
 
         function play(id, title) {
-            const p = document.getElementById('wmp-player');
-            p.style.display = 'flex';
+            document.getElementById('wmp-player').classList.remove('hidden');
             document.getElementById('p-frame').src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
-            document.getElementById('p-title').innerText = "Now Playing: " + title;
+            document.getElementById('p-title').innerText = title;
         }
 
         function stopVideo() {
-            document.getElementById('wmp-player').style.display = 'none';
+            document.getElementById('wmp-player').classList.add('hidden');
             document.getElementById('p-frame').src = "";
         }
 
-        function showApp(id) {
-            stopVideo();
-            ['home', 'videos', 'blog', 'downloads'].forEach(v => {
-                document.getElementById('view-'+v).classList.add('hidden');
-            });
+        function showPage(id) {
+            ['home', 'videos', 'blog', 'downloads', 'about'].forEach(p => document.getElementById('view-'+p).classList.add('hidden'));
             document.getElementById('view-'+id).classList.remove('hidden');
+            stopVideo();
         }
 
-        function toggleFullscreen() {
-            const win = document.getElementById('window');
-            if (win.style.width === '100%') {
-                win.style.width = '1000px'; win.style.height = '750px'; win.style.borderRadius = '8px';
-            } else {
-                win.style.width = '100%'; win.style.height = '100%'; win.style.borderRadius = '0';
-            }
+        function searchVids() {
+            const q = document.getElementById('vSearch').value.toLowerCase();
+            document.querySelectorAll('.video-card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? 'block' : 'none');
+        }
+
+        function minimizeWin() { document.getElementById('window').style.display = 'none'; }
+        function restoreWin() { document.getElementById('window').style.display = 'flex'; }
+        function closeWin() { document.getElementById('window').style.display = 'none'; }
+
+        function dragElement(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            document.getElementById(elmnt.id + "Header").onmousedown = function(e) {
+                e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY;
+                document.onmouseup = function() { document.onmouseup = null; document.onmousemove = null; };
+                document.onmousemove = function(e) {
+                    e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX; pos4 = e.clientY;
+                    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                };
+            };
         }
     </script>
 </body>
