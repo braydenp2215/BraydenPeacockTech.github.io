@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BraydenPeacockTech - Build 4032w</title>
+    <title>BraydenPeacockTech - Build 4032z</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { 
@@ -10,18 +10,6 @@
             font-family: 'Segoe UI', Tahoma, sans-serif; 
             background: #004578 url('wallpaper.jpg') no-repeat center center fixed;
             background-size: cover;
-        }
-
-        #taskbar {
-            position: fixed; bottom: 0; width: 100%; height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.3);
-            display: flex; align-items: center; padding: 0 10px; z-index: 10000;
-        }
-        .task-item {
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
-            color: white; padding: 5px 15px; border-radius: 3px; cursor: pointer; font-size: 12px;
-            display: flex; align-items: center; gap: 8px;
         }
 
         #window {
@@ -45,50 +33,52 @@
         .win-btn { width: 45px; height: 22px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; }
         .close-btn:hover { background: #e81123; }
 
-        .main-view { display: flex; flex: 1; overflow: hidden; position: relative; }
+        .main-view { display: flex; flex: 1; overflow: hidden; }
         
-        .sidebar { width: 140px; background: rgba(0,0,0,0.2); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding-top: 15px; }
-        .nav-item { margin-bottom: 20px; color: white; cursor: pointer; text-align: center; width: 100%; padding: 10px 0; transition: 0.2s; }
+        .sidebar { width: 150px; background: rgba(0,0,0,0.3); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; padding-top: 15px; }
+        .nav-item { 
+            padding: 15px 0; color: white; cursor: pointer; text-align: center; 
+            transition: 0.2s; border-left: 3px solid transparent;
+        }
         .nav-item:hover { background: rgba(255,255,255,0.1); }
-        .nav-icon { width: 32px; height: 32px; display: block; margin: 0 auto 5px; }
-        .nav-label { font-size: 11px; text-shadow: 0 1px 2px black; }
+        .nav-item.active { background: rgba(255,255,255,0.15); border-left: 3px solid #00adef; }
+        .nav-icon { width: 36px; height: 36px; display: block; margin: 0 auto 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+        .nav-label { font-size: 12px; text-shadow: 0 1px 2px black; font-weight: 500; }
 
-        .content-area { flex: 1; display: flex; flex-direction: column; background: rgba(0,0,0,0.25); }
+        .content-area { flex: 1; background: rgba(0,0,0,0.2); position: relative; overflow: hidden; }
+        .tab-content { display: none; width: 100%; height: 100%; flex-direction: column; padding: 20px; color: white; }
+        .tab-content.active { display: flex; }
 
-        /* Video List Area */
-        .video-container { flex: 1; overflow-y: auto; padding: 20px; }
-        .search-box { width: 100%; padding: 8px; background: rgba(0,0,0,0.4); border: 1px solid #555; color: white; border-radius: 4px; margin-bottom: 20px; outline: none; }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-        .video-card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 5px; cursor: pointer; border-radius: 3px; transition: 0.1s; }
-        .video-card:hover { border-color: #5da9e9; transform: scale(1.02); }
-        .video-card p { font-size: 11px; color: white; margin-top: 5px; height: 28px; overflow: hidden; line-height: 1.3; }
+        /* Unified Video Tab Styles */
+        #video-list-view { display: flex; flex-direction: column; height: 100%; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; overflow-y: auto; flex: 1; }
+        .video-card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 8px; cursor: pointer; border-radius: 4px; transition: 0.1s; }
+        .video-card:hover { border-color: #5da9e9; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        .video-card p { font-size: 12px; margin-top: 8px; line-height: 1.4; height: 34px; overflow: hidden; }
 
-        /* Docked Legacy Player */
-        #legacy-player {
-            height: 400px; background: #000;
-            display: none; flex-direction: column;
-            border-top: 2px solid #444; position: relative;
-        }
-        .legacy-header {
-            background: linear-gradient(to right, rgba(0,173,239,0.3), transparent);
-            padding: 6px 15px; font-size: 11px; color: #5da9e9; border-bottom: 1px solid #222;
-        }
+        /* Player View (Inside Video Tab) */
+        #video-player-view { display: none; flex-direction: column; height: 100%; background: #000; border-radius: 4px; overflow: hidden; }
+        .player-header { background: #111; padding: 10px 15px; font-size: 12px; color: #00adef; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
+        .back-btn { cursor: pointer; color: white; text-decoration: underline; }
+        .video-frame-wrap { flex: 1; background: black; }
+        
         .legacy-controls {
-            height: 70px; background: linear-gradient(to bottom, #2a2a2a, #000);
-            display: flex; align-items: center; justify-content: center; gap: 15px;
-            border-top: 1px solid #444;
+            height: 80px; background: linear-gradient(to bottom, #2a2a2a, #000);
+            display: flex; align-items: center; justify-content: center; gap: 20px;
         }
         .l-btn {
-            width: 40px; height: 40px; border-radius: 50%;
+            width: 45px; height: 45px; border-radius: 50%;
             background: radial-gradient(circle, #5da9e9, #1c4a7a);
             border: 2px solid #fff; color: white; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 18px;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+            box-shadow: 0 0 10px rgba(0,173,239,0.5);
         }
-        .l-btn-small {
-            width: 30px; height: 30px; border-radius: 50%;
-            background: #333; border: 1px solid #666; color: #ccc; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 12px;
-        }
+
+        .search-box { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid #444; color: white; border-radius: 6px; margin-bottom: 20px; font-size: 14px; }
+        
+        /* Blog Styling */
+        .blog-post { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); line-height: 1.6; }
+        .blog-post b { color: #00adef; }
     </style>
 </head>
 <body onload="init()">
@@ -97,49 +87,84 @@
 
     <div id="window">
         <div class="title-bar" id="windowHeader">
-            <span class="title-text">Windows Media Player Legacy - Brayden Peacock Tech Archive</span>
+            <span class="title-text">Windows Media Player Legacy - Brayden Peacock Tech</span>
             <div class="controls">
-                <button class="win-btn" onclick="minimizeWin()">_</button>
-                <button class="win-btn close-btn" onclick="closeWin()">✕</button>
+                <button class="win-btn">_</button>
+                <button class="win-btn close-btn">✕</button>
             </div>
         </div>
 
         <div class="main-view">
             <div class="sidebar">
-                <div class="nav-item"><img src="videos.png" class="nav-icon"><span class="nav-label">Library</span></div>
-                <div class="nav-item"><img src="downloads.png" class="nav-icon"><span class="nav-label">Playlists</span></div>
-                <div class="nav-item"><img src="pic.png" class="nav-icon"><span class="nav-label">Pictures</span></div>
+                <div class="nav-item active" onclick="showTab('home')">
+                    <img src="https://cdn0.iconfinder.com/data/icons/computer-7/100/computer-08-512.png" class="nav-icon">
+                    <span class="nav-label">Home</span>
+                </div>
+                <div class="nav-item" onclick="showTab('videos')">
+                    <img src="https://cdn0.iconfinder.com/data/icons/computer-7/100/computer-01-512.png" class="nav-icon">
+                    <span class="nav-label">Videos</span>
+                </div>
+                <div class="nav-item" onclick="showTab('downloads')">
+                    <img src="https://cdn0.iconfinder.com/data/icons/computer-7/100/computer-17-512.png" class="nav-icon">
+                    <span class="nav-label">Downloads</span>
+                </div>
+                <div class="nav-item" onclick="showTab('blog')">
+                    <img src="https://cdn0.iconfinder.com/data/icons/computer-7/100/computer-61-512.png" class="nav-icon">
+                    <span class="nav-label">Blog</span>
+                </div>
             </div>
 
             <div class="content-area">
-                <div class="video-container">
-                    <input type="text" id="vSearch" class="search-box" placeholder="Search your videos..." onkeyup="searchVids()">
-                    <div class="video-grid" id="v-grid"></div>
+                <div id="home" class="tab-content active">
+                    <h2>Welcome back</h2>
+                    <p style="margin-top:10px; color:#ccc;">Select the Videos tab to browse the archive.</p>
                 </div>
 
-                <div id="legacy-player">
-                    <div class="legacy-header">
-                        Now Playing: <span id="now-playing-title">None</span>
-                        <button style="float:right; background:transparent; border:none; color:white; cursor:pointer;" onclick="closePlayer()">[X]</button>
+                <div id="videos" class="tab-content" style="padding: 15px;">
+                    <div id="video-list-view">
+                        <input type="text" id="vSearch" class="search-box" placeholder="Search archive..." onkeyup="searchVids()">
+                        <div class="video-grid" id="v-grid"></div>
                     </div>
-                    <div style="flex: 1; background: black;">
-                        <iframe id="video-frame" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen"></iframe>
-                    </div>
-                    <div class="legacy-controls">
-                        <div class="l-btn-small">⏮</div>
-                        <div class="l-btn" onclick="closePlayer()">■</div>
-                        <div class="l-btn" style="width:50px; height:50px; font-size: 24px;">►</div>
-                        <div class="l-btn-small">⏭</div>
-                        <div style="width: 180px; height: 5px; background: #333; margin-left: 20px; border-radius: 3px; border: 1px solid #444;">
-                            <div style="width: 65%; height: 100%; background: #00adef;"></div>
+                    <div id="video-player-view">
+                        <div class="player-header">
+                            <span>NOW PLAYING: <span id="cur-title">...</span></span>
+                            <span class="back-btn" onclick="backToList()">Return to Library</span>
                         </div>
+                        <div class="video-frame-wrap">
+                            <iframe id="video-frame" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen"></iframe>
+                        </div>
+                        <div class="legacy-controls">
+                            <div class="l-btn" onclick="backToList()">⏮</div>
+                            <div class="l-btn" style="width:60px; height:60px; font-size:30px;">►</div>
+                            <div class="l-btn" onclick="stopVid()">■</div>
+                            <div style="width: 250px; height: 6px; background: #333; margin-left: 20px; border-radius: 3px; position:relative;">
+                                <div style="width: 65%; height: 100%; background: #00adef; border-radius:3px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="downloads" class="tab-content">
+                    <h2>Available Resources</h2>
+                    <p style="margin-top:10px;">Build 4032z Patch Files</p>
+                </div>
+
+                <div id="blog" class="tab-content">
+                    <div class="blog-post">
+                        <h2>Windows 11 Build 26300.2289 Update</h2>
+                        <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Published: 4/26/26</p>
+                        <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p><br>
+                        <p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p><br>
+                        <p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p><br>
+                        <p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p><br>
+                        <p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p><br>
+                        <p><b>5th and Final:</b> In Windows Update, Dev and Canary were merged into the Experimental Channel.</p><br>
+                        <p><i>Thanks for reading this blog and have a great day.</i></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="taskbar"><div class="task-item" onclick="restoreWin()">Media Player</div></div>
 
     <script>
         const vData = [
@@ -222,45 +247,41 @@
             vData.forEach(v => {
                 const card = document.createElement('div');
                 card.className = 'video-card';
-                card.onclick = () => playVideo(v.id, v.t);
-                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" style="width:100%; border-radius: 2px;"><p>${v.t}</p>`;
+                card.onclick = () => loadVideo(v.id, v.t);
+                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" style="width:100%;"><p>${v.t}</p>`;
                 grid.appendChild(card);
             });
-            dragElement(document.getElementById("window"));
         }
 
-        function playVideo(id, title) {
-            document.getElementById('legacy-player').style.display = 'flex';
-            document.getElementById('video-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-            document.getElementById('now-playing-title').innerText = title;
+        function showTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+            if(id !== 'videos') stopVid(); // Clear player if leaving tab
         }
 
-        function closePlayer() {
-            document.getElementById('legacy-player').style.display = 'none';
+        function loadVideo(id, title) {
+            document.getElementById('video-list-view').style.display = 'none';
+            document.getElementById('video-player-view').style.display = 'flex';
+            document.getElementById('video-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1&controls=0&modestbranding=1&rel=0`;
+            document.getElementById('cur-title').innerText = title;
+        }
+
+        function backToList() {
+            document.getElementById('video-list-view').style.display = 'flex';
+            document.getElementById('video-player-view').style.display = 'none';
+            stopVid();
+        }
+
+        function stopVid() {
             document.getElementById('video-frame').src = "";
+            document.getElementById('cur-title').innerText = "...";
         }
 
         function searchVids() {
             const q = document.getElementById('vSearch').value.toLowerCase();
             document.querySelectorAll('.video-card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? 'block' : 'none');
-        }
-
-        function minimizeWin() { document.getElementById('window').style.display = 'none'; }
-        function restoreWin() { document.getElementById('window').style.display = 'flex'; }
-        function closeWin() { document.getElementById('window').style.display = 'none'; }
-
-        function dragElement(elmnt) {
-            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            document.getElementById(elmnt.id + "Header").onmousedown = function(e) {
-                e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY;
-                document.onmouseup = function() { document.onmouseup = null; document.onmousemove = null; };
-                document.onmousemove = function(e) {
-                    e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
-                    pos3 = e.clientX; pos4 = e.clientY;
-                    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-                    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-                };
-            };
         }
     </script>
 </body>
