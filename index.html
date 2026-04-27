@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BraydenPeacockTech - Build 4032c</title>
+    <title>BraydenPeacockTech - Build 4032e</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif; background: #003366; }
+        body, html { 
+            width: 100%; height: 100%; overflow: hidden; 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: #003366 url('wallpaper.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
         
         #window {
             position: absolute; top: 30px; left: 30px; width: 1000px; height: 700px;
             background: rgba(45, 115, 185, 0.9); border: 2px solid rgba(255, 255, 255, 0.6);
             border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            display: flex; flex-direction: column; z-index: 100; transition: all 0.3s ease;
+            display: flex; flex-direction: column; z-index: 100; transition: all 0.2s ease;
         }
 
-        /* Fullscreen Blog Mode */
         #window.fullscreen { top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; border-radius: 0; }
 
         .title-bar { height: 40px; padding: 0 15px; display: flex; justify-content: space-between; align-items: center; cursor: move; background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent); user-select: none; }
@@ -31,25 +35,51 @@
         .icon-img { width: 42px; height: 42px; filter: drop-shadow(0 2px 4px black); }
         .icon-label { color: white; font-size: 10px; margin-top: 5px; text-align: center; }
 
-        .content-area { flex: 1; padding: 30px; color: white; background: rgba(0,0,0,0.2); overflow-y: auto; }
+        .content-area { flex: 1; padding: 30px; color: white; background: rgba(0,0,0,0.2); overflow-y: auto; position: relative; }
         
-        /* Video Grid */
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .video-card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; text-align: center; cursor: pointer; }
-        .video-card:hover { background: rgba(255,255,255,0.2); }
-        .video-thumb { width: 100%; border-radius: 3px; margin-bottom: 8px; }
-        .video-title { font-size: 12px; height: 35px; overflow: hidden; line-height: 1.2; }
+        /* Global Search Box Styling */
+        .global-search-container { position: sticky; top: -30px; float: right; margin-bottom: 20px; z-index: 50; }
+        .search-box { padding: 6px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.4); background: rgba(0,0,0,0.5); color: white; width: 200px; outline: none; }
+        .search-box:focus { border-color: #00adef; }
 
-        /* Blog Styling */
-        .blog-preview { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; border-left: 4px solid #00adef; }
-        .see-more { color: #00adef; cursor: pointer; font-weight: bold; text-decoration: underline; margin-top: 10px; display: inline-block; }
-        .full-blog-view { line-height: 1.8; font-size: 16px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; clear: both; }
+        .video-card { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 5px; text-align: left; cursor: pointer; transition: 0.2s; }
+        .video-card:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
+        .video-thumb { width: 100%; border-radius: 3px; margin-bottom: 8px; }
+        .video-title { font-size: 12px; font-weight: bold; height: 40px; overflow: hidden; }
+
+        /* Windows Media Player 12 Style Overlay */
+        #wmp-player {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 200; display: flex; flex-direction: column;
+        }
+        .wmp-header {
+            height: 50px; background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
+            display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .wmp-video-container { flex: 1; display: flex; justify-content: center; background: black; }
+        .wmp-controls {
+            height: 100px; background: linear-gradient(to top, rgba(30, 30, 30, 0.9), rgba(60, 60, 60, 0.8));
+            border-top: 1px solid rgba(255,255,255,0.2); display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .wmp-buttons { display: flex; gap: 20px; align-items: center; margin-top: 10px; }
+        .play-btn { 
+            width: 50px; height: 50px; border-radius: 50%; border: 2px solid white; 
+            background: radial-gradient(circle, #444, #111); color: white; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; font-weight: bold;
+            box-shadow: 0 0 10px rgba(0,173,239,0.5);
+        }
+        .wmp-seekbar { width: 80%; height: 5px; background: #333; margin-top: 10px; position: relative; border-radius: 5px; }
+        .wmp-progress { width: 30%; height: 100%; background: #00adef; border-radius: 5px; box-shadow: 0 0 8px #00adef; }
+
+        .blog-preview { background: rgba(0,0,0,0.4); padding: 25px; border-radius: 8px; border-left: 5px solid #00adef; clear: both; }
+        .see-more { color: #00adef; cursor: pointer; font-weight: bold; text-decoration: underline; margin-top: 15px; display: inline-block; }
+        .full-blog-view { line-height: 1.8; font-size: 16px; background: rgba(0,0,0,0.6); padding: 40px; border-radius: 10px; clear: both; }
 
         .hidden { display: none; }
         
-        /* Rover */
         .rover-container { position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; z-index: 1000; }
-        .bubble { background: #ffffcc; color: black; padding: 10px; border-radius: 10px; border: 1px solid #999; font-size: 12px; margin-bottom: 5px; width: 140px; text-align: center; }
+        .bubble { background: #ffffcc; color: black; padding: 10px; border-radius: 10px; border: 1px solid #999; font-size: 12px; margin-bottom: 5px; width: 140px; text-align: center; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body onload="playStartup()">
@@ -58,7 +88,7 @@
 
     <div id="window">
         <div id="drag-handle" class="title-bar">
-            <span class="title-text">Explorer - Build 4032c (Content Creator)</span>
+            <span class="title-text">Explorer - Build 4032e</span>
             <div class="controls">
                 <div class="btn" onclick="toggleFullscreen()">[ ]</div>
                 <div class="btn close" onclick="document.getElementById('window').style.display='none'">X</div>
@@ -73,24 +103,46 @@
                 <div class="icon-box" onclick="openApp('About')"><img src="aboutme.png" class="icon-img"><span class="icon-label">About</span></div>
             </div>
             
-            <div class="content-area" id="content-main">
+            <div class="content-area" id="main-content-scroll">
+                
+                <div id="wmp-player" class="hidden">
+                    <div class="wmp-header">
+                        <button onclick="closeVideo()" style="background:none; border:1px solid white; color:white; cursor:pointer; padding:2px 10px; margin-right:15px;">&larr; Library</button>
+                        <span id="now-playing-title" style="font-size:14px; font-weight:lighter;">Now Playing</span>
+                    </div>
+                    <div class="wmp-video-container">
+                        <iframe id="wmp-iframe" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    </div>
+                    <div class="wmp-controls">
+                        <div class="wmp-seekbar"><div class="wmp-progress"></div></div>
+                        <div class="wmp-buttons">
+                            <span style="color:white; cursor:pointer;">⏮</span>
+                            <div class="play-btn">||</div>
+                            <span style="color:white; cursor:pointer;">⏭</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="global-search-container" id="search-area">
+                    <input type="text" id="globalSearch" class="search-box" placeholder="Search page..." onkeyup="handleGlobalSearch()">
+                </div>
+
                 <div id="Home-app">
-                    <h1>Welcome, Brayden</h1>
-                    <p>Build 4032c: 70+ Videos indexed and Blog logic updated.</p>
+                    <h1>System Explorer</h1>
+                    <p>Build 4032e is running. Use the search box above to find content on any page.</p>
                 </div>
 
                 <div id="Blog-app" class="hidden">
-                    <h1>Tech Blog</h1>
                     <div id="blog-list">
                         <div class="blog-preview">
                             <h2>Is Microsoft finally doing things right?</h2>
-                            <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about the big changes...</p>
+                            <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it...</p>
                             <span class="see-more" onclick="showFullBlog()">See More (Fullscreen)</span>
                         </div>
                     </div>
                     
                     <div id="full-blog-view" class="hidden full-blog-view">
-                        <button onclick="hideFullBlog()" style="margin-bottom: 20px; padding: 5px 15px;">&larr; Back to List</button>
+                        <button onclick="hideFullBlog()" style="margin-bottom: 20px; cursor: pointer;">&larr; Back to List</button>
                         <h2>Is Microsoft finally doing things right?</h2>
                         <hr><br>
                         <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p>
@@ -105,14 +157,13 @@
 
                 <div id="Videos-app" class="hidden">
                     <h1>Video Archive</h1>
-                    <div class="video-grid" id="video-grid">
-                        </div>
+                    <div class="video-grid" id="video-grid"></div>
                 </div>
 
                 <div id="About-app" class="hidden"><h1>About</h1><p>Created by Brayden Peacock.</p></div>
 
                 <div class="rover-container">
-                    <div id="rover-bubble" class="bubble">Woof! Ready to help!</div>
+                    <div id="rover-bubble" class="bubble">Woof! Search is active!</div>
                     <img id="rover-img" src="search.png" width="80">
                 </div>
             </div>
@@ -122,60 +173,94 @@
     <script>
         const videoData = [
             { t: "Windows Vista dies part 1", id: "YhPE3z1WeVA" },
-            { t: "Upgrading Windows Part 1", id: "t684MtGv31Y" },
-            { t: "Exploring Windows 8 8032", id: "rkuYDSrxreA" },
+            { t: "Upgrading through every version of Windows Part 1", id: "t684MtGv31Y" },
+            { t: "Installing and Exploring Windows 8 8032", id: "rkuYDSrxreA" },
             { t: "The Evolution of Windows", id: "49OH_v64Fpg" },
             { t: "New BetaTester Intro", id: "XR2AoWhmjMk" },
-            { t: "Windows 10 like its 2016", id: "ugu-VQdo-8I" },
-            { t: "Windows 11 Build 29531", id: "Psd7wpNbGRQ" },
+            { t: "Upgrading to Windows 10 like its 2016", id: "ugu-VQdo-8I" },
+            { t: "Exploring Windows 11 Build 29531.1000", id: "Psd7wpNbGRQ" },
             { t: "My PC and a weird video", id: "vFLD3-0Cs4E" },
-            { t: "Windows 10 10074", id: "CNeIqVY3niM" },
-            { t: "Windows Part 2", id: "b5A4vUXMPpg" },
+            { t: "Installing & Exploring Windows 10 10074", id: "CNeIqVY3niM" },
+            { t: "Upgrading through almost every version of Windows Part 2", id: "b5A4vUXMPpg" },
             { t: "System", id: "mEoJBW3VvGQ" },
-            { t: "Destroying Windows 11", id: "TPMCbeakcgs" },
+            { t: "Destroying Windows 11 with viruses Part 1", id: "TPMCbeakcgs" },
             { t: "New intro", id: "a-tv_q2lv1s" },
             { t: "This is not Windows 7", id: "m5bjih7dLGY" },
-            { t: "When Windows 10 dies", id: "-TyfeKDRDJ8" },
-            { t: "Win 98 to XP", id: "YZYM4031WoI" },
-            { t: "IE vs Netscape", id: "wiHjFtQ-300" },
-            { t: "Unboxing Capture Card", id: "bo6f98TRnuE" },
-            { t: "Custom Win 11 Super11", id: "Ein11cKmK_M" },
-            { t: "Win 11 to 7 Downgrade", id: "HPSvLlfXlfU" },
-            { t: "IE on Windows 11", id: "jPHLOu8Asrs" },
-            { t: "VMware USB Fix", id: "_jmvMho7Ma0" },
-            { t: "Death of Win 98 Part 2", id: "m14Bc0IZfl4" },
-            { t: "Death of Win 98 Part 1", id: "joBF9Sq2dLs" },
-            { t: "Win 8 Build 8400", id: "agfaLn7rDK4" },
-            { t: "Responding to Comments", id: "E1g4QOSH8BQ" },
-            { t: "Aero on Home Server 2011", id: "M_-ylb6CMxo" },
-            { t: "KDE Plasma to MacOS", id: "3hUNgGIPGq0" },
-            { t: "KDE to Windows 7", id: "TcZhKPimrE8" },
-            { t: "WORMLOCKER2.0 TESTING", id: "6xbv7uBjvpc" },
+            { t: "What to do now that Windows 10 is dead + demoing Windows 10", id: "-TyfeKDRDJ8" },
+            { t: "Upgrading from Windows 98 to XP", id: "YZYM4031WoI" },
+            { t: "Comparing Internet Explorer to Netscape", id: "wiHjFtQ-300" },
+            { t: "Unboxing a capture card and USB", id: "bo6f98TRnuE" },
+            { t: "Checking out my own custom Windows 11 ISO Super11", id: "Ein11cKmK_M" },
+            { t: "What happens if you downgrade from Windows 11 21H2 to Windows 7", id: "HPSvLlfXlhU" },
+            { t: "How to get Internet Explorer on Windows 11 26H1", id: "jPHLOu8Asrs" },
+            { t: "How to fix not seeing your USB drive on VMware Workstation", id: "_jmvMho7Ma0" },
+            { t: "The death of Windows 98 Part 2", id: "m14Bc0IZfl4" },
+            { t: "The death of Windows 98 Part 1", id: "joBF9Sq2dLs" },
+            { t: "Installing and exploring Windows 8 build 8400", id: "agfaLn7rDK4" },
+            { t: "Responding to your comments", id: "E1g4QOSH8BQ" },
+            { t: "How to get aero on Windows Home Server 2011", id: "M_-ylb6CMxo" },
+            { t: "Installing and Exploring Windows Home Server 2011", id: "LDZt379o_lc" },
+            { t: "Making KDE Plasma look like MacOS Part 1", id: "3hUNgGIPGq0" },
+            { t: "Making KDE look like Windows 7", id: "TcZhKPimrE8" },
+            { t: "WORMLOCKER2.0 TESTING & REMOVING", id: "6xbv7uBjvpc" },
             { t: "Apple Virus scam", id: "t36ydsEosCk" },
-            { t: "Debloat Windows 11", id: "tJbyDsGcToY" },
-            { t: "Linux KDE Plasma", id: "gXcSpdkg81I" },
-            { t: "Windows 7 in 2025", id: "h2MNFmz_9cQ" },
-            { t: "Moon Valley Mod", id: "63Q01QdKVy4" },
-            { t: "Windows Gangster Edition", id: "gX9c00yMaEo" },
-            { t: "Replace Win 7 Explorer", id: "YLAY0QOJnsc" },
-            { t: "Uninstall Edge Fast", id: "T0PiQlQ9E14" },
-            { t: "Win 10 ISO", id: "1L8_866l110" },
-            { t: "Win 11 to 10 RTM", id: "_F0tT7GP4_E" },
-            { t: "iPad OS to Win XP", id: "JEMxg_FI1No" },
-            { t: "Win XP in 2024", id: "FXk4J_g1IqU" }
+            { t: "How to debloat Windows 11 with your CPU Usage", id: "tJbyDsGcToY" },
+            { t: "Testing out the Amazon Water protecter for phones", id: "2fQyd0UfSi8" },
+            { t: "Trying out Linux (KDE Plasma)", id: "gXcSpdkg81I" },
+            { t: "How to install and use Windows Subsystem for Linux", id: "IBg2H1u1HpA" },
+            { t: "How to make Windows 11 Your own", id: "7JPITMQp6j8" },
+            { t: "Skipping Windows 11's OOBE after install again", id: "cqRLWrsqqX4" },
+            { t: "Skipping Windows 11's OOBE after install", id: "iVixjzp-XyM" },
+            { t: "How to use Windows 7 in 2025", id: "h2MNFmz_9cQ" },
+            { t: "How to get rid of bloat on Windows 11 almost Part 2", id: "0BDhryTnqWg" },
+            { t: "Intro for channel", id: "rLyxbi0FFlA" },
+            { t: "The Intro for videos now", id: "eD7bauXOvwE" },
+            { t: "How to get rid of bloat on Windows 11 almost", id: "SFILY3bloNQ" },
+            { t: "Is Windows Moon Valley the best Windows 11 mod?", id: "63Q01QdKVy4" },
+            { t: "Windows Gangster edition is just Normal Stock Windows XP", id: "gX9c00yMaEo" },
+            { t: "Looking at Windows Gangster Edition Gone Wrong", id: "Q-YW3l_s-Bc" },
+            { t: "What happens if you replace Windows 7's Explorer with Windows Vista's Explorer.exe", id: "YLAY0QOJnsc" },
+            { t: "I broke my search bar", id: "y3YR9beWCs4" },
+            { t: "How to uninstall Microsoft Edge the right and fast way", id: "T0PiQlQ9E14" },
+            { t: "The future of this channel", id: "yJc7saKmW5k" },
+            { t: "Worst things that happens when you're kids", id: "OeLdDZKpeNY" },
+            { t: "How to get Windows 10 iso", id: "1L8_866l110" },
+            { t: "What to do when Windows 10 Dies Part 1", id: "qLGItvVwgJ8" },
+            { t: "Checking out Transformation Pack 10to7 By ImSwordQueen", id: "4hEABDobIo8" },
+            { t: "Features on Windows 8 build 7899", id: "-SfUAdZ0Pik" },
+            { t: "Is Windows 11 still Windows 10 and why does Windows 11 use Windows 10's NT version", id: "yyrusivy-y4" },
+            { t: "Checking out Geckium on Firefox 138", id: "k8a5JwIiSzY" },
+            { t: "Reacting to some of my other YouTube videos Part 2", id: "znDCNIDf674" },
+            { t: "Guess what I found", id: "4qO9pkkTjB4" },
+            { t: "What happens if you go back to Windows 7 from 10 RTM", id: "_F0tT7GP4_E" },
+            { t: "Testing Out Windows Vista Unofficial SP3 Gone Wrong", id: "VR8W1BbW_d4" },
+            { t: "Reacting to some of my other YouTube videos", id: "swOHZE82uAY" },
+            { t: "Windows Disney land 2010", id: "nGNXxxDjQvs" },
+            { t: "Trying To install Windows XP beta builds but everything goes wrong", id: "iWGiDa7DH-E" },
+            { t: "How to make iPad OS 18.2 look like Windows XP", id: "JEMxg_FI1No" },
+            { t: "How to use LotusLanternX", id: "Xu1paCktubc" },
+            { t: "Windows 7 2024", id: "p9AxLbMt7so" },
+            { t: "Installing Windows 11 in 2024 (in PowerPoint)", id: "H1wF0ftcEWc" },
+            { t: "Windows 95 vs Windows 2000 (OUTDATED)", id: "XgYAN_2cyA0" },
+            { t: "Installing Windows XP in 2024!", id: "FXk4J_g1IqU" },
+            { t: "Drink challenge", id: "CK9utZVFBz4" },
+            { t: "I’m a 2nd grader!!!!!!!!!", id: "ZpSjSj5Ka1ykU" }
         ];
+
+        let currentApp = "Home";
 
         function playStartup() {
             document.getElementById("startup-sound").play().catch(() => {});
-            loadVideos();
+            loadVideos(videoData);
         }
 
-        function loadVideos() {
+        function loadVideos(data) {
             const grid = document.getElementById('video-grid');
-            videoData.forEach(v => {
+            grid.innerHTML = '';
+            data.forEach(v => {
                 const card = document.createElement('div');
                 card.className = 'video-card';
-                card.onclick = () => window.open(`https://www.youtube.com/watch?v=${v.id}`, '_blank');
+                card.onclick = () => playInWMP(v.id, v.t);
                 card.innerHTML = `
                     <img class="video-thumb" src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg">
                     <div class="video-title">${v.t}</div>
@@ -184,22 +269,61 @@
             });
         }
 
+        function playInWMP(id, title) {
+            document.getElementById('wmp-player').classList.remove('hidden');
+            document.getElementById('wmp-iframe').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+            document.getElementById('now-playing-title').innerText = "Now Playing: " + title;
+            document.getElementById('search-area').style.display = "none";
+        }
+
+        function closeVideo() {
+            document.getElementById('wmp-player').classList.add('hidden');
+            document.getElementById('wmp-iframe').src = "";
+            document.getElementById('search-area').style.display = "block";
+        }
+
+        function handleGlobalSearch() {
+            const val = document.getElementById('globalSearch').value.toLowerCase();
+            const b = document.getElementById("rover-bubble");
+
+            if (currentApp === "Videos") {
+                const filtered = videoData.filter(v => v.t.toLowerCase().includes(val));
+                loadVideos(filtered);
+                b.innerText = filtered.length > 0 ? "Found " + filtered.length + " videos!" : "No videos found.";
+            } else if (currentApp === "Blog") {
+                const blog = document.querySelector(".blog-preview");
+                if (blog.innerText.toLowerCase().includes(val)) {
+                    blog.style.display = "block";
+                    b.innerText = "Found it in the blog!";
+                } else {
+                    blog.style.display = "none";
+                    b.innerText = "Nothing found here.";
+                }
+            }
+        }
+
         function openApp(name) {
+            currentApp = name;
+            closeVideo();
+            document.getElementById('globalSearch').value = "";
             ['Home','Blog','Videos','About'].forEach(a => document.getElementById(a + '-app').classList.add('hidden'));
             document.getElementById(name + '-app').classList.remove('hidden');
-            hideFullBlog();
+            loadVideos(videoData); 
+            if(name === "Blog") document.querySelector(".blog-preview").style.display = "block";
         }
 
         function showFullBlog() {
             document.getElementById('blog-list').classList.add('hidden');
             document.getElementById('full-blog-view').classList.remove('hidden');
             document.getElementById('window').classList.add('fullscreen');
+            document.querySelector(".global-search-container").style.display = "none";
         }
 
         function hideFullBlog() {
             document.getElementById('blog-list').classList.remove('hidden');
             document.getElementById('full-blog-view').classList.add('hidden');
             document.getElementById('window').classList.remove('fullscreen');
+            document.querySelector(".global-search-container").style.display = "block";
         }
 
         function toggleFullscreen() {
@@ -210,20 +334,17 @@
         const win = document.getElementById("window");
         const handle = document.getElementById("drag-handle");
         let dragging = false, offsetX, offsetY;
-
         handle.onmousedown = (e) => {
             if(win.classList.contains('fullscreen')) return;
             dragging = true;
             offsetX = e.clientX - win.offsetLeft;
             offsetY = e.clientY - win.offsetTop;
         };
-
         document.onmousemove = (e) => {
             if (!dragging) return;
             win.style.left = (e.clientX - offsetX) + "px";
             win.style.top = (e.clientY - offsetY) + "px";
         };
-
         document.onmouseup = () => dragging = false;
     </script>
 </body>
