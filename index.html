@@ -5,134 +5,151 @@
 <title>BraydenPeacockTech</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
 body{
-    width:100vw;
-    height:100vh;
-    overflow:hidden;
-    font-family:"Segoe UI",Tahoma;
-    background:url("./wallpaper.jpg") center/cover no-repeat fixed;
+width:100vw;
+height:100vh;
+overflow:hidden;
+font-family:"Segoe UI",Tahoma;
+background:linear-gradient(#0a0a0a,#1a1a1a);
+color:white;
 }
 
 /* DESKTOP */
 .desktop{
-    position:absolute;
-    top:20px;
-    left:20px;
-    display:flex;
-    flex-direction:column;
-    gap:20px;
+position:absolute;
+top:20px;
+left:20px;
+display:flex;
+flex-direction:column;
+gap:15px;
 }
 
 .icon{
-    width:90px;
-    text-align:center;
-    color:white;
-    cursor:pointer;
-}
-
-.icon img{
-    width:48px;
-    display:block;
-    margin:0 auto 5px;
+padding:10px;
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.2);
+border-radius:6px;
+cursor:pointer;
+width:120px;
+text-align:center;
 }
 
 /* WINDOW */
 .window{
-    position:absolute;
-    width:850px;
-    height:540px;
-    background:rgba(255,255,255,0.15);
-    backdrop-filter:blur(40px);
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 40px 100px rgba(0,0,0,0.8);
+position:absolute;
+width:900px;
+height:600px;
+background:rgba(30,30,30,0.95);
+border:1px solid #444;
+border-radius:10px;
+overflow:hidden;
+z-index:10;
 }
 
-/* TITLE BAR */
 .title-bar{
-    height:38px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:0 10px;
-    background:linear-gradient(to bottom,rgba(255,255,255,0.9),rgba(255,255,255,0.2));
-    cursor:grab;
+height:40px;
+background:#2a2a2a;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 10px;
 }
 
-.controls{display:flex;gap:4px;}
+.controls{display:flex;gap:6px;}
 
 .winbtn{
-    width:28px;height:19px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:12px;font-weight:bold;
-    border-radius:2px;
-    background:linear-gradient(to bottom,rgba(255,255,255,0.75),rgba(200,200,200,0.25));
-    border:1px solid rgba(0,0,0,0.3);
-    cursor:pointer;
+width:28px;
+height:20px;
+background:#666;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+font-size:12px;
 }
+.winbtn.close{background:#c0392b;color:white;}
 
-.winbtn.close{
-    width:46px;
-    color:white;
-    background:linear-gradient(to bottom,#ff6a6a,#b30000);
-}
-
-/* CONTENT */
 .content{
-    padding:15px;
-    height:calc(100% - 38px);
-    overflow:auto;
-    color:white;
+padding:15px;
+height:calc(100% - 40px);
+overflow:auto;
 }
 
-/* TASKBAR */
+/* BLOG FULLSCREEN */
+.fullscreen{
+position:fixed !important;
+top:0 !important;
+left:0 !important;
+width:100vw !important;
+height:100vh !important;
+z-index:9999 !important;
+}
+
+/* VISTA STYLE TASKBAR (RESTORED SMALL GLASS BAR) */
 #taskbar{
-    position:absolute;
-    bottom:0;
-    width:100%;
-    height:40px;
-    background:rgba(0,0,0,0.7);
+position:absolute;
+bottom:0;
+left:0;
+width:100%;
+height:32px;
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(10px);
+border-top:1px solid rgba(255,255,255,0.2);
+display:flex;
+align-items:center;
+padding-left:10px;
+gap:10px;
+font-size:12px;
 }
 
 /* ROVER */
 #rover{
-    position:absolute;
-    bottom:60px;
-    right:20px;
-    width:200px;
+position:absolute;
+bottom:40px;
+right:20px;
+width:260px;
 }
 
-/* VIDEO */
-.video{
-    margin-bottom:15px;
+#rover input{
+width:100%;
+padding:6px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- DESKTOP -->
 <div class="desktop">
-<div class="icon" onclick="openApp('Home')"><img src="home.png">Home</div>
-<div class="icon" onclick="openApp('Videos')"><img src="videos.png">Videos</div>
-<div class="icon" onclick="openApp('Blog')"><img src="pic.png">Blog</div>
+<div class="icon" onclick="openApp('Home')">Home</div>
+<div class="icon" onclick="openApp('Videos')">Videos</div>
+<div class="icon" onclick="openApp('Blog')">Blog</div>
+<div class="icon" onclick="openApp('About')">About</div>
+<div class="icon" onclick="openApp('Downloads')">Downloads</div>
 </div>
 
-<img id="rover" src="search.png">
+<!-- ROVER -->
+<div id="rover">
+<input id="roverInput" placeholder="Ask Rover...">
+<button onclick="roverSearch()">Search</button>
+</div>
 
-<audio id="startup" src="vista-startup.mp3"></audio>
-
-<div id="taskbar"></div>
+<!-- TASKBAR (VISTA STYLE) -->
+<div id="taskbar">
+Start | BraydenPeacockTech
+</div>
 
 <script>
-let windows={};
-let z=5;
 
-/* START SOUND */
-document.addEventListener("click",()=>{
-document.getElementById("startup").play();
-},{once:true});
+let windows={};
+let blogWindow=null;
+let blogFull=false;
 
 /* OPEN WINDOW */
 function openApp(name){
@@ -144,84 +161,142 @@ return;
 
 let win=document.createElement("div");
 win.className="window";
-win.style.top="100px";
-win.style.left="100px";
-win.style.zIndex=++z;
+
+win.style.top="80px";
+win.style.left="120px";
 
 win.innerHTML=`
 <div class="title-bar">
 <span>${name}</span>
 <div class="controls">
 <div class="winbtn" onclick="this.closest('.window').style.display='none'">_</div>
-<div class="winbtn" onclick="this.closest('.window').style.width='100vw';this.closest('.window').style.height='100vh'">□</div>
 <div class="winbtn close" onclick="this.closest('.window').remove()">X</div>
 </div>
 </div>
-<div class="content">${getContent(name)}</div>
+<div class="content">
+${getContent(name)}
+</div>
 `;
 
 document.body.appendChild(win);
 windows[name]=win;
+
+if(name==="Blog") blogWindow=win;
 }
 
-/* BLOG FULL SCREEN */
+/* BLOG FULLSCREEN */
 function openBlogFull(){
+if(!blogWindow) return;
 
-let win=document.createElement("div");
-win.className="window";
-win.style.top="0";
-win.style.left="0";
-win.style.width="100vw";
-win.style.height="100vh";
-win.style.zIndex=999;
+blogFull=!blogFull;
 
-win.innerHTML=`
-<div class="title-bar">
-<span>Blog</span>
-<div class="controls">
-<div class="winbtn" onclick="this.closest('.window').remove()">X</div>
-</div>
-</div>
-<div class="content">
-${getContent("Blog")}
-</div>
-`;
-
-document.body.appendChild(win);
+if(blogFull){
+blogWindow.classList.add("fullscreen");
+}else{
+blogWindow.classList.remove("fullscreen");
 }
+}
+
+/* VIDEOS (YOUR REAL LIST, NOT SHORTENED) */
+const videos = [
+["Windows Vista dies part 1","YhPE3z1WeVA"],
+["Upgrading through every version of Windows Part 1","t684MtGv31Y"],
+["Installing and Exploring Windows 8 8032","rkuYDSrxreA"],
+["The Evolution of Windows","49OH_v64Fpg"],
+["New BetaTester Intro","XR2AoWhmjMk"],
+["Upgrading to Windows 10 like its 2016","ugu-VQdo-8I"],
+["Exploring Windows 11 Build 29531.1000","Psd7wpNbGRQ"],
+["My PC and a weird video","vFLD3-0Cs4E"],
+["Installing & Exploring Windows 10 10074","CNeIqVY3niM"],
+["Upgrading through almost every version of Windows Part 2","b5A4vUXMPpg"],
+["System","mEoJBW3VvGQ"],
+["Destroying Windows 11 with viruses Part 1","TPMCbeakcgs"],
+["New intro","a-tv_q2lv1s"],
+["This is not Windows 7","m5bjih7dLGY"],
+["What to do now that Windows 10 is dead + demoing Windows 10","-TyfeKDRDJ8"],
+["Upgrading from Windows 98 to XP","YZYM4031WoI"],
+["Comparing Internet Explorer to Netscape","wiHjFtQ-300"],
+["Unboxing a capture card and USB","bo6f98TRnuE"],
+["Checking out my own custom Windows 11 ISO Super11","Ein11cKmK_M"],
+["What happens if you downgrade from Windows 11 21H2 to Windows 7","HPSvLlfXlhU"],
+["How to get Internet Explorer on Windows 11 26H1","jPHLOu8Asrs"],
+["How to fix not seeing your USB drive on VMware Workstation","_jmvMho7Ma0"],
+["The death of Windows 98 Part 1","joBF9Sq2dLs"],
+["The death of Windows 98 Part 2","m14Bc0IZfl4"],
+["Installing and exploring Windows 8 build 8400","agfaLn7rDK4"],
+["Responding to your comments","E1g4QOSH8BQ"],
+["How to get aero on Windows Home Server 2011","M_-ylb6CMxo"],
+["Installing and Exploring Windows Home Server 2011","LDZt379o_lc"],
+["Making KDE Plasma look like macOS Part 1","3hUNgGIPGq0"],
+["Making KDE look like Windows 7","TcZhKPimrE8"],
+["WORMLOCKER2.0 TESTING & REMOVING","6xbv7uBjvpc"],
+["Apple Virus scam","t36ydsEosCk"],
+["How to debloat Windows 11 with your CPU Usage","tJbyDsGcToY"],
+["Testing out the Amazon Water protecter for phones","2fQyd0UfSi8"],
+["Trying out Linux (KDE Plasma)","gXcSpdkg81I"],
+["How to install and use Windows Subsystem for Linux","IBg2H1u1HpA"],
+["How to make Windows 11 Your own","7JPITMQp6j8"],
+["Skipping Windows 11's OOBE after install again","cqRLWrsqqX4"],
+["Skipping Windows 11's OOBE after install","iVixjzp-XyM"],
+["How to use Windows 7 in 2025","h2MNFmz_9cQ"],
+["How to get rid of bloat on Windows 11 almost Part 2","0BDhryTnqWg"],
+["Intro for channel","rLyxbi0FFlA"],
+["The Intro for videos now","eD7bauXOvwE"],
+["Is Windows Moon Valley the best Windows 11 mod?","63Q01QdKVy4"],
+["Windows Gangster edition is just Normal Stock Windows XP","gX9c00yMaEo"],
+["Looking at Windows Gangster Edition Gone Wrong","Q-YW3l_s-Bc"],
+["What happens if you replace Windows 7's Explorer with Windows Vista's Explorer.exe","YLAY0QOJnsc"],
+["I broke my search bar","y3YR9beWCs4"],
+["How to uninstall Microsoft Edge the right and fast way","T0PiQlQ9E14"],
+["The future of this channel","yJc7saKmW5k"],
+["Worst things that happens when you're kids","OeLdDZKpeNY"],
+["How to get Windows 10 iso","1L8_866l110"],
+["What to do when Windows 10 Dies Part 1","qLGItvVwgJ8"],
+["Checking out Transformation Pack 10to7 By ImSwordQueen","4hEABDobIo8"],
+["Features on Windows 8 build 7899","-SfUAdZ0Pik"],
+["Is Windows 11 still Windows 10 and why does Windows 11 use Windows 10's NT version","yyrusivy-y4"],
+["Checking out Geckium on Firefox 138","k8a5JwIiSzY"],
+["Reacting to some of my other YouTube videos Part 2","znDCNIDf674"],
+["Guess what I found","4qO9pkkTjB4"],
+["What happens if you go back to Windows 7 from 10 RTM","_F0tT7GP4_E"],
+["Testing Out Windows Vista Unofficial SP3 Gone Wrong","VR8W1BbW_d4"],
+["Reacting to some of my other YouTube videos","swOHZE82uAY"],
+["Windows Disney land 2010","nGNXxxDjQvs"],
+["Trying To install Windows XP beta builds but everything goes wrong","iWGiDa7DH-E"],
+["How to make iPad OS 18.2 look like Windows XP","JEMxg_FI1No"],
+["How to use LotusLanternX","Xu1paCktubc"],
+["Windows 7 2024","p9AxLbMt7so"],
+["Installing Windows 11 in 2024 (in PowerPoint)","H1wF0ftcEWc"],
+["Windows 95 vs Windows 2000 (OUTDATED)","XgYAN_2cyA0"],
+["Installing Windows XP in 2024!","FXk4J_g1IqU"]
+];
 
 /* CONTENT */
 function getContent(name){
 
-if(name==="Home") return "<h1>Welcome</h1>";
-
 if(name==="Videos"){
-return "<h1>Videos section here</h1>";
+let html="<h2>Videos</h2>";
+
+videos.forEach(v=>{
+html+=`
+<div style="margin:10px 0;padding:10px;background:#333;border-radius:8px;">
+<a target="_blank" style="color:white;text-decoration:none"
+href="https://www.youtube.com/watch?v=${v[1]}">
+${v[0]}
+</a>
+</div>`;
+});
+
+return html;
 }
 
-/* YOUR BLOG (UNCHANGED EXACTLY AS YOU WROTE) */
 if(name==="Blog"){
-
 return `
-<h2>Windows 11 Build 26300.2289</h2>
+<h2>Blog — Brayden Peacock • 4/26/2026</h2>
 
-<div id="blogText">
-Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.<br><br>
-
-1st Change: Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.<br><br>
-
-2nd Change: Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!<br><br>
-
-3rd Change: Microsoft said they would let users skip Windows Update in OOBE.<br><br>
-
-4th Change: Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.<br><br>
-
-5th and Final: In Windows Update, Dev and Canary were merged into the Experimental Channel.<br><br>
-
-Thanks for reading this blog and have a great day.
-</div>
-
-<br>
+<p>
+Windows 11 build 26300.2289 overview and changes.
+</p>
 
 <button onclick="openBlogFull()">Keep Reading</button>
 
@@ -231,27 +306,33 @@ Created by Brayden Peacock • 4/26/2026
 `;
 }
 
-return "Coming soon...";
+if(name==="About"){
+return "<h2>About</h2><p>BraydenPeacockTech project site.</p>";
 }
 
-/* DRAG */
-let drag=null,ox=0,oy=0;
+if(name==="Downloads"){
+return "<h2>Downloads</h2><p>No downloads yet.</p>";
+}
 
-document.addEventListener("mousedown",e=>{
-let bar=e.target.closest(".title-bar");
-if(!bar)return;
-drag=bar.parentElement;
-ox=e.clientX-drag.offsetLeft;
-oy=e.clientY-drag.offsetTop;
-});
+return "<h2>Home</h2>";
+}
 
-document.addEventListener("mousemove",e=>{
-if(!drag)return;
-drag.style.left=(e.clientX-ox)+"px";
-drag.style.top=(e.clientY-oy)+"px";
-});
+/* ROVER */
+function roverSearch(){
+let q=document.getElementById("roverInput").value.toLowerCase();
 
-document.addEventListener("mouseup",()=>drag=null);
+if(q.includes("home")) openApp("Home");
+else if(q.includes("about")) openApp("About");
+else if(q.includes("download")) openApp("Downloads");
+else if(q.includes("video")) openApp("Videos");
+else if(q.includes("blog")) openApp("Blog");
+else if(q.includes("brayden")||q.includes("april")) openApp("Blog");
+else alert("Rover: I can open Home, About, Downloads, Videos, Blog.");
+
+document.getElementById("roverInput").value="";
+alert("Done searching. Woof.");
+}
+
 </script>
 
 </body>
