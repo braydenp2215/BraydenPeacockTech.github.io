@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BraydenPeacockTech - Build 4026</title>
+    <title>BraydenPeacockTech Beta Build - 4028</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -15,9 +15,10 @@
             background-size: cover;
         }
 
+        /* Fixed Window Positioning */
         #window {
             position: absolute;
-            top: 50px; left: 100px;
+            top: 50px; left: 50px; /* Specific starting point to ensure visibility */
             width: 950px; height: 650px;
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(25px) saturate(200%);
@@ -52,14 +53,12 @@
 
         .main-view { display: flex; flex: 1; overflow: hidden; position: relative; }
 
-        /* Sidebar Navigation */
         .sidebar {
             width: 120px;
             background: rgba(0,0,0,0.3);
             border-right: 1px solid rgba(255,255,255,0.1);
             display: flex; flex-direction: column; align-items: center;
             padding-top: 20px;
-            overflow-y: auto;
         }
 
         .icon-box {
@@ -78,11 +77,7 @@
             position: relative;
         }
 
-        /* Search Bar */
-        .search-container {
-            margin-bottom: 25px;
-            display: flex; gap: 10px;
-        }
+        .search-container { margin-bottom: 25px; display: flex; gap: 10px; }
         #search {
             background: rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.3);
@@ -93,12 +88,9 @@
             border: 1px solid white; color: white; padding: 5px 15px; cursor: pointer;
         }
 
-        /* Rover UI */
         .rover-container {
-            position: absolute;
-            bottom: 20px; right: 20px;
+            position: absolute; bottom: 20px; right: 20px;
             display: flex; flex-direction: column; align-items: center;
         }
         .bubble {
-            background: #ffffcc; color: black;
-            padding: 10px; border-radius
+            background: #ffffcc; color
