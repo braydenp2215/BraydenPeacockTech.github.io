@@ -16,69 +16,58 @@
             position: absolute; top: 20px; left: 30px;
             width: 1200px; height: 900px;
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 8px; box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px; box-shadow: 0 25px 60px rgba(0,0,0,0.5);
             display: flex; flex-direction: column;
-            backdrop-filter: blur(25px) saturate(150%);
+            backdrop-filter: blur(30px) saturate(160%);
             z-index: 100;
+            overflow: hidden;
         }
 
         .title-bar { 
-            height: 38px; cursor: move; display: flex; 
-            justify-content: space-between; align-items: center; padding: 0 12px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.05));
+            height: 45px; display: flex; 
+            justify-content: space-between; align-items: center; padding: 0 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .title-text { color: white; font-size: 13px; text-shadow: 0 1px 2px black; pointer-events: none; }
-
-        .win-btn { width: 45px; height: 22px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; }
-        .close-btn:hover { background: #e81123; }
+        .title-text { color: white; font-size: 14px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
         .main-view { display: flex; flex: 1; overflow: hidden; }
         
-        .sidebar { width: 150px; background: rgba(0,0,0,0.3); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; padding-top: 15px; }
+        /* Navigation Sidebar using your PNGs */
+        .sidebar { width: 100px; background: rgba(0,0,0,0.25); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 15px; }
         .nav-item { 
-            padding: 15px 0; color: white; cursor: pointer; text-align: center; 
-            transition: 0.2s; border-left: 3px solid transparent;
+            width: 70px; padding: 10px 0; border-radius: 8px; display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; transition: 0.2s;
         }
-        .nav-item:hover { background: rgba(255,255,255,0.1); }
-        .nav-item.active { background: rgba(255,255,255,0.15); border-left: 3px solid #00adef; }
-        .nav-icon { width: 36px; height: 36px; display: block; margin: 0 auto 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
-        .nav-label { font-size: 12px; text-shadow: 0 1px 2px black; font-weight: 500; }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.1); }
+        .nav-item.active { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255,255,255,0.2); }
+        .nav-icon { width: 42px; height: 42px; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
+        .nav-label { color: white; font-size: 11px; text-shadow: 0 1px 2px black; }
 
-        .content-area { flex: 1; background: rgba(0,0,0,0.2); position: relative; overflow: hidden; }
-        .tab-content { display: none; width: 100%; height: 100%; flex-direction: column; padding: 20px; color: white; }
+        /* Content Area */
+        .content-area { flex: 1; position: relative; overflow: hidden; padding: 30px; color: white; }
+        .tab-content { display: none; width: 100%; height: 100%; flex-direction: column; }
         .tab-content.active { display: flex; }
 
-        /* Unified Video Tab Styles */
-        #video-list-view { display: flex; flex-direction: column; height: 100%; }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; overflow-y: auto; flex: 1; }
-        .video-card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 8px; cursor: pointer; border-radius: 4px; transition: 0.1s; }
-        .video-card:hover { border-color: #5da9e9; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
-        .video-card p { font-size: 12px; margin-top: 8px; line-height: 1.4; height: 34px; overflow: hidden; }
+        /* Search Header */
+        .search-container { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .search-box { flex: 1; max-width: 400px; padding: 12px 20px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 25px; outline: none; }
+        .search-icon-img { width: 24px; height: 24px; }
 
-        /* Player View (Inside Video Tab) */
-        #video-player-view { display: none; flex-direction: column; height: 100%; background: #000; border-radius: 4px; overflow: hidden; }
-        .player-header { background: #111; padding: 10px 15px; font-size: 12px; color: #00adef; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
-        .back-btn { cursor: pointer; color: white; text-decoration: underline; }
-        .video-frame-wrap { flex: 1; background: black; }
-        
-        .legacy-controls {
-            height: 80px; background: linear-gradient(to bottom, #2a2a2a, #000);
-            display: flex; align-items: center; justify-content: center; gap: 20px;
-        }
-        .l-btn {
-            width: 45px; height: 45px; border-radius: 50%;
-            background: radial-gradient(circle, #5da9e9, #1c4a7a);
-            border: 2px solid #fff; color: white; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 20px;
-            box-shadow: 0 0 10px rgba(0,173,239,0.5);
-        }
+        /* Videos Grid */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; overflow-y: auto; flex: 1; }
+        .video-card { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 10px; cursor: pointer; border-radius: 8px; transition: 0.2s; }
+        .video-card:hover { border-color: #00adef; transform: scale(1.03); background: rgba(0,0,0,0.5); }
+        .video-card img { width: 100%; border-radius: 4px; margin-bottom: 10px; }
 
-        .search-box { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid #444; color: white; border-radius: 6px; margin-bottom: 20px; font-size: 14px; }
+        /* Blog Section */
+        .blog-header-img { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.2); }
+        .blog-container { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); line-height: 1.6; overflow-y: auto; }
         
-        /* Blog Styling */
-        .blog-post { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); line-height: 1.6; }
-        .blog-post b { color: #00adef; }
+        /* Player Overlay */
+        #player-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 200; flex-direction: column; }
+        .player-header { height: 50px; background: #111; display: flex; align-items: center; padding: 0 20px; justify-content: space-between; border-bottom: 1px solid #333; }
     </style>
 </head>
 <body onload="init()">
@@ -86,80 +75,75 @@
     <audio id="startup" src="Start.mp3"></audio>
 
     <div id="window">
-        <div class="title-bar" id="windowHeader">
-            <span class="title-text">Windows Media Player Legacy - Brayden Peacock Tech</span>
-            <div class="controls">
-                <button class="win-btn">_</button>
-                <button class="win-btn close-btn">✕</button>
+        <div class="title-bar">
+            <span class="title-text">Brayden Peacock Tech - Build 4032z</span>
+            <div style="display:flex; gap: 8px;">
+                <div style="width:12px; height:12px; background:rgba(255,255,255,0.2); border:1px solid white; border-radius:50%;"></div>
             </div>
         </div>
 
         <div class="main-view">
             <div class="sidebar">
                 <div class="nav-item active" onclick="showTab('home')">
-                    <img src="https://cdn0.iconfinder.com/data/icons/computer-7/100/computer-08-512.png" class="nav-icon">
+                    <img src="home.png" class="nav-icon">
                     <span class="nav-label">Home</span>
                 </div>
                 <div class="nav-item" onclick="showTab('videos')">
-                    <img src="https://cdn0.iconfinder.com/data/icons/computer-7/100/computer-01-512.png" class="nav-icon">
+                    <img src="videos.png" class="nav-icon">
                     <span class="nav-label">Videos</span>
                 </div>
                 <div class="nav-item" onclick="showTab('downloads')">
-                    <img src="https://cdn0.iconfinder.com/data/icons/computer-7/100/computer-17-512.png" class="nav-icon">
+                    <img src="downloads.png" class="nav-icon">
                     <span class="nav-label">Downloads</span>
                 </div>
                 <div class="nav-item" onclick="showTab('blog')">
-                    <img src="https://cdn0.iconfinder.com/data/icons/computer-7/100/computer-61-512.png" class="nav-icon">
+                    <img src="aboutme.png" class="nav-icon">
                     <span class="nav-label">Blog</span>
                 </div>
             </div>
 
             <div class="content-area">
                 <div id="home" class="tab-content active">
-                    <h2>Welcome back</h2>
-                    <p style="margin-top:10px; color:#ccc;">Select the Videos tab to browse the archive.</p>
+                    <h1 style="font-size:32px; margin-bottom:10px;">Welcome Back</h1>
+                    <p style="color:rgba(255,255,255,0.7);">System Build 4032z is live. All assets loaded successfully.</p>
                 </div>
 
-                <div id="videos" class="tab-content" style="padding: 15px;">
-                    <div id="video-list-view">
+                <div id="videos" class="tab-content">
+                    <div class="search-container">
+                        <img src="search.png" class="search-icon-img">
                         <input type="text" id="vSearch" class="search-box" placeholder="Search archive..." onkeyup="searchVids()">
-                        <div class="video-grid" id="v-grid"></div>
+                        <img src="finding.gif" id="finding-status" style="width:30px; opacity:0; transition:0.3s;">
                     </div>
-                    <div id="video-player-view">
-                        <div class="player-header">
-                            <span>NOW PLAYING: <span id="cur-title">...</span></span>
-                            <span class="back-btn" onclick="backToList()">Return to Library</span>
-                        </div>
-                        <div class="video-frame-wrap">
-                            <iframe id="video-frame" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen"></iframe>
-                        </div>
-                        <div class="legacy-controls">
-                            <div class="l-btn" onclick="backToList()">⏮</div>
-                            <div class="l-btn" style="width:60px; height:60px; font-size:30px;">►</div>
-                            <div class="l-btn" onclick="stopVid()">■</div>
-                            <div style="width: 250px; height: 6px; background: #333; margin-left: 20px; border-radius: 3px; position:relative;">
-                                <div style="width: 65%; height: 100%; background: #00adef; border-radius:3px;"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="video-grid" id="v-grid"></div>
                 </div>
 
                 <div id="downloads" class="tab-content">
-                    <h2>Available Resources</h2>
-                    <p style="margin-top:10px;">Build 4032z Patch Files</p>
+                    <h2>Downloads</h2>
+                    <p style="margin-top:20px;">The download repository is currently being synced...</p>
                 </div>
 
                 <div id="blog" class="tab-content">
-                    <div class="blog-post">
+                    <div class="blog-container">
+                        <img src="pic.png" class="blog-header-img">
                         <h2>Windows 11 Build 26300.2289 Update</h2>
                         <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Published: 4/26/26</p>
                         <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p><br>
-                        <p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p><br>
-                        <p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p><br>
-                        <p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p><br>
-                        <p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p><br>
+                        <p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p>
+                        <p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p>
+                        <p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p>
+                        <p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p>
                         <p><b>5th and Final:</b> In Windows Update, Dev and Canary were merged into the Experimental Channel.</p><br>
                         <p><i>Thanks for reading this blog and have a great day.</i></p>
+                    </div>
+                </div>
+
+                <div id="player-overlay">
+                    <div class="player-header">
+                        <span id="cur-title" style="font-size:13px;">Video Player</span>
+                        <span style="cursor:pointer; font-weight:bold;" onclick="closePlayer()">[X] CLOSE</span>
+                    </div>
+                    <div style="flex:1;">
+                        <iframe id="video-frame" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen"></iframe>
                     </div>
                 </div>
             </div>
@@ -242,13 +226,16 @@
         ];
 
         function init() {
-            document.addEventListener('click', () => { document.getElementById('startup').play().catch(()=>{}); }, {once: true});
+            document.addEventListener('click', () => { 
+                document.getElementById('startup').play().catch(()=>{}); 
+            }, {once: true});
+
             const grid = document.getElementById('v-grid');
             vData.forEach(v => {
                 const card = document.createElement('div');
                 card.className = 'video-card';
-                card.onclick = () => loadVideo(v.id, v.t);
-                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" style="width:100%;"><p>${v.t}</p>`;
+                card.onclick = () => playVideo(v.id, v.t);
+                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg"><p>${v.t}</p>`;
                 grid.appendChild(card);
             });
         }
@@ -258,30 +245,28 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             event.currentTarget.classList.add('active');
-            if(id !== 'videos') stopVid(); // Clear player if leaving tab
+            if(id !== 'videos') closePlayer();
         }
 
-        function loadVideo(id, title) {
-            document.getElementById('video-list-view').style.display = 'none';
-            document.getElementById('video-player-view').style.display = 'flex';
-            document.getElementById('video-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1&controls=0&modestbranding=1&rel=0`;
+        function playVideo(id, title) {
+            document.getElementById('player-overlay').style.display = 'flex';
+            document.getElementById('video-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
             document.getElementById('cur-title').innerText = title;
         }
 
-        function backToList() {
-            document.getElementById('video-list-view').style.display = 'flex';
-            document.getElementById('video-player-view').style.display = 'none';
-            stopVid();
-        }
-
-        function stopVid() {
+        function closePlayer() {
+            document.getElementById('player-overlay').style.display = 'none';
             document.getElementById('video-frame').src = "";
-            document.getElementById('cur-title').innerText = "...";
         }
 
         function searchVids() {
             const q = document.getElementById('vSearch').value.toLowerCase();
-            document.querySelectorAll('.video-card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? 'block' : 'none');
+            const finding = document.getElementById('finding-status');
+            finding.style.opacity = q.length > 0 ? "1" : "0";
+            
+            document.querySelectorAll('.video-card').forEach(c => {
+                c.style.display = c.innerText.toLowerCase().includes(q) ? 'block' : 'none';
+            });
         }
     </script>
 </body>
