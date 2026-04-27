@@ -314,18 +314,96 @@ function getContent(name){
 /* VIDEOS */
 if(name==="Videos"){
 
-const videos=[
-{title:"Windows Vista dies part 1",id:"YhPE3z1WeVA"},
-{title:"Upgrading Windows Part 1",id:"t684MtGv31Y"},
-{title:"Windows 8 8032",id:"rkuYDSrxreA"},
-{title:"Evolution of Windows",id:"49OH_v64Fpg"},
-{title:"Windows 10 10074",id:"CNeIqVY3niM"},
-{title:"Windows 11 build 29531",id:"Psd7wpNbGRQ"},
-{title:"System",id:"mEoJBW3VvGQ"},
-{title:"Destroying Windows 11 viruses",id:"TPMCbeakcgs"},
-{title:"Windows 98 to XP",id:"YZYM4031WoI"},
-{title:"Super11 ISO",id:"Ein11cKmK_M"}
+const videos = [
+{title:"Windows Vista dies part 1", id:"YhPE3z1WeVA"},
+{title:"Upgrading through every version of Windows Part 1", id:"t684MtGv31Y"},
+{title:"Installing and Exploring Windows 8 8032", id:"rkuYDSrxreA"},
+{title:"The Evolution of Windows", id:"49OH_v64Fpg"},
+{title:"New BetaTester Intro", id:"XR2AoWhmjMk"},
+{title:"Upgrading to Windows 10 like its 2016", id:"ugu-VQdo-8I"},
+{title:"Exploring Windows 11 Build 29531.1000", id:"Psd7wpNbGRQ"},
+{title:"My PC and a weird video", id:"vFLD3-0Cs4E"},
+{title:"Installing and Exploring Windows 10 10074", id:"CNeIqVY3niM"},
+{title:"Upgrading through almost every version of Windows Part 2", id:"b5A4vUXMPpg"},
+{title:"System", id:"mEoJBW3VvGQ"},
+{title:"Destroying Windows 11 with viruses Part 1", id:"TPMCbeakcgs"},
+{title:"New intro", id:"a-tv_q2lv1s"},
+{title:"This is not Windows 7", id:"m5bjih7dLGY"},
+{title:"What to do now that Windows 10 is dead + demoing Windows 10", id:"-TyfeKDRDJ8"},
+{title:"Upgrading from Windows 98 to XP", id:"YZYM4031WoI"},
+{title:"Comparing Internet Explorer to Netscape", id:"wiHjFtQ-300"},
+{title:"Unboxing a capture card and USB", id:"bo6f98TRnuE"},
+{title:"Checking out my own custom Windows 11 ISO Super11", id:"Ein11cKmK_M"},
+{title:"What happens if you downgrade from Windows 11 21H2 to Windows 7", id:"HPSvLlfXlhU"},
+{title:"How to get Internet Explorer on Windows 11 26H1", id:"jPHLOu8Asrs"},
+{title:"How to fix not seeing your USB drive on VMware Workstation", id:"_jmvMho7Ma0"},
+{title:"The death of Windows 98 Part 1", id:"joBF9Sq2dLs"},
+{title:"The death of Windows 98 Part 2", id:"m14Bc0IZfl4"},
+{title:"Installing and exploring Windows 8 build 8400", id:"agfaLn7rDK4"},
+{title:"Responding to your comments", id:"E1g4QOSH8BQ"},
+{title:"How to get aero on Windows Home Server 2011", id:"M_-ylb6CMxo"},
+{title:"Installing and Exploring Windows Home Server 2011", id:"LDZt379o_lc"},
+{title:"Making KDE Plasma look like MacOS Part 1", id:"3hUNgGIPGq0"},
+{title:"Making KDE look like Windows 7", id:"TcZhKPimrE8"},
+{title:"WORMLOCKER2.0 TESTING & REMOVING", id:"6xbv7uBjvpc"},
+{title:"Apple Virus scam", id:"t36ydsEosCk"},
+{title:"How to debloat Windows 11 with your CPU Usage", id:"tJbyDsGcToY"},
+{title:"Testing out the Amazon Water protecter for phones", id:"2fQyd0UfSi8"},
+{title:"Trying out Linux (KDE Plasma)", id:"gXcSpdkg81I"},
+{title:"How to install and use Windows Subsystem for Linux", id:"IBg2H1u1HpA"},
+{title:"How to make Windows 11 Your own", id:"7JPITMQp6j8"},
+{title:"Skipping Windows 11's OOBE after install again", id:"cqRLWrsqqX4"},
+{title:"Skipping Windows 11's OOBE after install", id:"iVixjzp-XyM"},
+{title:"How to use Windows 7 in 2025", id:"h2MNFmz_9cQ"},
+{title:"How to get rid of bloat on Windows 11 almost Part 2", id:"0BDhryTnqWg"},
+{title:"Intro for channel", id:"rLyxbi0FFlA"},
+{title:"The Intro for videos now", id:"eD7bauXOvwE"},
+{title:"Is Windows Moon Valley the best Windows 11 mod?", id:"63Q01QdKVy4"},
+{title:"Windows Gangster edition is just Normal Stock Windows XP", id:"gX9c00yMaEo"},
+{title:"Looking at Windows Gangster Edition Gone Wrong", id:"Q-YW3l_s-Bc"},
+{title:"What happens if you replace Windows 7's Explorer with Windows Vista's Explorer.exe", id:"YLAY0QOJnsc"},
+{title:"I broke my search bar", id:"y3YR9beWCs4"},
+{title:"How to uninstall Microsoft Edge the right and fast way", id:"T0PiQlQ9E14"},
+{title:"The future of this channel", id:"yJc7saKmW5k"},
+{title:"Worst things that happens when you're kids", id:"OeLdDZKpeNY"},
+{title:"How to get Windows 10 iso", id:"1L8_866l110"},
+{title:"What to do when Windows 10 Dies Part 1", id:"qLGItvVwgJ8"},
+{title:"Checking out Transformation Pack 10to7 By ImSwordQueen", id:"4hEABDobIo8"},
+{title:"Features on Windows 8 build 7899", id:"-SfUAdZ0Pik"},
+{title:"Is Windows 11 still Windows 10 and why does Windows 11 use Windows 10's NT version", id:"yyrusivy-y4"},
+{title:"Checking out Geckium on Firefox 138", id:"k8a5JwIiSzY"},
+{title:"Reacting to some of my other YouTube videos Part 2", id:"znDCNIDf674"},
+{title:"Guess what I found", id:"4qO9pkkTjB4"},
+{title:"What happens if you go back to Windows 7 from 10 RTM", id:"_F0tT7GP4_E"},
+{title:"Testing Out Windows Vista Unofficial SP3 Gone Wrong", id:"VR8W1BbW_d4"},
+{title:"Reacting to some of my other YouTube videos", id:"swOHZE82uAY"},
+{title:"Windows Disney land 2010", id:"nGNXxxDjQvs"},
+{title:"Trying To install Windows XP beta builds but everything goes wrong", id:"iWGiDa7DH-E"},
+{title:"How to make iPad OS 18.2 look like Windows XP", id:"JEMxg_FI1No"},
+{title:"How to use LotusLanternX", id:"Xu1paCktubc"},
+{title:"Windows 7 2024", id:"p9AxLbMt7so"},
+{title:"Installing Windows 11 in 2024 (in PowerPoint)", id:"H1wF0ftcEWc"},
+{title:"Windows 95 vs Windows 2000 (OUTDATED)", id:"XgYAN_2cyA0"},
+{title:"Installing Windows XP in 2024!", id:"FXk4J_g1IqU"}
 ];
+
+let html = "<h1>Videos</h1><div style='height:100%;overflow-y:auto;padding-right:10px;'>";
+
+videos.forEach(v=>{
+    html += `
+    <div style="background:rgba(255,255,255,0.12);padding:12px;border-radius:10px;margin-bottom:12px;">
+        <h3 style="margin-bottom:8px;">${v.title}</h3>
+
+        <iframe width="100%" height="260"
+        src="https://www.youtube.com/embed/${v.id}"
+        frameborder="0"
+        allowfullscreen></iframe>
+    </div>`;
+});
+
+html += "</div>";
+return html;
+}
 
 let html="<h1>Videos</h1>";
 
