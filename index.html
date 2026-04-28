@@ -10,16 +10,17 @@
             font-family: 'Segoe UI', Tahoma, sans-serif; 
             background: #004578 url('wallpaper.jpg') no-repeat center center fixed;
             background-size: cover;
+            user-select: none;
         }
 
         #window {
             position: absolute; top: 20px; left: 30px;
             width: 1200px; height: 900px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 12px; box-shadow: 0 25px 60px rgba(0,0,0,0.5);
             display: flex; flex-direction: column;
-            backdrop-filter: blur(30px) saturate(160%);
+            backdrop-filter: blur(35px) saturate(180%);
             z-index: 100;
             overflow: hidden;
         }
@@ -27,47 +28,55 @@
         .title-bar { 
             height: 45px; display: flex; 
             justify-content: space-between; align-items: center; padding: 0 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: move;
         }
-        .title-text { color: white; font-size: 14px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        .title-text { color: white; font-size: 14px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); pointer-events: none; }
 
-        .main-view { display: flex; flex: 1; overflow: hidden; }
+        .main-view { display: flex; flex: 1; overflow: hidden; position: relative; }
         
-        /* Navigation Sidebar using your PNGs */
+        .rover {
+            position: absolute; bottom: 10px; right: 10px;
+            width: 100px; z-index: 1000; pointer-events: none;
+        }
+
+        .aero-btn {
+            background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 51%, rgba(255,255,255,0.2) 100%);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 4px; color: white; padding: 8px 16px;
+            cursor: pointer; font-size: 13px; transition: 0.2s;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+        .aero-btn:hover { background: rgba(255,255,255,0.3); border-color: white; }
+
         .sidebar { width: 100px; background: rgba(0,0,0,0.25); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 15px; }
         .nav-item { 
-            width: 70px; padding: 10px 0; border-radius: 8px; display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; transition: 0.2s;
+            width: 80px; padding: 10px 0; border-radius: 8px; display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; transition: 0.2s; text-align: center;
         }
         .nav-item:hover { background: rgba(255, 255, 255, 0.1); }
         .nav-item.active { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255,255,255,0.2); }
-        .nav-icon { width: 42px; height: 42px; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
+        .nav-icon { width: 42px; height: 42px; margin-bottom: 5px; }
         .nav-label { color: white; font-size: 11px; text-shadow: 0 1px 2px black; }
 
-        /* Content Area */
         .content-area { flex: 1; position: relative; overflow: hidden; padding: 30px; color: white; }
-        .tab-content { display: none; width: 100%; height: 100%; flex-direction: column; }
+        .tab-content { display: none; width: 100%; height: 100%; flex-direction: column; overflow-y: auto; }
         .tab-content.active { display: flex; }
 
-        /* Search Header */
         .search-container { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-        .search-box { flex: 1; max-width: 400px; padding: 12px 20px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 25px; outline: none; }
-        .search-icon-img { width: 24px; height: 24px; }
+        .search-box { flex: 1; max-width: 400px; padding: 12px 20px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 25px; outline: none; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
+        .video-card { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .video-card:hover { background: rgba(255,255,255,0.1); transform: scale(1.02); }
+        .video-card p { font-size: 12px; margin-top: 8px; line-height: 1.2; height: 2.4em; overflow: hidden; }
 
-        /* Videos Grid */
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; overflow-y: auto; flex: 1; }
-        .video-card { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 10px; cursor: pointer; border-radius: 8px; transition: 0.2s; }
-        .video-card:hover { border-color: #00adef; transform: scale(1.03); background: rgba(0,0,0,0.5); }
-        .video-card img { width: 100%; border-radius: 4px; margin-bottom: 10px; }
+        .blog-container { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); line-height: 1.6; }
+        #blog-more { display: none; margin-top: 15px; }
 
-        /* Blog Section */
-        .blog-header-img { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.2); }
-        .blog-container { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); line-height: 1.6; overflow-y: auto; }
-        
-        /* Player Overlay */
         #player-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 200; flex-direction: column; }
-        .player-header { height: 50px; background: #111; display: flex; align-items: center; padding: 0 20px; justify-content: space-between; border-bottom: 1px solid #333; }
+        .player-header { height: 50px; background: #111; display: flex; align-items: center; padding: 0 20px; justify-content: space-between; }
     </style>
 </head>
 <body onload="init()">
@@ -75,14 +84,17 @@
     <audio id="startup" src="Start.mp3"></audio>
 
     <div id="window">
-        <div class="title-bar">
+        <div class="title-bar" id="titleBar">
             <span class="title-text">Brayden Peacock Tech - Build 4032z</span>
             <div style="display:flex; gap: 8px;">
-                <div style="width:12px; height:12px; background:rgba(255,255,255,0.2); border:1px solid white; border-radius:50%;"></div>
+                <button class="aero-btn" style="padding: 2px 10px;" onclick="alert('Minimize')">_</button>
+                <button class="aero-btn" style="padding: 2px 10px; background: rgba(200, 50, 50, 0.6);" onclick="alert('Closing...')">X</button>
             </div>
         </div>
 
         <div class="main-view">
+            <img src="rover.gif" class="rover" id="rover-assistant">
+
             <div class="sidebar">
                 <div class="nav-item active" onclick="showTab('home')">
                     <img src="home.png" class="nav-icon">
@@ -97,8 +109,12 @@
                     <span class="nav-label">Downloads</span>
                 </div>
                 <div class="nav-item" onclick="showTab('blog')">
-                    <img src="aboutme.png" class="nav-icon">
+                    <img src="pic.png" class="nav-icon">
                     <span class="nav-label">Blog</span>
+                </div>
+                <div class="nav-item" onclick="showTab('aboutme')">
+                    <img src="aboutme.png" class="nav-icon">
+                    <span class="nav-label">About Me</span>
                 </div>
             </div>
 
@@ -110,47 +126,89 @@
 
                 <div id="videos" class="tab-content">
                     <div class="search-container">
-                        <img src="search.png" class="search-icon-img">
+                        <img src="search.png" style="width:24px;">
                         <input type="text" id="vSearch" class="search-box" placeholder="Search archive..." onkeyup="searchVids()">
-                        <img src="finding.gif" id="finding-status" style="width:30px; opacity:0; transition:0.3s;">
                     </div>
                     <div class="video-grid" id="v-grid"></div>
                 </div>
 
                 <div id="downloads" class="tab-content">
                     <h2>Downloads</h2>
-                    <p style="margin-top:20px;">The download repository is currently being synced...</p>
+                    <p style="margin-top:20px;">The repository is currently being synced...</p>
                 </div>
 
                 <div id="blog" class="tab-content">
                     <div class="blog-container">
-                        <img src="pic.png" class="blog-header-img">
                         <h2>Windows 11 Build 26300.2289 Update</h2>
                         <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Published: 4/26/26</p>
-                        <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p><br>
-                        <p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p>
-                        <p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p>
-                        <p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p>
-                        <p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p>
-                        <p><b>5th and Final:</b> In Windows Update, Dev and Canary were merged into the Experimental Channel.</p><br>
-                        <p><i>Thanks for reading this blog and have a great day.</i></p>
+                        
+                        <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p>
+                        
+                        <div id="blog-more">
+                            <br>
+                            <p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p>
+                            <br>
+                            <p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p>
+                            <br>
+                            <p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p>
+                            <br>
+                            <p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p>
+                            <br>
+                            <p><b>5th and Final:</b> In Windows Update, Dev and Canary were merged into the Experimental Channel.</p>
+                            <br>
+                            <p><i>Thanks for reading this blog and have a great day.</i></p>
+                        </div>
+                        
+                        <br>
+                        <button class="aero-btn" id="readMoreBtn" onclick="toggleBlog()">Read More</button>
                     </div>
+                </div>
+
+                <div id="aboutme" class="tab-content">
+                    <h2>About Me</h2>
+                    <p style="margin-top:15px;">Welcome to my digital workspace. I'm Brayden, a tech enthusiast specializing in Windows customization and legacy hardware restoration.</p>
                 </div>
 
                 <div id="player-overlay">
                     <div class="player-header">
-                        <span id="cur-title" style="font-size:13px;">Video Player</span>
-                        <span style="cursor:pointer; font-weight:bold;" onclick="closePlayer()">[X] CLOSE</span>
+                        <span id="cur-title">Video Player</span>
+                        <button class="aero-btn" onclick="closePlayer()">CLOSE [X]</button>
                     </div>
-                    <div style="flex:1;">
-                        <iframe id="video-frame" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen"></iframe>
-                    </div>
+                    <iframe id="video-frame" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen"></iframe>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        const win = document.getElementById('window');
+        const titleBar = document.getElementById('titleBar');
+        let isDragging = false, offset = [0,0];
+
+        titleBar.onmousedown = (e) => {
+            isDragging = true;
+            offset = [win.offsetLeft - e.clientX, win.offsetTop - e.clientY];
+        };
+        document.onmousemove = (e) => {
+            if (!isDragging) return;
+            win.style.left = (e.clientX + offset[0]) + 'px';
+            win.style.top = (e.clientY + offset[1]) + 'px';
+        };
+        document.onmouseup = () => isDragging = false;
+
+        function toggleBlog() {
+            const more = document.getElementById('blog-more');
+            const btn = document.getElementById('readMoreBtn');
+            if (more.style.display === "block") {
+                more.style.display = "none";
+                btn.innerText = "Read More";
+            } else {
+                more.style.display = "block";
+                btn.innerText = "Show Less";
+            }
+        }
+
+        // UPDATED VIDEO DATA ARRAY
         const vData = [
             { t: "Windows Vista dies part 1", id: "YhPE3z1WeVA" },
             { t: "Upgrading through every version of Windows Part 1", id: "t684MtGv31Y" },
@@ -199,7 +257,7 @@
             { t: "Is Windows Moon Valley the best Windows 11 mod?", id: "63Q01QdKVy4" },
             { t: "Windows Gangster edition is just Normal Stock Windows XP", id: "gX9c00yMaEo" },
             { t: "Looking at Windows Gangster Edition Gone Wrong", id: "Q-YW3l_s-Bc" },
-            { t: "What happens if you replace Windows 7's Explorer with Windows Vista's Explorer.exe", id: "YLAY0OJnsc" },
+            { t: "What happens if you replace Windows 7's Explorer with Windows Vista's Explorer.exe", id: "YLAY0QOJnsc" },
             { t: "I broke my search bar", id: "y3YR9beWCs4" },
             { t: "How to uninstall Microsoft Edge the right and fast way", id: "T0PiQlQ9E14" },
             { t: "The future of this channel", id: "yJc7saKmW5k" },
@@ -208,7 +266,7 @@
             { t: "What to do when Windows 10 Dies Part 1", id: "qLGItvVwgJ8" },
             { t: "Checking out Transformation Pack 10to7 By ImSwordQueen", id: "4hEABDobIo8" },
             { t: "Features on Windows 8 build 7899", id: "-SfUAdZ0Pik" },
-            { t: "Is Windows 11 still Windows 10", id: "yyrusivy-y4" },
+            { t: "Is Windows 11 still Windows 10 and why does Windows 11 use Windows 10's NT version", id: "yyrusivy-y4" },
             { t: "Checking out Geckium on Firefox 138", id: "k8a5JwIiSzY" },
             { t: "Reacting to some of my other YouTube videos Part 2", id: "znDCNIDf674" },
             { t: "Guess what I found", id: "4qO9pkkTjB4" },
@@ -216,7 +274,7 @@
             { t: "Testing Out Windows Vista Unofficial SP3 Gone Wrong", id: "VR8W1BbW_d4" },
             { t: "Reacting to some of my other YouTube videos", id: "swOHZE82uAY" },
             { t: "Windows Disney land 2010", id: "nGNXxxDjQvs" },
-            { t: "Trying To install Windows XP beta builds", id: "iWGiDa7DH-E" },
+            { t: "Trying To install Windows XP beta builds but everything goes wrong", id: "iWGiDa7DH-E" },
             { t: "How to make iPad OS 18.2 look like Windows XP", id: "JEMxg_FI1No" },
             { t: "How to use LotusLanternX", id: "Xu1paCktubc" },
             { t: "Windows 7 2024", id: "p9AxLbMt7so" },
@@ -226,16 +284,13 @@
         ];
 
         function init() {
-            document.addEventListener('click', () => { 
-                document.getElementById('startup').play().catch(()=>{}); 
-            }, {once: true});
-
+            document.addEventListener('click', () => { document.getElementById('startup').play().catch(()=>{}); }, {once: true});
             const grid = document.getElementById('v-grid');
             vData.forEach(v => {
                 const card = document.createElement('div');
                 card.className = 'video-card';
                 card.onclick = () => playVideo(v.id, v.t);
-                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg"><p>${v.t}</p>`;
+                card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" style="width:100%; border-radius: 4px;"><p>${v.t}</p>`;
                 grid.appendChild(card);
             });
         }
@@ -250,7 +305,7 @@
 
         function playVideo(id, title) {
             document.getElementById('player-overlay').style.display = 'flex';
-            document.getElementById('video-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+            document.getElementById('video-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
             document.getElementById('cur-title').innerText = title;
         }
 
@@ -258,12 +313,9 @@
             document.getElementById('player-overlay').style.display = 'none';
             document.getElementById('video-frame').src = "";
         }
-
+        
         function searchVids() {
             const q = document.getElementById('vSearch').value.toLowerCase();
-            const finding = document.getElementById('finding-status');
-            finding.style.opacity = q.length > 0 ? "1" : "0";
-            
             document.querySelectorAll('.video-card').forEach(c => {
                 c.style.display = c.innerText.toLowerCase().includes(q) ? 'block' : 'none';
             });
