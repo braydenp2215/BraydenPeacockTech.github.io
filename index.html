@@ -49,7 +49,6 @@
         }
         .aero-btn:hover { background: rgba(255,255,255,0.4); border-color: white; }
 
-        /* Bigger Glowing Red Close Button */
         .btn-close {
             padding: 5px 28px !important;
             background: linear-gradient(180deg, rgba(232, 17, 35, 0.6) 0%, rgba(180, 20, 30, 0.8) 100%) !important;
@@ -80,7 +79,7 @@
 
         .blog-post { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 12px; line-height: 1.6; }
         .blog-post h2 { margin-bottom: 15px; color: #00bcff; }
-        .blog-post b { color: #fff; }
+        #blog-more { display: none; margin-top: 15px; }
 
         #player-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 200; flex-direction: column; }
     </style>
@@ -122,7 +121,7 @@
             <div class="content-area">
                 <div id="home" class="tab-content active">
                     <h1>Welcome Back</h1>
-                    <p style="margin-top:10px; opacity:0.8;">System Build 4032z is active. All services running.</p>
+                    <p style="margin-top:10px; opacity:0.8;">System Build 4032z is active.</p>
                 </div>
 
                 <div id="videos" class="tab-content">
@@ -132,19 +131,24 @@
                 <div id="blog" class="tab-content">
                     <div class="blog-post">
                         <h2>Windows 11 Build 26300.2289 Update</h2>
-                        <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p><br>
-                        <p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p><br>
-                        <p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p><br>
-                        <p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p><br>
-                        <p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p><br>
-                        <p><b>5th and Final:</b> In Windows Update, Dev and Canary were merged into the Experimental Channel.</p><br>
-                        <p><i>Thanks for reading this blog and have a great day.</i></p>
+                        <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p>
+                        
+                        <div id="blog-more">
+                            <br><p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p>
+                            <br><p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p>
+                            <br><p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p>
+                            <br><p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p>
+                            <br><p><b>5th and Final:</b> In Windows Update, Dev and Canary were merged into the Experimental Channel.</p>
+                            <br><p><i>Thanks for reading this blog and have a great day.</i></p>
+                        </div>
+                        <br>
+                        <button class="aero-btn" id="readMoreBtn" onclick="toggleBlog()">Read More</button>
                     </div>
                 </div>
 
                 <div id="aboutme" class="tab-content">
                     <h1>About Me</h1>
-                    <p style="margin-top:20px; font-size:18px;">Welcome to my digital workspace. I'm Brayden, a tech enthusiast specializing in Windows customization and legacy hardware restoration.</p>
+                    <p style="margin-top:20px;">Welcome to my digital workspace. I'm Brayden, a tech enthusiast specializing in Windows customization and legacy hardware restoration.</p>
                 </div>
 
                 <div id="player-overlay">
@@ -163,7 +167,6 @@
         const titleBar = document.getElementById('titleBar');
         let isDragging = false, offset = [0,0], isMax = false, lastPos = {};
 
-        // Window Controls
         function minimizeWin() { win.style.opacity = "0"; setTimeout(() => win.style.display = "none", 300); }
         function closeWin() { alert("Closing Brayden Peacock Tech..."); win.remove(); }
         function maximizeWin() {
@@ -176,10 +179,21 @@
             isMax = !isMax;
         }
 
-        // Draggable
         titleBar.onmousedown = (e) => { if(!isMax){ isDragging = true; offset = [win.offsetLeft - e.clientX, win.offsetTop - e.clientY]; }};
         document.onmousemove = (e) => { if(isDragging){ win.style.left = (e.clientX + offset[0]) + 'px'; win.style.top = (e.clientY + offset[1]) + 'px'; }};
         document.onmouseup = () => isDragging = false;
+
+        function toggleBlog() {
+            const more = document.getElementById('blog-more');
+            const btn = document.getElementById('readMoreBtn');
+            if (more.style.display === "block") {
+                more.style.display = "none";
+                btn.innerText = "Read More";
+            } else {
+                more.style.display = "block";
+                btn.innerText = "Show Less";
+            }
+        }
 
         const vData = [
             {t:"Windows Vista dies part 1",id:"YhPE3z1WeVA"},
