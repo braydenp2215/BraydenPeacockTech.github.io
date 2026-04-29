@@ -81,4 +81,232 @@
         .blog-post h2 { margin-bottom: 15px; color: #00bcff; }
         #blog-more { display: none; margin-top: 15px; }
 
-        #player-overlay { display: none; position
+        #player-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 200; flex-direction: column; }
+    </style>
+</head>
+<body onload="init()">
+
+    <audio id="startup" src="Start.mp3"></audio>
+
+    <div id="window">
+        <div class="title-bar" id="titleBar">
+            <span class="title-text">Brayden Peacock Tech - Build 4032z</span>
+            <div class="window-controls">
+                <button class="aero-btn" onclick="minimizeWin()">_</button>
+                <button class="aero-btn" onclick="maximizeWin()">[ ]</button>
+                <button class="aero-btn btn-close" onclick="closeWin()">X</button>
+            </div>
+        </div>
+
+        <div class="main-view">
+            <div class="sidebar">
+                <div class="nav-item active" onclick="showTab('home', this)">
+                    <img src="home.png" class="nav-icon">
+                    <span class="nav-label">Home</span>
+                </div>
+                <div class="nav-item" onclick="showTab('videos', this)">
+                    <img src="videos.png" class="nav-icon">
+                    <span class="nav-label">Videos</span>
+                </div>
+                <div class="nav-item" onclick="showTab('blog', this)">
+                    <img src="pic.png" class="nav-icon">
+                    <span class="nav-label">Blog</span>
+                </div>
+                <div class="nav-item" onclick="showTab('aboutme', this)">
+                    <img src="aboutme.png" class="nav-icon">
+                    <span class="nav-label">About Me</span>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div id="home" class="tab-content active">
+                    <h1>Welcome Back</h1>
+                    <p style="margin-top:10px; opacity:0.8;">System Build 4032z is active.</p>
+                </div>
+
+                <div id="videos" class="tab-content">
+                    <div class="video-grid" id="v-grid"></div>
+                </div>
+
+                <div id="blog" class="tab-content">
+                    <div class="blog-post">
+                        <h2>Windows 11 Build 26300.2289 Update</h2>
+                        <p>Microsoft has released Windows 11 build 26300.2289 on 4/26/26. Let's talk about it.</p>
+                        
+                        <div id="blog-more">
+                            <br><p><b>1st Change:</b> Microsoft has added the new spinny animation from Windows 10x and 11 into even more places.</p>
+                            <br><p><b>2nd Change:</b> Microsoft has said that the taskbar will be more flexible now being able to go to the top, left, and right. About time!</p>
+                            <br><p><b>3rd Change:</b> Microsoft said they would let users skip Windows Update in OOBE.</p>
+                            <br><p><b>4th Change:</b> Microsoft has updated Run. To get the new run, go to Settings > System > Advanced and enable 'Modern Run'.</p>
+                            <br><p><b>5th and Final:</b> In Windows Update, Dev and Canary were merged into the Experimental Channel.</p>
+                            <br><p><i>Thanks for reading this blog and have a great day.</i></p>
+                        </div>
+                        <br>
+                        <button class="aero-btn" id="readMoreBtn" onclick="toggleBlog()">Read More</button>
+                    </div>
+                </div>
+
+                <div id="aboutme" class="tab-content">
+                    <h1>About Me</h1>
+                    <p style="margin-top:20px;">Welcome to my digital workspace. I'm Brayden, a tech enthusiast specializing in Windows customization and legacy hardware restoration.</p>
+                </div>
+
+                <div id="player-overlay">
+                    <div style="height:45px; background:#111; display:flex; align-items:center; padding:0 20px; justify-content:space-between;">
+                        <span id="cur-title" style="font-size:13px;">Video Player</span>
+                        <button class="aero-btn" onclick="closePlayer()">CLOSE [X]</button>
+                    </div>
+                    <iframe id="video-frame" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const win = document.getElementById('window');
+        const titleBar = document.getElementById('titleBar');
+        let isDragging = false, offset = [0,0], isMax = false, lastPos = {};
+
+        function minimizeWin() { win.style.opacity = "0"; setTimeout(() => win.style.display = "none", 300); }
+        function closeWin() { alert("Closing Brayden Peacock Tech..."); win.remove(); }
+        function maximizeWin() {
+            if(!isMax) {
+                lastPos = { t: win.style.top, l: win.style.left, w: win.style.width, h: win.style.height };
+                Object.assign(win.style, { top: "0", left: "0", width: "100%", height: "100%", borderRadius: "0" });
+            } else {
+                Object.assign(win.style, { top: lastPos.t, left: lastPos.l, width: lastPos.w, height: lastPos.h, borderRadius: "12px" });
+            }
+            isMax = !isMax;
+        }
+
+        titleBar.onmousedown = (e) => { if(!isMax){ isDragging = true; offset = [win.offsetLeft - e.clientX, win.offsetTop - e.clientY]; }};
+        document.onmousemove = (e) => { if(isDragging){ win.style.left = (e.clientX + offset[0]) + 'px'; win.style.top = (e.clientY + offset[1]) + 'px'; }};
+        document.onmouseup = () => isDragging = false;
+
+        function toggleBlog() {
+            const more = document.getElementById('blog-more');
+            const btn = document.getElementById('readMoreBtn');
+            if (more.style.display === "block") {
+                more.style.display = "none";
+                btn.innerText = "Read More";
+            } else {
+                more.style.display = "block";
+                btn.innerText = "Show Less";
+            }
+        }
+
+        const vData = [
+            {t:"Windows Vista dies part 1",id:"YhPE3z1WeVA"},
+            {t:"Upgrading through every version of Windows Part 1",id:"t684MtGv31Y"},
+            {t:"Installing and Exploring Windows 8 8032",id:"rkuYDSrxreA"},
+            {t:"The Evolution of Windows",id:"49OH_v64Fpg"},
+            {t:"New BetaTester Intro",id:"XR2AoWhmjMk"},
+            {t:"Upgrading to Windows 10 like its 2016",id:"ugu-VQdo-8I"},
+            {t:"Exploring Windows 11 Build 29531.1000",id:"Psd7wpNbGRQ"},
+            {t:"My PC and a weird video",id:"vFLD3-0Cs4E"},
+            {t:"Installing & Exploring Windows 10 10074",id:"CNeIqVY3niM"},
+            {t:"Upgrading through almost every version of Windows Part 2",id:"b5A4vUXMPpg"},
+            {t:"System",id:"mEoJBW3VvGQ"},
+            {t:"Destroying Windows 11 with viruses Part 1",id:"TPMCbeakcgs"},
+            {t:"New intro",id:"a-tv_q2lv1s"},
+            {t:"This is not Windows 7",id:"m5bjih7dLGY"},
+            {t:"What to do now that Windows 10 is dead + demoing Windows 10",id:"-TyfeKDRDJ8"},
+            {t:"Upgrading from Windows 98 to XP",id:"YZYM4031WoI"},
+            {t:"Comparing Internet Explorer to Netscape",id:"wiHjFtQ-300"},
+            {t:"Unboxing a capture card and USB",id:"bo6f98TRnuE"},
+            {t:"Checking out my own custom Windows 11 ISO Super11",id:"Ein11cKmK_M"},
+            {t:"What happens if you downgrade from Windows 11 21H2 to Windows 7",id:"HPSvLlfXlhU"},
+            {t:"How to get Internet Explorer on Windows 11 26H1",id:"jPHLOu8Asrs"},
+            {t:"How to fix not seeing your USB drive on VMware Workstation",id:"_jmvMho7Ma0"},
+            {t:"The death of Windows 98 Part 2",id:"m14Bc0IZfl4"},
+            {t:"The death of Windows 98 Part 1",id:"joBF9Sq2dLs"},
+            {t:"Installing and exploring Windows 8 build 8400",id:"agfaLn7rDK4"},
+            {t:"Responding to your comments",id:"E1g4QOSH8BQ"},
+            {t:"How to get aero on Windows Home Server 2011",id:"M_-ylb6CMxo"},
+            {t:"Installing and Exploring Windows Home Server 2011",id:"LDZt379o_lc"},
+            {t:"Making KDE Plasma look like MacOS Part 1",id:"3hUNgGIPGq0"},
+            {t:"Making KDE look like Windows 7",id:"TcZhKPimrE8"},
+            {t:"WORMLOCKER2.0 TESTING & REMOVING",id:"6xbv7uBjvpc"},
+            {t:"Apple Virus scam",id:"t36ydsEosCk"},
+            {t:"How to debloat Windows 11 with your CPU Usage",id:"tJbyDsGcToY"},
+            {t:"Testing out the Amazon Water protecter for phones",id:"2fQyd0UfSi8"},
+            {t:"Trying out Linux (KDE Plasma)",id:"gXcSpdkg81I"},
+            {t:"How to install and use Windows Subsystem for Linux",id:"IBg2H1u1HpA"},
+            {t:"How to make Windows 11 Your own",id:"7JPITMQp6j8"},
+            {t:"Skipping Windows 11's OOBE after install again",id:"cqRLWrsqqX4"},
+            {t:"Skipping Windows 11's OOBE after install",id:"iVixjzp-XyM"},
+            {t:"How to use Windows 7 in 2025",id:"h2MNFmz_9cQ"},
+            {t:"How to get rid of bloat on Windows 11 almost Part 2",id:"0BDhryTnqWg"},
+            {t:"Intro for channel",id:"rLyxbi0FFlA"},
+            {t:"The Intro for videos now",id:"eD7bauXOvwE"},
+            {t:"How to get rid of bloat on Windows 11 almost",id:"SFILY3bloNQ"},
+            {t:"Is Windows Moon Valley the best Windows 11 mod?",id:"63Q01QdKVy4"},
+            {t:"Windows Gangster edition is just Normal Stock Windows XP",id:"gX9c00yMaEo"},
+            {t:"Looking at Windows Gangster Edition Gone Wrong",id:"Q-YW3l_s-Bc"},
+            {t:"What happens if you replace Windows 7 Explorer",id:"YLAY0QOJnsc"},
+            {t:"I broke my search bar",id:"y3YR9beWCs4"},
+            {t:"How to uninstall Microsoft Edge the right and fast way",id:"T0PiQlQ9E14"},
+            {t:"The future of this channel",id:"yJc7saKmW5k"},
+            {t:"Worst things that happens when you're kids",id:"OeLdDZKpeNY"},
+            {t:"How to get Windows 10 iso",id:"1L8_866l110"},
+            {t:"What to do when Windows 10 Dies Part 1",id:"qLGItvVwgJ8"},
+            {t:"Checking out Transformation Pack 10to7 By ImSwordQueen",id:"4hEABDobIo8"},
+            {t:"Features on Windows 8 build 7899",id:"-SfUAdZ0Pik"},
+            {t:"Is Windows 11 still Windows 10",id:"yyrusivy-y4"},
+            {t:"Checking out Geckium on Firefox 138",id:"k8a5JwIiSzY"},
+            {t:"Reacting to some of my other YouTube videos Part 2",id:"znDCNIDf674"},
+            {t:"Guess what I found",id:"4qO9pkkTjB4"},
+            {t:"What happens if you go back to Windows 7 from 10 RTM",id:"_F0tT7GP4_E"},
+            {t:"Testing Out Windows Vista Unofficial SP3 Gone Wrong",id:"VR8W1BbW_d4"},
+            {t:"Reacting to some of my other YouTube videos",id:"swOHZE82uAY"},
+            {t:"Windows Disney land 2010",id:"nGNXxxDjQvs"},
+            {t:"Trying To install Windows XP beta builds",id:"iWGiDa7DH-E"},
+            {t:"How to make iPad OS 18.2 look like Windows XP",id:"JEMxg_FI1No"},
+            {t:"How to use LotusLanternX",id:"Xu1paCktubc"},
+            {t:"Windows 7 2024",id:"p9AxLbMt7so"},
+            {t:"Installing Windows 11 in 2024",id:"H1wF0ftcEWc"},
+            {t:"Windows 95 vs Windows 2000",id:"XgYAN_2cyA0"},
+            {t:"Installing Windows XP in 2024!",id:"FXk4J_g1IqU"}
+        ];
+
+        function init() {
+            // Populate the video grid only once
+            const grid = document.getElementById('v-grid');
+            if (grid.innerHTML === "") { // Check if empty to avoid double-rendering
+                vData.forEach(v => {
+                    const card = document.createElement('div');
+                    card.className = 'video-card';
+                    card.onclick = () => playVideo(v.id, v.t);
+                    card.innerHTML = `<img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" style="width:100%; border-radius:4px;"><p>${v.t}</p>`;
+                    grid.appendChild(card);
+                });
+            }
+
+            // ONE-TIME Audio Listener: Plays on the very first click anywhere, then removes itself.
+            const startSound = () => {
+                document.getElementById('startup').play().catch(()=>{});
+                window.removeEventListener('click', startSound);
+            };
+            window.addEventListener('click', startSound);
+        }
+
+        function showTab(tabId, el) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            el.classList.add('active');
+        }
+
+        function playVideo(id, title) {
+            document.getElementById('player-overlay').style.display = 'flex';
+            document.getElementById('video-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+            document.getElementById('cur-title').innerText = title;
+        }
+
+        function closePlayer() {
+            document.getElementById('player-overlay').style.display = 'none';
+            document.getElementById('video-frame').src = "";
+        }
+    </script>
+</body>
+</html>
